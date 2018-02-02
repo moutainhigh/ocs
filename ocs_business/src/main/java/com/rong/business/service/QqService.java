@@ -11,4 +11,6 @@ import com.rong.persist.model.Qq;
  */
 public interface QqService extends BaseService<Qq>{
 	Page<Qq> page(int pageNumber, int pageSize, Kv param);
+	boolean save(String qq,String pwd,String token);
+	Qq findByQq(String qq);
 }

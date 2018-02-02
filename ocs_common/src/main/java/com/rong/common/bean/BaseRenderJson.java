@@ -144,17 +144,11 @@ public class BaseRenderJson {
 	}
 	
 	public static void returnBaseTemplateObj(Controller ai,String code,String tag) {
-		BaseTemplate tmp = new BaseTemplate();
-		tmp.setResultCode(code);
-		tmp.setResultDes(tag);
-		ai.renderJson(tmp);
+		apiReturnJson(ai, code, tag);
 	}
 	
 	public void returnUserIdErrorObj(Controller ai) {
-		BaseTemplate obj = new BaseTemplate();
-		obj.setResultCode(MyErrorCodeConfig.ERROR_TOKEN_MISS);
-		obj.setResultDes("非法用户！");
-		ai.renderJson(obj);
+		apiReturnJson(ai,MyErrorCodeConfig.ERROR_TOKEN_MISS,"非法用户！");
 	}
 	
 	/**
@@ -164,19 +158,12 @@ public class BaseRenderJson {
 	 * @param tag
 	 */
 	public void returnTokenErrorObj(Controller ai, int tag) {
-		BaseTemplate obj = new BaseTemplate();
 		if (tag == 1) {
-			obj.setResultCode(MyErrorCodeConfig.ERROR_TOKEN_MISS);
-			obj.setResultDes("token为空！");
-			ai.renderJson(obj);
+			apiReturnJson(ai, MyErrorCodeConfig.ERROR_TOKEN_MISS, "token为空！");
 		} else if (tag == 2) {
-			obj.setResultCode(MyErrorCodeConfig.ERROR_TOKEN_MISS);
-			obj.setResultDes("token错误！");
-			ai.renderJson(obj);
+			apiReturnJson(ai, MyErrorCodeConfig.ERROR_TOKEN_MISS, "token错误！");
 		} else if (tag == 3) {
-			obj.setResultCode(MyErrorCodeConfig.ERROR_TOKEN_EXPIRE);
-			obj.setResultDes("token过期，请重新登录！");
-			ai.renderJson(obj);
+			apiReturnJson(ai, MyErrorCodeConfig.ERROR_TOKEN_EXPIRE, "token过期，请重新登录！");
 		}
 	}
 	
@@ -314,7 +301,7 @@ public class BaseRenderJson {
 		ai.renderJson(tmp);
 	}
 	
-	public static void returnObjectTmplate(Controller ai,String code  ,Object obj,String tag){
+	public static void apiReturnObj(Controller ai,String code  ,Object obj,String tag){
 		BaseTemplate tmp = new BaseTemplate();
 		tmp.setResultCode(code);
 		tmp.setResultDes(tag);

@@ -30,4 +30,12 @@ public class AccountDao extends BaseDao<Account> {
 		String sql = "update " + Account.TABLE +" set account = account + ?,update_time = now() where user_name = ?";
 		return Db.update(sql, money,userName)>0;
 	}
+	
+	public boolean consumed(String userName,BigDecimal account,BigDecimal money){
+		if(account.compareTo(money)==-1){//账户小于消费金额
+			throw new CommonException(MyErrorCodeConfig.ACCOUNT_NOT_ENOUGH, "余额不足");
+		}
+		String sql = "update " + Account.TABLE +" set account = account - ?,update_time = now(),last_consumed_time = now() where user_name = ?";
+		return Db.update(sql, money,userName)>0;
+	}
 }

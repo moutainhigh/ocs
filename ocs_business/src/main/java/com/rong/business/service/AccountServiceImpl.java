@@ -21,5 +21,10 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 		item.setUserName(userName);
 		return dao.save(item);
 	}
+
+	@Override
+	public Account findByUserName(String userName) {
+		return dao.findByUserName(userName);
+	}
 	
 }

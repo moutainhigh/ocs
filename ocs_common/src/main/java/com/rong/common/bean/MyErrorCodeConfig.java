@@ -19,4 +19,7 @@ public class MyErrorCodeConfig {
 	public static final String USER_DISABLE = "1004"; // 用户禁用
 	public static final String USER_LOGIN_ERROR = "1005"; // 用户名或者密码错误
 	public static final String MONEY_ERROR = "1006"; // 金额需要大于0
+	public static final String ACCOUNT_NOT_ENOUGH = "1007"; // 余额不足
+	public static final String PROJECT_NOT_EXIST = "1008"; //项目不存在
+	public static final String DLL_ERROR = "1009"; //调用DLL异常
 }

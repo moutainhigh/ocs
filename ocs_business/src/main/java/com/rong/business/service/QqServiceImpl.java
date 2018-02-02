@@ -1,5 +1,7 @@
 package com.rong.business.service;
 
+import java.util.Date;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.rong.persist.base.BaseServiceImpl;
@@ -23,6 +25,21 @@ public class QqServiceImpl extends BaseServiceImpl<Qq> implements QqService{
 	@Override
 	public Page<Qq> page(int pageNumber, int pageSize, Kv param) {
 		return dao.page(pageNumber, pageSize, param);
+	}
+
+	@Override
+	public boolean save(String qq, String pwd, String token) {
+		Qq model = new Qq();
+		model.setCreateTime(new Date());
+		model.setQq(qq);
+		model.setPwd(pwd);
+		model.setToken(token);
+		return dao.save(model);
+	}
+
+	@Override
+	public Qq findByQq(String qq) {
+		return dao.findByQq(qq);
 	}
 
 }

@@ -5,7 +5,6 @@ import com.jfinal.plugin.activerecord.Page;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
 import com.rong.persist.model.Qq;
-import com.rong.persist.model.User;
 
 /**
  * QQdao
@@ -34,7 +33,7 @@ public class QqDao extends BaseDao<Qq> {
 	}
 	
 	public Qq findByQq(String qq){
-		String sql = "select " + FILEDS + " from " + User.TABLE + " where qq = ?";
+		String sql = "select " + FILEDS + " from " + Qq.TABLE + " where qq = ?";
 		return dao.findFirst(sql, qq);
 	}
 }

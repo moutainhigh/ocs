@@ -9,4 +9,5 @@ import com.rong.persist.model.Account;
  */
 public interface AccountService extends BaseService<Account>{
 	boolean save(String userName);
+	Account findByUserName(String userName);
 }

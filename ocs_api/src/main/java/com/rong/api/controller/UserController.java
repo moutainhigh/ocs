@@ -1,5 +1,6 @@
 package com.rong.api.controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +8,15 @@ import java.util.Map;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
+import com.rong.api.jna.TokenDLL;
 import com.rong.business.service.AccountService;
 import com.rong.business.service.AccountServiceImpl;
+import com.rong.business.service.InterfaceCallService;
+import com.rong.business.service.InterfaceCallServiceImpl;
+import com.rong.business.service.ProjectService;
+import com.rong.business.service.ProjectServiceImpl;
+import com.rong.business.service.QqService;
+import com.rong.business.service.QqServiceImpl;
 import com.rong.business.service.UserService;
 import com.rong.business.service.UserServiceImpl;
 import com.rong.business.service.UserTokenService;
@@ -17,8 +25,12 @@ import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyConst;
 import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.util.CommonUtil;
+import com.rong.common.util.StringUtils;
 import com.rong.common.validator.CommonValidatorUtils;
 import com.rong.persist.dao.SystemConfigDao;
+import com.rong.persist.model.Account;
+import com.rong.persist.model.Project;
+import com.rong.persist.model.Qq;
 import com.rong.persist.model.SystemConfig;
 import com.rong.persist.model.User;
 
@@ -33,6 +45,9 @@ public class UserController extends Controller {
 	private UserService userService = new UserServiceImpl();
 	private UserTokenService userTokenService = new UserTokenServiceImpl();
 	private AccountService accountService = new AccountServiceImpl();
+	private InterfaceCallService interfaceCallService = new InterfaceCallServiceImpl();
+	private ProjectService projectService = new ProjectServiceImpl();
+	private QqService qqService = new QqServiceImpl();
 
 	/**
 	 * 用户注册
@@ -51,12 +66,12 @@ public class UserController extends Controller {
 		}
 		// 校验用户名：5-11位数字
 		if (!userName.matches(MyConst.REG_USER_NAME)) {
-			BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.USER_NAME_ERROR, "用户名只允许5-11位数字");
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_NAME_ERROR, "用户名只允许5-11位数字");
 			return;
 		}
 		// 校验该用户名是否已被注册
 		if (userService.findByUserName(userName) != null) {
-			BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.USER_EXIST, "用户名已被使用，请重新填写");
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_EXIST, "用户名已被使用，请重新填写");
 			return;
 		}
 		User user = new User();
@@ -77,7 +92,7 @@ public class UserController extends Controller {
 			BaseRenderJson.baseRenderObj.returnObj(this, returnObj, MyErrorCodeConfig.REQUEST_SUCCESS, "注册成功");
 		} catch (Exception e) {
 			e.printStackTrace();
-			BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.ERROR_FAIL, "注册异常");
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.ERROR_FAIL, "注册异常");
 			logger.error("" + e);
 		}
 	}
@@ -94,22 +109,8 @@ public class UserController extends Controller {
 		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
 			return;
 		}
-		// 查询登陆信息
-		User temp = userService.findByUserName(userName);
-		if (temp != null) {
-			// 校验用户是否被禁用
-			if (!temp.getState()) {
-				BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.USER_DISABLE,
-						"系统发现您的账号异常，目前账号已被锁定，如有疑问，请联系客服咨询");
-				return;
-			}
-		} else {
-			BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.USER_NOT_EXIST, "该账号不存在");
-			return;
-		}
-		User user = userService.findByUserNameAndPwd(userName, userPwd);
-		if (user == null) {
-			BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.USER_LOGIN_ERROR, "用户名或者密码错误");
+		User user = checkUserNameAndPwd(userName, userPwd);
+		if(user == null){
 			return;
 		}
 		// 旧的TOKEN失效 删除掉旧的token
@@ -121,13 +122,149 @@ public class UserController extends Controller {
 		BaseRenderJson.baseRenderObj.returnObj(this, returnObj, MyErrorCodeConfig.REQUEST_SUCCESS, "登录成功");
 	}
 	
+	/**
+	 * 查询余额
+	 */
+	public void account() {
+		String userName = getPara("userName");
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userName", userName);
+		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
+			return;
+		}
+		Account item = accountService.findByUserName(userName);
+		Record returnObj = new Record();
+		returnObj.set("account", item.getAccount());
+		BaseRenderJson.baseRenderObj.returnObj(this, returnObj, MyErrorCodeConfig.REQUEST_SUCCESS, "查询成功");
+	}
+	
+	/**
+	 * 刷新白名单配置
+	 */
 	public void refreshConf() {
 		SystemConfig config = new SystemConfigDao().getByKey("apiAuthIp");
 		if(config!=null){
 			MyConst.apiAuthIp = config.getValue();
-			BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.REQUEST_SUCCESS, "刷新成功");
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "刷新成功");
 			return;
 		}
-		BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.REQUEST_FAIL, "刷新失败");
+		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_FAIL, "刷新失败");
+	}
+	
+	/**
+	 * 接口调用计费
+	 */
+	public void consum(){
+		String userName = getPara("userName");
+		String userPwd = getPara("userPwd");
+		Long projectId = getParaToLong("projectId");
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userName", userName);
+		paraMap.put("userPwd", userPwd);
+		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
+			return;
+		}
+		String token = consumBusiness(userName, userPwd, projectId,true);
+		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,token ,"计费成功");
+	}
+	
+	/**
+	 * 接口调用计费-qq项目
+	 */
+	public void consumqq(){
+		String userName = getPara("userName");
+		String userPwd = getPara("userPwd");
+		String qq = getPara("qq");
+		String qqPwd = getPara("qqPwd");
+		Long projectId = getParaToLong("projectId");
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userName", userName);
+		paraMap.put("userPwd", userPwd);
+		paraMap.put("qq", qq);
+		paraMap.put("qqPwd", qqPwd);
+		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
+			return;
+		}
+		String token = "";
+		Qq qqFind = qqService.findByQq(qq);
+		// 校验qq是否存在，存在则直接取数据库token
+		if(qqFind!=null){
+			if(qqFind.getPwd().equals(qqPwd)){
+				consumBusiness(userName, userPwd, projectId,false);
+			}else{
+				token = consumBusiness(userName, userPwd, projectId,true);
+				//更新token
+				qqFind.setToken(token);
+				qqFind.update();
+			}
+			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,qqFind.getToken() ,"计费成功");
+		}else{
+			// 保存qq
+			token = consumBusiness(userName, userPwd, projectId,true);
+			qqService.save(qq, qqPwd, token);
+			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,token ,"计费成功");
+		}
+	}
+
+	/**
+	 * 私有的消费计费逻辑
+	 * @param userName
+	 * @param userPwd
+	 * @param projectId
+	 */
+	private String consumBusiness(String userName, String userPwd, Long projectId,boolean hasGetToken) {
+		// 1.校验用户是否合法
+		User user = checkUserNameAndPwd(userName, userPwd);
+		if(user == null){
+			return null;
+		}
+		// 1.1校验项目是否存在
+		Project project = projectService.findById(projectId);
+		if(project==null){//项目不存在
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.PROJECT_NOT_EXIST, "项目不存在");
+			return null;
+		}
+		// 2.校验余额是否足够
+		Account userAccount = accountService.findByUserName(userName);
+		if(BigDecimal.ZERO.compareTo(userAccount.getAccount())==1){
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.ACCOUNT_NOT_ENOUGH, "余额不足，请及时充值");
+			return null;
+		}
+		// TODO 3.调用Dll获取加密串
+		String returnStr = "";
+		if(hasGetToken){
+			returnStr = "dll";
+			if(StringUtils.isNullOrEmpty(returnStr)){
+				interfaceCallService.save(userName, false, projectId,project.getProjectName(),"调用DLL失败");
+				BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.DLL_ERROR, "调用DLL失败");
+				return null;
+			}
+		}
+		// 4.计费
+		interfaceCallService.consumed(projectId,project.getProjectName(),project.getPrice(), userName, userAccount.getAccount());
+		return returnStr;
+	}
+
+	/** 校验登录用户名密码是否正确  */
+	private User checkUserNameAndPwd(String userName, String userPwd) {
+		// 查询登陆信息
+		User temp = userService.findByUserName(userName);
+		if (temp != null) {
+			// 校验用户是否被禁用
+			if (!temp.getState()) {
+				BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_DISABLE,
+						"系统发现您的账号异常，目前账号已被锁定，如有疑问，请联系客服咨询");
+				return null;
+			}
+		} else {
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_NOT_EXIST, "该账号不存在");
+			return null;
+		}
+		User user = userService.findByUserNameAndPwd(userName, userPwd);
+		if (user == null) {
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_LOGIN_ERROR, "用户名或者密码错误");
+			return null;
+		}
+		return temp;
 	}
 }

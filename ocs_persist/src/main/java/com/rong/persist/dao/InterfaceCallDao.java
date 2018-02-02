@@ -1,5 +1,7 @@
 package com.rong.persist.dao;
 
+import java.util.Date;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -43,5 +45,16 @@ public class InterfaceCallDao extends BaseDao<InterfaceCall> {
 	
 	public int countByProjectId(Long projectId){
 		return Db.queryInt("select count(*) from " + InterfaceCall.TABLE + " where project_id = ?",projectId);
+	}
+	
+	public boolean save(String userName,boolean callSuccess,long projectId,String projectName,String remark){
+		InterfaceCall item = new InterfaceCall();
+		item.setCreateTime(new Date());
+		item.setCallSuccess(callSuccess);
+		item.setProjectId(projectId);
+		item.setProjectName(projectName);
+		item.setRemark(remark);
+		item.setUserName(userName);
+		return item.save();
 	}
 }

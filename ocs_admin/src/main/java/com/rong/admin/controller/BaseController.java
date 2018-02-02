@@ -14,9 +14,7 @@ import com.google.gson.JsonObject;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyConst;
-import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.bean.ResultBean;
 import com.rong.common.exception.ParamIsEmpty;
 import com.rong.common.exception.ParamNotFound;
@@ -130,17 +128,5 @@ public class BaseController extends Controller {
 				}
 			}
 		}
-	}
-	
-	public void succ(Object data) {
-		BaseRenderJson.returnObjectTmplate(this, MyErrorCodeConfig.REQUEST_SUCCESS, data, "success");
-	}
-
-	public void succ() {
-		succ(null);
-	}
-	
-	public void fail(String message) {
-		BaseRenderJson.returnBaseTemplateObj(this, MyErrorCodeConfig.REQUEST_FAIL, message);
 	}
 }
