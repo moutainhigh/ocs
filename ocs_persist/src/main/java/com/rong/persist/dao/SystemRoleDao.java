@@ -39,7 +39,7 @@ public class SystemRoleDao extends BaseDao<SystemRole>{
 	}
 	
 	public boolean saveRolePermissions(long roleId,List<Long> permissionsIds) {
-		Db.update("delete from "+SystemRoleResource.TABLE+" where roleId = ?",roleId);
+		Db.update("delete from "+SystemRoleResource.TABLE+" where role_id = ?",roleId);
 		for (Long resourceId : permissionsIds) {
 			SystemRoleResource model = new SystemRoleResource();
 			model.setResourceId(resourceId);

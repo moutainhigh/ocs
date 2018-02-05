@@ -10,6 +10,7 @@ public class MyErrorCodeConfig {
 	public static final String ERROR_TOKEN_EXPIRE = "302"; // token过期
 	public static final String ERROR_BAD_REQUEST = "400"; // 参数 不正确
 	public static final String ERROR_FAIL = "500"; // 请求异常
+	public static final String ERROR_IP_NOT_AUTH = "303"; // ip没有访问权限，非白名单
 	public static final String REQUEST_SUCCESS = "1"; // 请求成功
 	public static final String REQUEST_FAIL = "0"; // 请求失败
 	
@@ -22,4 +23,7 @@ public class MyErrorCodeConfig {
 	public static final String ACCOUNT_NOT_ENOUGH = "1007"; // 余额不足
 	public static final String PROJECT_NOT_EXIST = "1008"; //项目不存在
 	public static final String DLL_ERROR = "1009"; //调用DLL异常
+	public static final String REG_ORDERCODE_ERROR = "1010"; //注册时异常，使用无效的订单号
+	public static final String AGENT_NOT_EXIST = "1011"; // 代理不存在
+	public static final String RECHARGE_ORDERCODE_ERROR = "1012"; //充值时异常，订单号已使用
 }

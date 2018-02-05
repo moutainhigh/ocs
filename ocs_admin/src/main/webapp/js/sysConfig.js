@@ -66,14 +66,23 @@ function initRefreshBtn(){
 }
 
 function refreshConf(){
-	$.ajax({
-   		url:"http://127.0.0.1:8080/ocs_api/api/user/refreshConf",
-   		dataType:"text",
-   		success:function(data){
-   			var obj = jQuery.parseJSON(data);
-   			alert(obj.resultDes);
-   		}
-   	})
+	var arr_write_ip = new Array("39.108.75.150:8090","127.0.0.1:8080");
+	var alertStr = "";
+	for(i in arr_write_ip){
+			$.ajax({
+				url:"http://"+arr_write_ip[i]+"/ocs_api/api/user/refreshConf",
+				dataType:"text",
+				async:false,
+				success:function(data){
+					var obj = jQuery.parseJSON(data);
+					alertStr += (arr_write_ip[i].split(":")[0]+":"+obj.resultDes+"\n");
+				},
+				error:function(request, status, error){
+					alertStr += (arr_write_ip[i].split(":")[0]+":请求失败,服务器未运行\n");
+				}
+			})
+	}
+	alert(alertStr);
 }
 
 

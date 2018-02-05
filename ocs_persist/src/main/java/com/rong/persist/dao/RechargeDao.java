@@ -15,7 +15,7 @@ public class RechargeDao extends BaseDao<Recharge> {
 
 	public static final Recharge dao = Recharge.dao;
 
-	public static final String FILEDS = "id,create_time,type,money,recharge_code,order_code,remark,use_state,user_name,give_money";
+	public static final String FILEDS = "id,create_time,type,money,recharge_code,order_code,remark,use_state,user_name,give_money,reg_state,agent_id";
 
 	public Page<Recharge> page(int pageNumber, int pageSize, Kv param) {
 		String select = "select " + FILEDS;
@@ -35,9 +35,24 @@ public class RechargeDao extends BaseDao<Recharge> {
 			if (!StringUtils.isNullOrEmpty(date)) {
 				where.append(" and to_days(create_time) = to_days('"+date+"')");
 			}
+			// 代理id
+			Long agentId = param.getLong("agentId");
+			if (agentId != null  && agentId != 0) {
+				where.append(" and agent_id = " + agentId + "");
+			}
 		}
 		String orderBy = " order by id desc";
 		sqlExceptSelect = sqlExceptSelect + where + orderBy;
 		return dao.paginate(pageNumber, pageSize, select, sqlExceptSelect);
+	}
+	
+	public Recharge findByOrderCodeNotReg(String orderCode){
+		String sql = "select " + FILEDS + " from " + Recharge.TABLE + " where order_code = ? and reg_state = false and agent_id is not null";
+		return dao.findFirst(sql, orderCode);
+	}
+	
+	public Recharge findByOrderCode(String orderCode){
+		String sql = "select " + FILEDS + " from " + Recharge.TABLE + " where order_code = ? ";
+		return dao.findFirst(sql, orderCode);
 	}
 }

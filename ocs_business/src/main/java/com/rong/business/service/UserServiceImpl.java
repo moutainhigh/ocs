@@ -17,8 +17,7 @@ import com.rong.persist.model.User;
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService{
 	private UserDao dao = new UserDao();
 	@Override
-	public Page<Record> getUserList(int page,int pagesize,Boolean state) {
-		Kv param = Kv.by("state", state);
+	public Page<Record> getUserList(int page,int pagesize,Kv param) {
 		return dao.page(page,pagesize,param);
 	}
 	

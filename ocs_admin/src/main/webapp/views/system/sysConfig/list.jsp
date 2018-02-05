@@ -8,7 +8,7 @@
         	<div class="am-btn-toolbar">
                 	<div class="am-btn-group am-btn-group-xs">
 				  		<button type="button" id="addBtn" onclick="javascript:loadBack('<%=basePath %>/sysConfig/toEdit')" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</button>
-				  		<button type="button" id="refreshBtn" onclick="javascript:refreshConf()" class="am-btn am-btn-default"><span class="am-icon-plus"></span>刷新服务器白名单</button>
+				  		<button type="button" id="refreshBtn" onclick="javascript:refreshConf()" class="am-btn am-btn-default"><span class="am-icon-refresh"></span>刷新服务器白名单</button>
                    	</div>
                	</div>
         </div>

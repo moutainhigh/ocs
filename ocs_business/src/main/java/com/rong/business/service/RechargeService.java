@@ -12,6 +12,8 @@ import com.rong.persist.model.Recharge;
  * @date 2018年2月1日
  */
 public interface RechargeService extends BaseService<Recharge>{
-	boolean save(String userName,int type,BigDecimal money,String orderCode,String remark);
+	boolean save(String userName,int type,BigDecimal money,String orderCode,String remark,Long agentId);
 	Page<Recharge> page(int pageNumber, int pageSize, Kv param);
+	Recharge findByOrderCode(String orderCode);
+	public Recharge findByOrderCodeNotReg(String orderCode);
 }

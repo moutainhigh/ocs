@@ -6,7 +6,7 @@
 		<input type="hidden" id="page" name="page" value="${page.pageNumber}">
 		<div class="am-g tpl-amazeui-form">
 			<div class="am-u-lg-4">
-				<label for="qq" class="am-u-sm-4 am-form-label">用户名：</label>
+				<label for="userName" class="am-u-sm-4 am-form-label">用户名：</label>
 				<div class="am-input-group">
 					<input type="text" class="am-form-field" name="userName" value="${userName}" placeholder="请输入用户名">
 				</div>
@@ -42,6 +42,7 @@
 							<th>累计消费</th>
 							<th>最后消费时间</th>
 							<th>状态</th>
+							<th>所属代理</th>
 							<th>登录ip</th>
 							<th>最后登录时间</th>
 							<th>操作</th>
@@ -60,6 +61,7 @@
                                     <c:if test="${item.state  }">正常</c:if>
                                     <c:if test="${!item.state  }">冻结</c:if>
                                 </td>
+                                <td>${item.agent_id }</td>
                                 <td>${item.login_ip }</td>
                                 <td><fmt:formatDate value="${item.login_time }" pattern="yyyy-MM-dd HH:mm" /></td>
 								<td>

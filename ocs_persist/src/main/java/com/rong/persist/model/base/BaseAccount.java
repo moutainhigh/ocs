@@ -64,5 +64,4 @@ public abstract class BaseAccount<M extends BaseAccount<M>> extends Model<M> imp
 	public java.lang.String getUserName() {
 		return getStr("user_name");
 	}
-
 }

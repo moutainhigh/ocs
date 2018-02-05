@@ -1,4 +1,5 @@
 package com.rong.business.service;
+import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.persist.base.BaseService;
@@ -11,7 +12,7 @@ import com.rong.persist.model.User;
  */
 public interface UserService extends BaseService<User>{
 	//管理后台方法
-	Page<Record> getUserList(int page,int pageSize,Boolean state);
+	Page<Record> getUserList(int page,int pageSize,Kv param);
 	boolean resetPwd(long id, String pwd);
 	boolean setEnable(long id, boolean isEnable);
 	User findByUserName(String userName);

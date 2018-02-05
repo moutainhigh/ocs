@@ -14,6 +14,7 @@ import com.jfinal.core.Controller;
 import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyConst;
 import com.rong.common.bean.MyErrorCodeConfig;
+import com.rong.common.exception.CommonException;
 import com.rong.common.util.RequestUtils;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.dao.UserTokenDao;
@@ -32,7 +33,10 @@ public class CommonInterceptor implements Interceptor {
 	private boolean doMain(Invocation ai) {
 		try {
 			ai.invoke();// 然后调用
-		} catch (Exception e) {
+		} catch (CommonException e) {
+			e.printStackTrace();
+			BaseRenderJson.apiReturnJson(ai.getController(), e.getCode(), e.getMessage());
+		}catch (Exception e) {
 			e.printStackTrace();
 			BaseRenderJson.apiReturnJson(ai.getController(), MyErrorCodeConfig.REQUEST_FAIL, e.getMessage());
 		}
@@ -112,6 +116,7 @@ public class CommonInterceptor implements Interceptor {
 		}
 		if (!ret) {
 			logger.error("不受信任的ip：" + requestURI);
+			throw new CommonException(MyErrorCodeConfig.ERROR_IP_NOT_AUTH, "不受信任的ip：" + requestURI);
 		}
 	}
 

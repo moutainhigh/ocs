@@ -40,6 +40,7 @@
 					class="am-table am-table-striped am-table-hover table-main am-text-nowrap">
 					<thead>
 						<tr>
+							<th>所属代理</th>
 							<th>流水号</th>
 							<th>充值时间</th>
 							<th>用户</th>
@@ -48,12 +49,14 @@
 							<th>赠送金额</th>
 							<th>订单号</th>
 							<th>充值状态</th>
+							<th>使用状态</th>
 							<th>备注</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${page.list}" var="item">
 							<tr>
+								<td>${item.agentId }</td>
 								<td>${item.rechargeCode }</td>
                                 <td><fmt:formatDate value="${item.createTime }" pattern="yyyy-MM-dd HH:mm" /></td>
                                 <td>${item.userName }</td>
@@ -67,6 +70,10 @@
 								<td>
 								    <c:if test="${item.useState}">成功</c:if>
                                     <c:if test="${!item.useState}">失败</c:if>
+                                </td>
+								<td>
+								    <c:if test="${item.regState}">已注册使用</c:if>
+                                    <c:if test="${!item.regState}">未使用</c:if>
                                 </td>
 								<td>${item.remark }</td>
 							</tr>

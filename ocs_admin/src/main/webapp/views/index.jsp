@@ -76,6 +76,7 @@
 					<li class="tpl-left-nav-item"><a href="<%=basePath %>/views/index.jsp"
 						class="nav-link active"> <i class="am-icon-home"></i> <span>首页</span>
 					</a></li>
+					<shiro:hasPermission name="member">
 				<li class="tpl-left-nav-item"><a href="javascript:void(0);"
 						class="nav-link tpl-left-nav-link-list"> <i
 							class="am-icon-user-md"></i> <span>用户管理</span> <i
@@ -89,7 +90,9 @@
 							</li>
 						</ul>
 				</li>
+				</shiro:hasPermission>
 				
+				<shiro:hasPermission name="recharge">
 				<li class="tpl-left-nav-item"><a href="javascript:void(0);"
                         class="nav-link tpl-left-nav-link-list"> <i
                             class="am-icon-user-md"></i> <span>充值管理</span> <i
@@ -97,16 +100,22 @@
                     </a>
                         <ul class="tpl-left-nav-sub-menu" style="display: none;">
                             <li>
+                            <shiro:hasPermission name="recharge-list">
                             <a href="javascript:loadRight('<%=basePath %>/recharge/list','充值列表')"> <i
                                     class="am-icon-angle-right"></i> <span>充值列表</span>
                             </a>
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="rechargeSet-list">
                             <a href="javascript:loadRight('<%=basePath %>/rechargeSet/list','充值赠送管理')"> <i
                                     class="am-icon-angle-right"></i> <span>充值赠送管理</span>
                             </a>
+                            </shiro:hasPermission>
                             </li>
                         </ul>
                 </li>
+                </shiro:hasPermission>
                 
+                <shiro:hasPermission name="qq">
                 <li class="tpl-left-nav-item"><a href="javascript:void(0);"
                         class="nav-link tpl-left-nav-link-list"> <i
                             class="am-icon-user-md"></i> <span>QQ管理</span> <i
@@ -120,7 +129,9 @@
                             </li>
                         </ul>
                 </li>
+                </shiro:hasPermission>
                 
+                <shiro:hasPermission name="interfaceCall">
                 <li class="tpl-left-nav-item"><a href="javascript:void(0);"
                         class="nav-link tpl-left-nav-link-list"> <i
                             class="am-icon-user-md"></i> <span>接口调用实况</span> <i
@@ -134,7 +145,9 @@
                             </li>
                         </ul>
                 </li>
+                </shiro:hasPermission>
 				
+				<shiro:hasPermission name="project">
                     <li class="tpl-left-nav-item"><a href="javascript:void(0);"
                         class="nav-link tpl-left-nav-link-list"> <i
                             class="am-icon-user-md"></i> <span>消费项目管理</span> <i
@@ -147,7 +160,7 @@
                             </a>
                             </li>
                         </ul></li>
-                    
+                    </shiro:hasPermission>
 				
 					<shiro:hasPermission name="system">
 					<li class="tpl-left-nav-item"><a href="javascript:void(0);"

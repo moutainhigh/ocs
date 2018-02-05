@@ -16,6 +16,8 @@ import com.rong.business.service.ProjectService;
 import com.rong.business.service.ProjectServiceImpl;
 import com.rong.business.service.QqService;
 import com.rong.business.service.QqServiceImpl;
+import com.rong.business.service.RechargeService;
+import com.rong.business.service.RechargeServiceImpl;
 import com.rong.business.service.UserService;
 import com.rong.business.service.UserServiceImpl;
 import com.rong.business.service.UserTokenService;
@@ -31,6 +33,7 @@ import com.rong.persist.dao.SystemConfigDao;
 import com.rong.persist.model.Account;
 import com.rong.persist.model.Project;
 import com.rong.persist.model.Qq;
+import com.rong.persist.model.Recharge;
 import com.rong.persist.model.SystemConfig;
 import com.rong.persist.model.User;
 
@@ -48,6 +51,7 @@ public class UserController extends Controller {
 	private InterfaceCallService interfaceCallService = new InterfaceCallServiceImpl();
 	private ProjectService projectService = new ProjectServiceImpl();
 	private QqService qqService = new QqServiceImpl();
+	private RechargeService rechargeService = new RechargeServiceImpl();
 
 	/**
 	 * 用户注册
@@ -74,11 +78,18 @@ public class UserController extends Controller {
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_EXIST, "用户名已被使用，请重新填写");
 			return;
 		}
+		// 校验订单号是否已被使用（是否有效）
+		Recharge recharge = rechargeService.findByOrderCodeNotReg(orderCode);
+		if(recharge==null){
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REG_ORDERCODE_ERROR, "无效的订单号");
+			return;
+		}
 		User user = new User();
 		user.setUserName(userName);
 		user.setUserPwd(CommonUtil.getMD5(userPwd));
 		user.setCreateTime(new Date());
 		user.setState(true);
+		user.setAgentId(recharge.getAgentId());
 		try {
 			// 注册信息保存
 			user.save();
@@ -86,6 +97,10 @@ public class UserController extends Controller {
 			String token = userTokenService.saveToken(user);
 			// 生成相应的账户信息
 			accountService.save(userName);
+			// 更新充值记录中的订单号状态为已注册使用
+			recharge.setRegState(true);
+			recharge.update();
+			// 组织返回信息
 			Record returnObj = new Record();
 			returnObj.set("userName", userName);
 			returnObj.set("token", token);

@@ -87,6 +87,14 @@ public class BaseController extends Controller {
 		return u;
 	}
 	
+	public boolean isAdmin(){
+		SystemAdmin u = (SystemAdmin) getSessionAttr(MyConst.SESSION_KEY);
+		if(u.getRole().equals("admin")){
+			return true;
+		}
+		return false;
+	}
+	
 	public Map<String, Object> getParas(){
 		Map<String, String[]> paraMap = getParaMap();
 		Map<String, Object> result = new HashMap<>();

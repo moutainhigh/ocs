@@ -1,4 +1,5 @@
 package com.rong.admin.controller;
+import com.jfinal.kit.Kv;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -36,7 +37,12 @@ public class UserController extends BaseController{
 	public void list() {
 		int page = getParaToInt("page", 1);
 		Boolean state = getParaToBoolean("state");
-		Page<Record> list = userService.getUserList(page, pageSize, state);
+		String userName = getPara("userName");
+		Kv param = Kv.by("userName", userName).set("state", state);
+		if(!isAdmin()){
+			param.set("agentId", getUser().getId());
+		}
+		Page<Record> list = userService.getUserList(page, pageSize,param);
 		keepPara();
 		setAttr("page", list);
 		render("/views/user/list.jsp");

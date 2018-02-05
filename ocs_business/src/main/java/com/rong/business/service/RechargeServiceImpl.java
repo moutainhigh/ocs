@@ -5,11 +5,14 @@ import java.util.Date;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
+import com.rong.common.bean.MyErrorCodeConfig;
+import com.rong.common.exception.CommonException;
 import com.rong.common.util.NumberUtil;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.AccountDao;
 import com.rong.persist.dao.RechargeDao;
 import com.rong.persist.dao.RechargeSetDao;
+import com.rong.persist.dao.SystemAdminDao;
 import com.rong.persist.model.Recharge;
 
 /****
@@ -26,9 +29,14 @@ public class RechargeServiceImpl extends BaseServiceImpl<Recharge> implements Re
 	private RechargeDao dao = new RechargeDao();
 	private AccountDao accountDao = new AccountDao();
 	private RechargeSetDao rechargeSetDao = new RechargeSetDao();
+	private SystemAdminDao adminDao = new SystemAdminDao();
 	
 	@Override
-	public boolean save(String userName,int type,BigDecimal money,String orderCode,String remark) {
+	public boolean save(String userName,int type,BigDecimal money,String orderCode,String remark,Long agentId) {
+		//校验agentId是否真实存在
+		if (agentId != null && adminDao.findById(agentId)==null) {
+			throw new CommonException(MyErrorCodeConfig.AGENT_NOT_EXIST, "代理用户不存在");
+		}
 		// 1.保存充值记录
 		Recharge recharge = new Recharge();
 		recharge.setUserName(userName);
@@ -40,6 +48,7 @@ public class RechargeServiceImpl extends BaseServiceImpl<Recharge> implements Re
 		recharge.setUseState(false);
 		recharge.setRemark(remark);
 		recharge.setGiveMoney(rechargeSetDao.giveMoney(money.intValue()));
+		recharge.setAgentId(agentId);
 		boolean result = recharge.save();
 		if(result){
 			// 2.充值
@@ -56,6 +65,16 @@ public class RechargeServiceImpl extends BaseServiceImpl<Recharge> implements Re
 	@Override
 	public Page<Recharge> page(int pageNumber, int pageSize, Kv param) {
 		return dao.page(pageNumber, pageSize, param);
+	}
+
+	@Override
+	public Recharge findByOrderCode(String orderCode) {
+		return dao.findByOrderCode(orderCode);
+	}
+	
+	@Override
+	public Recharge findByOrderCodeNotReg(String orderCode) {
+		return dao.findByOrderCodeNotReg(orderCode);
 	}
 
 }

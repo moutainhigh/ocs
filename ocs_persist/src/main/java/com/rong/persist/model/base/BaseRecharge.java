@@ -88,5 +88,21 @@ public abstract class BaseRecharge<M extends BaseRecharge<M>> extends Model<M> i
 	public java.lang.Integer getGiveMoney() {
 		return getInt("give_money");
 	}
+	
+	public void setRegState(java.lang.Boolean regState) {
+		set("reg_state", regState);
+	}
+	
+	public java.lang.Boolean getRegState() {
+		return getBoolean("reg_state");
+	}
+	
+	public void setAgentId(java.lang.Long agentId) {
+		set("agent_id", agentId);
+	}
+
+	public java.lang.Long getAgentId() {
+		return getLong("agent_id");
+	}
 
 }

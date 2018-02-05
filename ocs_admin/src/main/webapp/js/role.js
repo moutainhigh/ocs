@@ -18,7 +18,7 @@ function initDelete(){
 	        onConfirm: function(options) {
 	        	var $link = $(this.relatedTarget);
 	        	$.ajax({
-	           		url:getRootPath()+"/resource/delete",
+	           		url:getRootPath()+"/role/delete",
 	           		data:{"id":$link.data("id")},
 	           		dataType:"text",
 	           		success:function(data){

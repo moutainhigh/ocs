@@ -20,7 +20,7 @@ public class UserDao extends BaseDao<User> {
 	public static final String FILEDS = "id,create_time,update_time,state,user_name,user_pwd,login_ip,login_time";
 
 	public Page<Record> page(int pageNumber, int pageSize, Kv param) {
-		String select = "select u.login_ip,u.login_time,u.id,u.user_name,u.state,u.create_time,u.update_time,a.account,a.consumed_sum,a.last_consumed_time";
+		String select = "select u.agent_id,u.login_ip,u.login_time,u.id,u.user_name,u.state,u.create_time,u.update_time,a.account,a.consumed_sum,a.last_consumed_time";
 		String sqlExceptSelect = "from " + User.TABLE + " u ," + Account.TABLE +" a";
 		StringBuffer where = new StringBuffer(" where u.user_name = a.user_name");
 		if(param!=null){
@@ -29,8 +29,18 @@ public class UserDao extends BaseDao<User> {
 			if (state != null) {
 				where.append(" and u.state = " + state + "");
 			}
+			// 用户名
+			String userName = param.getStr("userName");
+			if (userName != null) {
+				where.append(" and u.user_name = " + userName + "");
+			}
+			// 代理id
+			Long agentId = param.getLong("agentId");
+			if (agentId != null && agentId != 0) {
+				where.append(" and u.agent_id = " + agentId + "");
+			}
 		}
-		String orderBy = " order by create_time desc";
+		String orderBy = " order by u.id desc";
 		sqlExceptSelect = sqlExceptSelect + where + orderBy;
 		return Db.paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}

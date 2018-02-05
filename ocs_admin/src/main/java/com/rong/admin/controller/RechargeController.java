@@ -22,6 +22,9 @@ public class RechargeController extends BaseController{
 		Boolean useState = getParaToBoolean("useState");
 		String date = getPara("date");
 		Kv param = Kv.by("userName", userName).set("useState", useState).set("date",date);
+		if(!isAdmin()){
+			param.set("agentId", getUser().getId());
+		}
 		Page<Recharge> list = rechargeService.page(page, pageSize, param);
 		keepPara();
 		setAttr("page", list);
@@ -37,7 +40,7 @@ public class RechargeController extends BaseController{
 		Integer type = getParaToInt("type");
 		String orderCode = getPara("orderCode");
 		String remark = getPara("remark");
-		rechargeService.save(userName, type, new BigDecimal(money), orderCode, remark);
+		rechargeService.save(userName, type, new BigDecimal(money), orderCode, remark,null);
 		BaseRenderJson.returnJsonS(this, 1, "手动充值成功");
 		logger.info("[操作日志]手动充值成功,"+userName+"充值金额："+money);
 	}
