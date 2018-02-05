@@ -45,6 +45,7 @@
 							<th>用户</th>
 							<th>类型</th>
 							<th>充值额度</th>
+							<th>赠送金额</th>
 							<th>订单号</th>
 							<th>充值状态</th>
 							<th>备注</th>
@@ -61,6 +62,7 @@
 								    <c:if test="${item.type == 2}">微信</c:if>
 								</td>
 								<td>${item.money }￥</td>
+								<td>${item.giveMoney }￥</td>
 								<td>${item.orderCode }</td>
 								<td>
 								    <c:if test="${item.useState}">成功</c:if>

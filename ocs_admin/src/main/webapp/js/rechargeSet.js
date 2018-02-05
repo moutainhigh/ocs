@@ -1,5 +1,5 @@
 /**
- *qq数据管理
+ *充值赠送数据管理
  */
 
 /**
@@ -9,7 +9,6 @@ $(function() {
 	initPage();//初始化分页
 	initQueryForm();//初始化查询
 	initDelete();
-	initResetPwd();
 });
 
 /**
@@ -23,7 +22,7 @@ function initDelete(){
 	        onConfirm: function(options) {
 	        	var $link = $(this.relatedTarget);
 	        	$.ajax({
-	           		url:getRootPath()+"/user/delete",
+	           		url:getRootPath()+"/rechargeSet/delete",
 	           		data:{"id":$link.data("id")},
 	           		dataType:"text",
 	           		success:function(data){
@@ -41,34 +40,11 @@ function initDelete(){
 }
 
 /**
- * 初始化重置密码事件
- */
-function initResetPwd(){
-	$("button[name='resetPwdBtn']").on('click', function() {
-	      $('#resetPwd-prompt').modal({
-	        relatedTarget: this,
-	        onConfirm: function(options) {
-	        	var $link = $(this.relatedTarget);
-	        	$.ajax({
-	        		url:getRootPath()+"/user/resetPwd",
-	           		data:{"id":$link.data("id"), "userPwd":options.data},
-	           		dataType:"text",
-	           		success:function(data){
-	           			var obj = jQuery.parseJSON(data);
-	           			alert(obj.resultDes);
-	           		}
-	           	})
-	        }
-	      });
-	    });
-}
-
-/**
  * 禁用
  */
 function disable(id){
 	$.ajax({
-		url:getRootPath()+"/user/updateState",
+		url:getRootPath()+"/rechargeSet/updateState",
    		data:{"id":id,"enable":false},
    		dataType:"text",
    		success:function(data){
@@ -86,7 +62,7 @@ function disable(id){
  */
 function enable(id){
 	$.ajax({
-		url:getRootPath()+"/user/updateState",
+		url:getRootPath()+"/rechargeSet/updateState",
    		data:{"id":id,"enable":true},
    		dataType:"text",
    		success:function(data){

@@ -4,6 +4,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/dll"/>
         <dependent-module archiveName="ocs_common-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ocs_common/ocs_common">
             <dependency-type>uses</dependency-type>
         </dependent-module>

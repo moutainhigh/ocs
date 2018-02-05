@@ -9,6 +9,7 @@ import com.rong.common.util.NumberUtil;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.AccountDao;
 import com.rong.persist.dao.RechargeDao;
+import com.rong.persist.dao.RechargeSetDao;
 import com.rong.persist.model.Recharge;
 
 /****
@@ -24,6 +25,7 @@ import com.rong.persist.model.Recharge;
 public class RechargeServiceImpl extends BaseServiceImpl<Recharge> implements RechargeService {
 	private RechargeDao dao = new RechargeDao();
 	private AccountDao accountDao = new AccountDao();
+	private RechargeSetDao rechargeSetDao = new RechargeSetDao();
 	
 	@Override
 	public boolean save(String userName,int type,BigDecimal money,String orderCode,String remark) {
@@ -37,6 +39,7 @@ public class RechargeServiceImpl extends BaseServiceImpl<Recharge> implements Re
 		recharge.setRechargeCode(NumberUtil.createOrderCode(type));
 		recharge.setUseState(false);
 		recharge.setRemark(remark);
+		recharge.setGiveMoney(rechargeSetDao.giveMoney(money.intValue()));
 		boolean result = recharge.save();
 		if(result){
 			// 2.充值

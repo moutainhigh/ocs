@@ -24,6 +24,14 @@ public class UserController extends BaseController{
 		BaseRenderJson.returnJsonS(this, 1, "还原用户密码成功");
 		logger.info("[操作日志]还原用户成功,id：" + id);
 	}
+	
+	public void updateState() {
+		Long id = getParaToLong("id");
+		Boolean enable = getParaToBoolean("enable");
+		userService.setEnable(id, enable);
+		BaseRenderJson.returnUpdateObj(this, true);
+		logger.info("[操作日志]禁用/启用用户成功,id：" + id);
+	}
 
 	public void list() {
 		int page = getParaToInt("page", 1);

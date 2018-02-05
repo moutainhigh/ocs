@@ -22,6 +22,7 @@ public class _MappingKit {
 		arp.addMapping("ocs_project", "id", Project.class);
 		arp.addMapping("ocs_qq", "id", Qq.class);
 		arp.addMapping("ocs_recharge", "id", Recharge.class);
+		arp.addMapping("ocs_recharge_set", "id", RechargeSet.class);
 		arp.addMapping("ocs_user", "id", User.class);
 		arp.addMapping("ocs_user_token", "id", UserToken.class);
 		arp.addMapping("system_admin", "id", SystemAdmin.class);

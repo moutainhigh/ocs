@@ -42,6 +42,8 @@
 							<th>累计消费</th>
 							<th>最后消费时间</th>
 							<th>状态</th>
+							<th>登录ip</th>
+							<th>最后登录时间</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -58,6 +60,8 @@
                                     <c:if test="${item.state  }">正常</c:if>
                                     <c:if test="${!item.state  }">冻结</c:if>
                                 </td>
+                                <td>${item.login_ip }</td>
+                                <td><fmt:formatDate value="${item.login_time }" pattern="yyyy-MM-dd HH:mm" /></td>
 								<td>
 									<div class="am-btn-toolbar">
 										<div class="am-btn-group am-btn-group-xs">

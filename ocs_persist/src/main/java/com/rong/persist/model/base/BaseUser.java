@@ -57,4 +57,20 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 		return get("state");
 	}
 
+	public void setLoginIp(java.lang.String loginIp) {
+		set("login_ip", loginIp);
+	}
+
+	public java.lang.String getLoginIp() {
+		return getStr("login_ip");
+	}
+
+	public void setLoginTime(java.util.Date loginTime) {
+		set("login_time", loginTime);
+	}
+
+	public java.util.Date getLoginTime() {
+		return get("login_time");
+	}
+
 }

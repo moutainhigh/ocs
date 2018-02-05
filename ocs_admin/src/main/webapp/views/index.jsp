@@ -100,6 +100,9 @@
                             <a href="javascript:loadRight('<%=basePath %>/recharge/list','充值列表')"> <i
                                     class="am-icon-angle-right"></i> <span>充值列表</span>
                             </a>
+                            <a href="javascript:loadRight('<%=basePath %>/rechargeSet/list','充值赠送管理')"> <i
+                                    class="am-icon-angle-right"></i> <span>充值赠送管理</span>
+                            </a>
                             </li>
                         </ul>
                 </li>
@@ -254,6 +257,18 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 弹出框confirm2 -->
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="my_confirm2">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd" id="confirm2_title">确认提示</div>
+            <div class="am-modal-bd" id="confirm2_msg">确定要删除这条记录吗？</div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span> <span
+                    class="am-modal-btn" data-am-modal-confirm>确定</span>
+            </div>
+        </div>
+    </div>
 	
 		<!-- 用户资料查看弹出框 -->
 <div class="am-modal am-modal-no-btn" tabindex="-1" id="my-popup1">
@@ -412,9 +427,6 @@
 	<script src="<%=basePath%>/js/index.js"></script>
 	<script src="<%=basePath%>/assets/js/amazeui.datetimepicker.min.js"></script>
 	<script src="<%=basePath%>/assets/js/amazeui.datetimepicker.zh-CN.js"></script>
-	<script src="<%=basePath%>/js/fileupload/jquery.ui.widget.js"></script>
-	<script src="<%=basePath%>/js/fileupload/jquery.fileupload.js"></script>
-	<script src="<%=basePath%>/js/fileupload/jquery.iframe-transport.js"></script>
 </body>
 
 <shiro:notAuthenticated>

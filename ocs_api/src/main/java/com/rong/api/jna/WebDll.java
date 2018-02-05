@@ -15,9 +15,10 @@ import com.sun.jna.Platform;
  * @ModifyHistory:
  ****/
 
-public interface TokenDLL extends Library {
-	// msvcrt为dll名称,msvcrt目录的位置为:C:\Windows\System32下面,
-	TokenDLL Instance = (TokenDLL) Native.loadLibrary((Platform.isWindows() ? "msvcrt" : "c"), TokenDLL.class);
-	// printf为msvcrt.dll中的一个方法.
-	String getToken(String str);
+public interface WebDll extends Library {
+	// WebDll为dll名称,WebDll目录的位置为:C:\Windows\System32下面,
+	WebDll Instance = (WebDll) Native.loadLibrary((Platform.isWindows() ? "WebDll" : "c"), WebDll.class);
+	//dll导出函数名字是enc(char*,int len)
+//	{"data":"11111","time":"2222","cmd":"3333"}
+	String enc(String str,int len);
 }

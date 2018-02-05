@@ -15,7 +15,7 @@ public class RechargeDao extends BaseDao<Recharge> {
 
 	public static final Recharge dao = Recharge.dao;
 
-	public static final String FILEDS = "id,create_time,type,money,recharge_code,order_code,remark,use_state,user_name";
+	public static final String FILEDS = "id,create_time,type,money,recharge_code,order_code,remark,use_state,user_name,give_money";
 
 	public Page<Recharge> page(int pageNumber, int pageSize, Kv param) {
 		String select = "select " + FILEDS;

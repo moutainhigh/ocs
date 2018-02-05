@@ -26,6 +26,7 @@ import com.rong.admin.controller.LogController;
 import com.rong.admin.controller.ProjectController;
 import com.rong.admin.controller.QqController;
 import com.rong.admin.controller.RechargeController;
+import com.rong.admin.controller.RechargeSetController;
 import com.rong.admin.controller.ResourceController;
 import com.rong.admin.controller.RoleController;
 import com.rong.admin.controller.SystemConfigController;
@@ -105,6 +106,7 @@ public class MyConfig extends JFinalConfig {
 		me.add("/user", UserController.class);
 		me.add("/project", ProjectController.class);
 		me.add("/recharge", RechargeController.class);
+		me.add("/rechargeSet", RechargeSetController.class);
 		me.add("/qq", QqController.class);
 		me.add("/interfaceCall", InterfaceCallController.class);
 	}

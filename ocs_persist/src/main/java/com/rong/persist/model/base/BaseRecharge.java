@@ -80,5 +80,13 @@ public abstract class BaseRecharge<M extends BaseRecharge<M>> extends Model<M> i
 	public java.lang.String getUserName() {
 		return getStr("user_name");
 	}
+	
+	public void setGiveMoney(java.lang.Integer giveMoney) {
+		set("give_money", giveMoney);
+	}
+
+	public java.lang.Integer getGiveMoney() {
+		return getInt("give_money");
+	}
 
 }

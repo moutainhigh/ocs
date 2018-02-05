@@ -8,7 +8,6 @@ import java.util.Map;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
-import com.rong.api.jna.TokenDLL;
 import com.rong.business.service.AccountService;
 import com.rong.business.service.AccountServiceImpl;
 import com.rong.business.service.InterfaceCallService;
@@ -25,6 +24,7 @@ import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyConst;
 import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.util.CommonUtil;
+import com.rong.common.util.RequestUtils;
 import com.rong.common.util.StringUtils;
 import com.rong.common.validator.CommonValidatorUtils;
 import com.rong.persist.dao.SystemConfigDao;
@@ -113,6 +113,10 @@ public class UserController extends Controller {
 		if(user == null){
 			return;
 		}
+		// 更新用户登录ip和登录时间
+		user.setLoginTime(new Date());
+		user.setLoginIp(RequestUtils.getRequestIpAddress(this.getRequest()));
+		user.update();
 		// 旧的TOKEN失效 删除掉旧的token
 		userTokenService.delByUserName(userName);
 		String token = userTokenService.saveToken(user);// 保存新的token信息
@@ -156,15 +160,13 @@ public class UserController extends Controller {
 	 */
 	public void consum(){
 		String userName = getPara("userName");
-		String userPwd = getPara("userPwd");
 		Long projectId = getParaToLong("projectId");
 		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userName", userName);
-		paraMap.put("userPwd", userPwd);
 		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
 			return;
 		}
-		String token = consumBusiness(userName, userPwd, projectId,true);
+		String token = consumBusiness(userName, projectId,true);
 		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,token ,"计费成功");
 	}
 	
@@ -173,13 +175,11 @@ public class UserController extends Controller {
 	 */
 	public void consumqq(){
 		String userName = getPara("userName");
-		String userPwd = getPara("userPwd");
 		String qq = getPara("qq");
 		String qqPwd = getPara("qqPwd");
 		Long projectId = getParaToLong("projectId");
 		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userName", userName);
-		paraMap.put("userPwd", userPwd);
 		paraMap.put("qq", qq);
 		paraMap.put("qqPwd", qqPwd);
 		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
@@ -190,9 +190,9 @@ public class UserController extends Controller {
 		// 校验qq是否存在，存在则直接取数据库token
 		if(qqFind!=null){
 			if(qqFind.getPwd().equals(qqPwd)){
-				consumBusiness(userName, userPwd, projectId,false);
+				consumBusiness(userName, projectId,false);
 			}else{
-				token = consumBusiness(userName, userPwd, projectId,true);
+				token = consumBusiness(userName, projectId,true);
 				//更新token
 				qqFind.setToken(token);
 				qqFind.update();
@@ -200,7 +200,7 @@ public class UserController extends Controller {
 			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,qqFind.getToken() ,"计费成功");
 		}else{
 			// 保存qq
-			token = consumBusiness(userName, userPwd, projectId,true);
+			token = consumBusiness(userName, projectId,true);
 			qqService.save(qq, qqPwd, token);
 			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,token ,"计费成功");
 		}
@@ -212,9 +212,9 @@ public class UserController extends Controller {
 	 * @param userPwd
 	 * @param projectId
 	 */
-	private String consumBusiness(String userName, String userPwd, Long projectId,boolean hasGetToken) {
+	private String consumBusiness(String userName,Long projectId,boolean hasGetToken) {
 		// 1.校验用户是否合法
-		User user = checkUserNameAndPwd(userName, userPwd);
+		User user = checkUserState(userName);
 		if(user == null){
 			return null;
 		}
@@ -247,6 +247,17 @@ public class UserController extends Controller {
 
 	/** 校验登录用户名密码是否正确  */
 	private User checkUserNameAndPwd(String userName, String userPwd) {
+		User temp = checkUserState(userName);
+		User user = userService.findByUserNameAndPwd(userName, userPwd);
+		if (user == null) {
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_LOGIN_ERROR, "用户名或者密码错误");
+			return null;
+		}
+		return temp;
+	}
+
+	/** 校验登录用户是否正常  */
+	private User checkUserState(String userName) {
 		// 查询登陆信息
 		User temp = userService.findByUserName(userName);
 		if (temp != null) {
@@ -258,11 +269,6 @@ public class UserController extends Controller {
 			}
 		} else {
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_NOT_EXIST, "该账号不存在");
-			return null;
-		}
-		User user = userService.findByUserNameAndPwd(userName, userPwd);
-		if (user == null) {
-			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_LOGIN_ERROR, "用户名或者密码错误");
 			return null;
 		}
 		return temp;
