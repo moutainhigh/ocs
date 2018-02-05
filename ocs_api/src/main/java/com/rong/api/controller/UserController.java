@@ -1,6 +1,8 @@
 package com.rong.api.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.Map;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
+import com.rong.api.jna.WebDll;
 import com.rong.business.service.AccountService;
 import com.rong.business.service.AccountServiceImpl;
 import com.rong.business.service.InterfaceCallService;
@@ -25,6 +28,7 @@ import com.rong.business.service.UserTokenServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyConst;
 import com.rong.common.bean.MyErrorCodeConfig;
+import com.rong.common.exception.CommonException;
 import com.rong.common.util.CommonUtil;
 import com.rong.common.util.RequestUtils;
 import com.rong.common.util.StringUtils;
@@ -78,7 +82,7 @@ public class UserController extends Controller {
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_EXIST, "用户名已被使用，请重新填写");
 			return;
 		}
-		// 校验订单号是否已被使用（是否有效）
+		// 校验订单号是否已被使用（是否有效,金额是否为688）
 		Recharge recharge = rechargeService.findByOrderCodeNotReg(orderCode);
 		if(recharge==null){
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REG_ORDERCODE_ERROR, "无效的订单号");
@@ -176,12 +180,15 @@ public class UserController extends Controller {
 	public void consum(){
 		String userName = getPara("userName");
 		Long projectId = getParaToLong("projectId");
+		String data = getPara("data");
 		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userName", userName);
+		paraMap.put("projectId", projectId);
+		paraMap.put("data", data);
 		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
 			return;
 		}
-		String token = consumBusiness(userName, projectId,true);
+		String token = consumBusiness(userName, projectId,true,data);
 		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,token ,"计费成功");
 	}
 	
@@ -192,11 +199,14 @@ public class UserController extends Controller {
 		String userName = getPara("userName");
 		String qq = getPara("qq");
 		String qqPwd = getPara("qqPwd");
+		String data = getPara("data");
 		Long projectId = getParaToLong("projectId");
 		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userName", userName);
 		paraMap.put("qq", qq);
 		paraMap.put("qqPwd", qqPwd);
+		paraMap.put("projectId", projectId);
+		paraMap.put("data", data);
 		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
 			return;
 		}
@@ -205,9 +215,9 @@ public class UserController extends Controller {
 		// 校验qq是否存在，存在则直接取数据库token
 		if(qqFind!=null){
 			if(qqFind.getPwd().equals(qqPwd)){
-				consumBusiness(userName, projectId,false);
+				consumBusiness(userName, projectId,false,data);
 			}else{
-				token = consumBusiness(userName, projectId,true);
+				token = consumBusiness(userName, projectId,true,data);
 				//更新token
 				qqFind.setToken(token);
 				qqFind.update();
@@ -215,7 +225,7 @@ public class UserController extends Controller {
 			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,qqFind.getToken() ,"计费成功");
 		}else{
 			// 保存qq
-			token = consumBusiness(userName, projectId,true);
+			token = consumBusiness(userName, projectId,true,data);
 			qqService.save(qq, qqPwd, token);
 			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,token ,"计费成功");
 		}
@@ -227,7 +237,7 @@ public class UserController extends Controller {
 	 * @param userPwd
 	 * @param projectId
 	 */
-	private String consumBusiness(String userName,Long projectId,boolean hasGetToken) {
+	private String consumBusiness(String userName,Long projectId,boolean hasGetToken,String data) {
 		// 1.校验用户是否合法
 		User user = checkUserState(userName);
 		if(user == null){
@@ -245,10 +255,16 @@ public class UserController extends Controller {
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.ACCOUNT_NOT_ENOUGH, "余额不足，请及时充值");
 			return null;
 		}
-		// TODO 3.调用Dll获取加密串
+		// 3.调用Dll获取加密串
+		try {
+			data = new String(Base64.getDecoder().decode(data),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new CommonException(MyErrorCodeConfig.ERROR_BAD_REQUEST, "data参数base64解密失败");
+		}
 		String returnStr = "";
 		if(hasGetToken){
-			returnStr = "dll";
+			returnStr = WebDll.Instance.enc(data, data.length());
 			if(StringUtils.isNullOrEmpty(returnStr)){
 				interfaceCallService.save(userName, false, projectId,project.getProjectName(),"调用DLL失败");
 				BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.DLL_ERROR, "调用DLL失败");
@@ -257,6 +273,12 @@ public class UserController extends Controller {
 		}
 		// 4.计费
 		interfaceCallService.consumed(projectId,project.getProjectName(),project.getPrice(), userName, userAccount.getAccount());
+		try {
+			returnStr = Base64.getEncoder().encodeToString(returnStr.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new CommonException(MyErrorCodeConfig.ERROR_BAD_REQUEST, "returnToken参数base64加密失败");
+		}
 		return returnStr;
 	}
 

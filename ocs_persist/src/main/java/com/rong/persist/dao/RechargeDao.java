@@ -47,7 +47,7 @@ public class RechargeDao extends BaseDao<Recharge> {
 	}
 	
 	public Recharge findByOrderCodeNotReg(String orderCode){
-		String sql = "select " + FILEDS + " from " + Recharge.TABLE + " where order_code = ? and reg_state = false and agent_id is not null";
+		String sql = "select " + FILEDS + " from " + Recharge.TABLE + " where order_code = ? and reg_state = false";
 		return dao.findFirst(sql, orderCode);
 	}
 	

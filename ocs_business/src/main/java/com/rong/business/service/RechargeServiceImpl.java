@@ -13,7 +13,9 @@ import com.rong.persist.dao.AccountDao;
 import com.rong.persist.dao.RechargeDao;
 import com.rong.persist.dao.RechargeSetDao;
 import com.rong.persist.dao.SystemAdminDao;
+import com.rong.persist.dao.SystemConfigDao;
 import com.rong.persist.model.Recharge;
+import com.rong.persist.model.SystemConfig;
 
 /****
  * @Project_Name:	ocs_business
@@ -30,6 +32,7 @@ public class RechargeServiceImpl extends BaseServiceImpl<Recharge> implements Re
 	private AccountDao accountDao = new AccountDao();
 	private RechargeSetDao rechargeSetDao = new RechargeSetDao();
 	private SystemAdminDao adminDao = new SystemAdminDao();
+	private SystemConfigDao configDao = new SystemConfigDao();
 	
 	@Override
 	public boolean save(String userName,int type,BigDecimal money,String orderCode,String remark,Long agentId) {
@@ -74,7 +77,16 @@ public class RechargeServiceImpl extends BaseServiceImpl<Recharge> implements Re
 	
 	@Override
 	public Recharge findByOrderCodeNotReg(String orderCode) {
-		return dao.findByOrderCodeNotReg(orderCode);
+		Long regMoney = 688L;
+		SystemConfig systemConfig = configDao.getByKey("reg.money");
+		if(systemConfig!=null){
+			regMoney = Long.parseLong(systemConfig.getValue());
+		}
+		Recharge recharge = dao.findByOrderCodeNotReg(orderCode);
+		if(recharge!=null && recharge.getMoney().longValue()==regMoney){
+			return recharge;
+		}
+		return null;
 	}
 
 }

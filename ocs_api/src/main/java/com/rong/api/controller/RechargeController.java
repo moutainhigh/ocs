@@ -18,6 +18,18 @@ public class RechargeController extends Controller{
 	 * 充值
 	 */
 	public void saveRecharge() {
+		recharge(null);
+	}
+	
+	public void saveRechargeAgent2() {
+		recharge(2L);
+	}
+	
+	public void saveRechargeAgent3() {
+		recharge(3L);
+	}
+	
+	private void recharge(Long agentId){
 		String userName = getPara("userName");
 		String money = getPara("money");
 		Integer type = getParaToInt("type");
@@ -37,7 +49,9 @@ public class RechargeController extends Controller{
 			return;
 		}
 		String remark = getPara("remark");
-		Long agentId = getParaToLong("agentId");
+		if(agentId==null){
+			agentId = getParaToLong("agentId");
+		}
 		rechargeService.save(userName, type, new BigDecimal(money), orderCode, remark,agentId);
 		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "充值成功");
 		logger.info("充值成功,"+userName+"充值金额："+money);
