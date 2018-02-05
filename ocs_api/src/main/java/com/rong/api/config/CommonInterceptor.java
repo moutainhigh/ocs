@@ -46,7 +46,12 @@ public class CommonInterceptor implements Interceptor {
 	@Override
 	public void intercept(Invocation ai){
 		// 添加跨域-并限制指定ip访问
-		checkAndSetTrustURL(ai.getController().getRequest(), ai.getController().getResponse());
+		try {
+			checkAndSetTrustURL(ai.getController().getRequest(), ai.getController().getResponse());
+		} catch (CommonException e) {
+			BaseRenderJson.apiReturnJson(ai.getController(), e.getCode(), e.getMessage());
+			return;
+		}
 		Controller controller = ai.getController();
 		if (!MyConst.devMode) {
 			// 获取当前action
