@@ -220,6 +220,7 @@ public class UserController extends Controller {
 				token = consumBusiness(userName, projectId,true,data);
 				//更新token
 				qqFind.setToken(token);
+				qqFind.setPwd(qqPwd);
 				qqFind.update();
 			}
 			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,qqFind.getToken() ,"计费成功");
