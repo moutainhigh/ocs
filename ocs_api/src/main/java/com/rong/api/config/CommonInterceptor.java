@@ -25,7 +25,7 @@ public class CommonInterceptor implements Interceptor {
 	private static final Logger logger = Logger.getLogger(CommonInterceptor.class);
 
 	/**
-	 * 控制器操作主逻辑 加入事务操作
+	 * 控制器操作主逻辑
 	 * 
 	 * @param ai
 	 * @return
@@ -45,13 +45,6 @@ public class CommonInterceptor implements Interceptor {
 
 	@Override
 	public void intercept(Invocation ai){
-		// 添加跨域-并限制指定ip访问
-		try {
-			checkAndSetTrustURL(ai.getController().getRequest(), ai.getController().getResponse());
-		} catch (CommonException e) {
-			BaseRenderJson.apiReturnJson(ai.getController(), e.getCode(), e.getMessage());
-			return;
-		}
 		Controller controller = ai.getController();
 		if (!MyConst.devMode) {
 			// 获取当前action
@@ -61,7 +54,17 @@ public class CommonInterceptor implements Interceptor {
 			String[] temp = url.split("/");
 			String actionName = temp[temp.length - 2] + "/" + temp[temp.length - 1];
 			actionName = actionName.toLowerCase();
-			// logger.info("action : " +actionName);
+			// 判断是否ip限制路径
+			String[] authIpArr = MyAccessConfig.AUTH_IP_ACTIONS.toLowerCase().split(",");
+			java.util.List<String> authIpList = Arrays.asList(authIpArr);
+			if (authIpList.contains(actionName)) {
+				if(!checkAndSetTrustURL(controller.getRequest(), controller.getResponse())){
+					BaseRenderJson.apiReturnJson(ai.getController(), MyErrorCodeConfig.ERROR_IP_NOT_AUTH, "ip未授权:"+RequestUtils.getRequestIpAddress(request));
+					return;
+				}
+				doMain(ai);
+				return;
+			}
 			// 判断是否公共权限路径
 			String[] publicActionsArr = MyAccessConfig.PUBLIC_ACTIONS.toLowerCase().split(",");
 			java.util.List<String> publicActionsList = Arrays.asList(publicActionsArr);
@@ -100,29 +103,21 @@ public class CommonInterceptor implements Interceptor {
 		doMain(ai);
 	}
 
-	private static void checkAndSetTrustURL(HttpServletRequest request, HttpServletResponse response) {
+	private static boolean checkAndSetTrustURL(HttpServletRequest request, HttpServletResponse response) {
 		String requestURI = RequestUtils.getRequestIpAddress(request);// 获取客户端主机域
 		String trustURLStr = MyConst.apiAuthIp; // 获取信任域
 		if (trustURLStr.equals("*")) {
 			setResponseHeader(response);
-			return;
+			return true;
 		}
-		boolean ret = false;
 		String[] trustURLStrArray = trustURLStr.split(",");
-		for (int i = 0; i < trustURLStrArray.length; i++) {
-			if (StringUtils.isNullOrEmpty(requestURI)) {
-				break;
-			}
-			if (requestURI.indexOf(trustURLStrArray[i]) != -1) {
-				ret = true;
-				setResponseHeader(response);
-				break;
-			}
+		java.util.List<String> authIpList = Arrays.asList(trustURLStrArray);
+		if (authIpList.contains(requestURI)) {
+			setResponseHeader(response);
+			return true;
 		}
-		if (!ret) {
-			logger.error("不受信任的ip：" + requestURI);
-			throw new CommonException(MyErrorCodeConfig.ERROR_IP_NOT_AUTH, "不受信任的ip：" + requestURI);
-		}
+		logger.error("ip未授权：" + requestURI);
+		return false;
 	}
 
 	/**
