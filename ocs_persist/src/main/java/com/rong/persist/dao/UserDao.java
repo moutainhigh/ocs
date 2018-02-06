@@ -4,6 +4,7 @@ import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
 import com.rong.persist.model.Account;
 import com.rong.persist.model.User;
@@ -27,12 +28,12 @@ public class UserDao extends BaseDao<User> {
 			// 状态 1-可用，0已冻结
 			Boolean state = param.getBoolean("state");
 			if (state != null) {
-				where.append(" and u.state = " + state + "");
+				where.append(" and u.state = " + state);
 			}
 			// 用户名
 			String userName = param.getStr("userName");
-			if (userName != null) {
-				where.append(" and u.user_name = " + userName + "");
+			if (!StringUtils.isNullOrEmpty(userName)) {
+				where.append(" and u.user_name = '" + userName + "'");
 			}
 			// 代理id
 			Long agentId = param.getLong("agentId");

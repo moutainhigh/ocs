@@ -6,6 +6,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.rong.business.service.UserService;
 import com.rong.business.service.UserServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
+import com.rong.common.util.CommonUtil;
 
 public class UserController extends BaseController{
 	private final Log logger = Log.getLog(this.getClass());
@@ -21,7 +22,7 @@ public class UserController extends BaseController{
 	public void resetPwd() {
 		Long id = getParaToLong("id");
 		String userPwd = getPara("userPwd");
-		userService.resetPwd(id, userPwd);
+		userService.resetPwd(id, CommonUtil.getMD5(userPwd));
 		BaseRenderJson.returnJsonS(this, 1, "还原用户密码成功");
 		logger.info("[操作日志]还原用户成功,id：" + id);
 	}
