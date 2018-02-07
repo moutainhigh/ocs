@@ -30,12 +30,10 @@ public class RechargeController extends Controller{
 	}
 	
 	private void recharge(Long agentId){
-		String userName = getPara("userName");
 		String money = getPara("money");
 		Integer type = getParaToInt("type");
 		String orderCode = getPara("orderCode");
 		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("userName", userName);
 		paramMap.put("money", money);
 		paramMap.put("type", type);
 		paramMap.put("orderCode", orderCode);
@@ -52,6 +50,7 @@ public class RechargeController extends Controller{
 		if(agentId==null){
 			agentId = getParaToLong("agentId");
 		}
+		String userName = remark;//用户名即
 		rechargeService.save(userName, type, new BigDecimal(money), orderCode, remark,agentId);
 		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "充值成功");
 		logger.info("充值成功,"+userName+"充值金额："+money);
