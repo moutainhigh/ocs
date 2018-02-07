@@ -77,13 +77,13 @@ public class RechargeServiceImpl extends BaseServiceImpl<Recharge> implements Re
 	
 	@Override
 	public Recharge findByOrderCodeNotReg(String orderCode) {
-		Long regMoney = 688L;
+		BigDecimal regMoney = new BigDecimal(688);
 		SystemConfig systemConfig = configDao.getByKey("reg.money");
 		if(systemConfig!=null){
-			regMoney = Long.parseLong(systemConfig.getValue());
+			regMoney = new BigDecimal(systemConfig.getValue());
 		}
 		Recharge recharge = dao.findByOrderCodeNotReg(orderCode);
-		if(recharge!=null && recharge.getMoney().longValue()==regMoney){
+		if(recharge!=null && recharge.getMoney().compareTo(regMoney)==0){
 			return recharge;
 		}
 		return null;
