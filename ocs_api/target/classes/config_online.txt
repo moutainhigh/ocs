@@ -1,4 +1,4 @@
-jdbcUrl = jdbc:mysql://127.0.0.1:3306/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+jdbcUrl = jdbc:mysql://39.108.75.150:3306/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 user=rongwq
 password=wenqiang18
 devMode = false
