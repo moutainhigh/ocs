@@ -47,7 +47,7 @@ public class InterfaceCallDao extends BaseDao<InterfaceCall> {
 		return Db.queryInt("select count(*) from " + InterfaceCall.TABLE + " where project_id = ?",projectId);
 	}
 	
-	public boolean save(String userName,boolean callSuccess,long projectId,String projectName,String remark){
+	public Long save(String userName, boolean callSuccess, long projectId, String projectName, String remark) {
 		InterfaceCall item = new InterfaceCall();
 		item.setCreateTime(new Date());
 		item.setCallSuccess(callSuccess);
@@ -55,6 +55,7 @@ public class InterfaceCallDao extends BaseDao<InterfaceCall> {
 		item.setProjectName(projectName);
 		item.setRemark(remark);
 		item.setUserName(userName);
-		return item.save();
+		item.save();
+		return item.getId();
 	}
 }

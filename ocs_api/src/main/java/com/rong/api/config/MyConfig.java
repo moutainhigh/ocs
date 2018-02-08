@@ -15,6 +15,7 @@ import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.rong.api.controller.RechargeController;
 import com.rong.api.controller.UserController;
+import com.rong.api.controller.UserController_v2;
 import com.rong.common.bean.MyConst;
 import com.rong.persist.dao.SystemConfigDao;
 import com.rong.persist.model.SystemConfig;
@@ -68,6 +69,7 @@ public class MyConfig extends JFinalConfig {
 	@Override
 	public void configRoute(Routes me) {
 		me.add("/api/user", UserController.class);
+		me.add("/api/v2/user", UserController_v2.class);
 		me.add("/api/recharge", RechargeController.class);
 	}
 

@@ -14,6 +14,6 @@ import com.rong.persist.model.InterfaceCall;
 public interface InterfaceCallService extends BaseService<InterfaceCall>{
 	Page<InterfaceCall> page(int pageNumber, int pageSize, Kv param);
 	int countByProjectId(long projectId);
-	boolean consumed(long projectId,String projectName,BigDecimal projectPrice,String userName,BigDecimal account);
-	boolean save(String userName,boolean callSuccess,long projectId,String projectName,String remark);
+	Long consumed(long projectId,String projectName,BigDecimal projectPrice,String userName,BigDecimal account);
+	Long save(String userName,boolean callSuccess,long projectId,String projectName,String remark);
 }

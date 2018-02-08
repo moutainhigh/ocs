@@ -35,27 +35,26 @@ public class InterfaceCallServiceImpl extends BaseServiceImpl<InterfaceCall> imp
 		return dao.countByProjectId(projectId);
 	}
 	@Override
-	public boolean save(String userName,boolean callSuccess,long projectId,String projectName,String remark){
+	public Long save(String userName,boolean callSuccess,long projectId,String projectName,String remark){
 		return dao.save(userName, callSuccess, projectId, projectName, remark);
 	}
 
 	@Override
-	public boolean consumed(long projectId,String projectName,BigDecimal projectPrice,String userName,BigDecimal account){
+	public Long consumed(long projectId, String projectName, BigDecimal projectPrice, String userName,
+			BigDecimal account) {
 		// 1.保存调用记录
-		boolean result = dao.save(userName, true, projectId, projectName, null);
-		// 2.更新余额
-		if(result){
-			// 2.1.保存消费记录
-			Consume consume = new Consume();
-			consume.setCreateTime(new Date());
-			consume.setMoney(projectPrice);
-			consume.setProjectId(projectId);
-			consume.setProjectName(projectName);
-			consume.setUserName(userName);
-			consume.save();
-			return accountDao.consumed(userName, account, projectPrice);
-		}
-		return false;
+		Long result = dao.save(userName, true, projectId, projectName, null);
+		// 2.保存消费记录
+		Consume consume = new Consume();
+		consume.setCreateTime(new Date());
+		consume.setMoney(projectPrice);
+		consume.setProjectId(projectId);
+		consume.setProjectName(projectName);
+		consume.setUserName(userName);
+		consume.save();
+		// 3.更新余额
+		accountDao.consumed(userName, account, projectPrice);
+		return result;
 	}
 
 }
