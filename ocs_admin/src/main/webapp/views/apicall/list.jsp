@@ -45,6 +45,7 @@
 							<th>项目名</th>
 							<th>日期</th>
 							<th>调用状态</th>
+							<th>调用确认</th>
 							<th>备注</th>
 						</tr>
 					</thead>
@@ -57,6 +58,7 @@
                                 <td>${item.projectName }</td>
 								<td><fmt:formatDate value="${item.createTime }" pattern="yyyy-MM-dd HH:mm" /></td>
 								<td>${item.callSuccess?'成功':'失败' }</td>
+								<td>${item.callbackSuccess?'确认':'未确认' }</td>
                                 <td>${item.remark }</td>
 							</tr>
 						</c:forEach>

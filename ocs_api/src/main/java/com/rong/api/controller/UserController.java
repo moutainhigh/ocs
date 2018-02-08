@@ -247,14 +247,12 @@ public class UserController extends Controller {
 		// 1.1校验项目是否存在
 		Project project = projectService.findById(projectId);
 		if(project==null){//项目不存在
-			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.PROJECT_NOT_EXIST, "项目不存在");
-			return null;
+			throw new CommonException(MyErrorCodeConfig.PROJECT_NOT_EXIST, "项目不存在");
 		}
 		// 2.校验余额是否足够
 		Account userAccount = accountService.findByUserName(userName);
 		if(BigDecimal.ZERO.compareTo(userAccount.getAccount())==1){
-			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.ACCOUNT_NOT_ENOUGH, "余额不足，请及时充值");
-			return null;
+			throw new CommonException(MyErrorCodeConfig.ACCOUNT_NOT_ENOUGH, "余额不足，请及时充值");
 		}
 		// 3.调用Dll获取加密串
 		try {
@@ -268,8 +266,7 @@ public class UserController extends Controller {
 			returnStr = WebDll.Instance.enc(data, data.length());
 			if(StringUtils.isNullOrEmpty(returnStr)){
 				interfaceCallService.save(userName, false, projectId,project.getProjectName(),"调用DLL失败");
-				BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.DLL_ERROR, "调用DLL失败");
-				return null;
+				throw new CommonException(MyErrorCodeConfig.DLL_ERROR, "调用DLL失败");
 			}
 		}
 		// 4.计费

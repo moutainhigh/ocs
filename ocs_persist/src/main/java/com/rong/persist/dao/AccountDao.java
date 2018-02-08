@@ -35,7 +35,7 @@ public class AccountDao extends BaseDao<Account> {
 		if(account.compareTo(money)==-1){//账户小于消费金额
 			throw new CommonException(MyErrorCodeConfig.ACCOUNT_NOT_ENOUGH, "余额不足");
 		}
-		String sql = "update " + Account.TABLE +" set account = account - ?,update_time = now(),last_consumed_time = now() where user_name = ?";
-		return Db.update(sql, money,userName)>0;
+		String sql = "update " + Account.TABLE +" set account = account - ?,consumed_sum = consumed_sum + ?,update_time = now(),last_consumed_time = now() where user_name = ?";
+		return Db.update(sql, money,money,userName)>0;
 	}
 }
