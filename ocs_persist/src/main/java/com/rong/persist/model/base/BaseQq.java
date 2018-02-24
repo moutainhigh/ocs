@@ -56,5 +56,21 @@ public abstract class BaseQq<M extends BaseQq<M>> extends Model<M> implements IB
 	public java.util.Date getUpdateTime() {
 		return get("update_time");
 	}
+	
+	public void setData(java.lang.String data) {
+		set("data", data);
+	}
+
+	public java.lang.String getData() {
+		return getStr("data");
+	}
+	
+	public void setUserName(java.lang.String userName) {
+		set("user_name", userName);
+	}
+
+	public java.lang.String getUserName() {
+		return getStr("user_name");
+	}
 
 }

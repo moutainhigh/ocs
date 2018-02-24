@@ -210,7 +210,7 @@ public class UserController extends Controller {
 		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
 			return;
 		}
-		Qq qqFind = qqService.findByQq(qq);
+		Qq qqFind = qqService.findByQqAndUserName(qq,userName);
 		Record returnObj = null;
 		// 校验qq是否存在，存在则直接取数据库token
 		if(qqFind!=null){
@@ -227,7 +227,7 @@ public class UserController extends Controller {
 		}else{
 			// 保存qq
 			returnObj = consumBusiness(userName, projectId,true,data);
-			qqService.save(qq, qqPwd, returnObj.getStr("token"));
+			qqService.save(qq, qqPwd, returnObj.getStr("token"),userName);
 			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,returnObj.getStr("token") ,"计费成功");
 		}
 	}
@@ -310,5 +310,41 @@ public class UserController extends Controller {
 			return null;
 		}
 		return temp;
+	}
+	
+	/**
+	 * 查询qq二次登陆
+	 */
+	public void secondLoginQq() {
+		String qq = getPara("qq");
+		String userName = getPara("userName");
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("qq", qq);
+		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
+			return;
+		}
+		Qq item = qqService.findByQqAndUserName(qq, userName);
+		if(item==null){
+			BaseRenderJson.baseRenderObj.returnObj(this, null, MyErrorCodeConfig.REQUEST_SUCCESS, "无数据");
+			return;
+		}
+		BaseRenderJson.baseRenderObj.returnObj(this, item.getData(), MyErrorCodeConfig.REQUEST_SUCCESS, "查询成功");
+	}
+	
+	/**
+	 * 保存qq的data信息
+	 */
+	public void saveSecondLoginQq() {
+		String qq = getPara("qq");
+		String data = getPara("data");
+		String userName = getPara("userName");
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("qq", qq);
+		paraMap.put("data", data);
+		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
+			return;
+		}
+		qqService.saveOrUpdate(qq,userName,data);
+		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "保存成功");
 	}
 }

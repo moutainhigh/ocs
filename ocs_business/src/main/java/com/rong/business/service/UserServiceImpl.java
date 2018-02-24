@@ -41,4 +41,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		pwd = CommonUtil.getMD5(pwd);
 		return dao.findByUserNameAndPwd(userName, pwd);
 	}
+
+	@Override
+	public boolean editExpirDate(long id, String date) {
+		return dao.updateField(id, "expir_date", date);
+	}
 }

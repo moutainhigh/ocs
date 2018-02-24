@@ -15,7 +15,7 @@ public class QqDao extends BaseDao<Qq> {
 
 	public static final Qq dao = Qq.dao;
 
-	public static final String FILEDS = "id,create_time,update_time,qq,pwd,token";
+	public static final String FILEDS = "id,create_time,update_time,qq,pwd,token,data,user_name";
 
 	public Page<Qq> page(int pageNumber, int pageSize, Kv param) {
 		String select = "select " + FILEDS;
@@ -32,8 +32,8 @@ public class QqDao extends BaseDao<Qq> {
 		return dao.paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}
 	
-	public Qq findByQq(String qq){
-		String sql = "select " + FILEDS + " from " + Qq.TABLE + " where qq = ?";
-		return dao.findFirst(sql, qq);
+	public Qq findByQqAndUserName(String qq,String userName){
+		String sql = "select " + FILEDS + " from " + Qq.TABLE + " where qq = ? and user_name = ?";
+		return dao.findFirst(sql, qq,userName);
 	}
 }

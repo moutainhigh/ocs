@@ -80,5 +80,14 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 	public java.lang.Long getAgentId() {
 		return getLong("agent_id");
 	}
+	
+	public void setExpirDate(java.util.Date expirDate) {
+		set("expir_date", expirDate);
+	}
+
+	public java.util.Date getExpirDate() {
+		return get("expir_date");
+	}
+
 
 }

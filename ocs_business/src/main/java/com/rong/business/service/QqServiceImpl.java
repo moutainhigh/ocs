@@ -28,18 +28,34 @@ public class QqServiceImpl extends BaseServiceImpl<Qq> implements QqService{
 	}
 
 	@Override
-	public boolean save(String qq, String pwd, String token) {
+	public boolean save(String qq, String pwd, String token,String userName) {
 		Qq model = new Qq();
 		model.setCreateTime(new Date());
 		model.setQq(qq);
 		model.setPwd(pwd);
 		model.setToken(token);
+		model.setUserName(userName);
 		return dao.save(model);
 	}
 
 	@Override
-	public Qq findByQq(String qq) {
-		return dao.findByQq(qq);
+	public Qq findByQqAndUserName(String qq, String userName) {
+		return dao.findByQqAndUserName(qq, userName);
+	}
+
+	@Override
+	public boolean saveOrUpdate(String qq, String userName, String data) {
+		Qq item = dao.findByQqAndUserName(qq, userName);
+		if (item == null) {
+			Qq model = new Qq();
+			model.setCreateTime(new Date());
+			model.setQq(qq);
+			model.setData(data);
+			model.setUserName(userName);
+			return dao.save(model);
+		}
+		item.setData(data);
+		return dao.update(item);
 	}
 
 }

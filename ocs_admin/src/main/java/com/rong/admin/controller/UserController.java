@@ -1,4 +1,6 @@
 package com.rong.admin.controller;
+import java.util.Date;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Page;
@@ -45,7 +47,30 @@ public class UserController extends BaseController{
 		}
 		Page<Record> list = userService.getUserList(page, pageSize,param);
 		keepPara();
+		setAttr("nowDate", new Date());
 		setAttr("page", list);
 		render("/views/user/list.jsp");
+	}
+	
+	public void loginList() {
+		int page = getParaToInt("page", 1);
+		String userName = getPara("userName");
+		Kv param = Kv.by("userName", userName).set("orderByLoginTime", true);
+		if(!isAdmin()){
+			param.set("agentId", getUser().getId());
+		}
+		Page<Record> list = userService.getUserList(page, pageSize,param);
+		keepPara();
+		setAttr("nowDate", new Date());
+		setAttr("page", list);
+		render("/views/user/login_list.jsp");
+	}
+	
+	public void editExpirDate() {
+		Long id = getParaToLong("id");
+		String expirDate = getPara("expirDate");
+		userService.editExpirDate(id, expirDate);
+		BaseRenderJson.returnUpdateObj(this, true);
+		logger.info("[操作日志]编辑用户过期时间成功,id：" + id+",expirDate:"+expirDate);
 	}
 }

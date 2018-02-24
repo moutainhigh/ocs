@@ -10,6 +10,17 @@ $(function() {
 	initQueryForm();//初始化查询
 	initDelete();
 	initResetPwd();
+	initEditExpirDate();
+	
+	//日期时间选择器
+	$("#expirDate").datepicker({
+	    language: 'zh-CN', 
+	    format: "yyyy-mm-dd",
+	    autoclose: true,
+	    maxView: "decade",
+	    todayBtn: true,
+	    pickerPosition: "bottom-left"
+	})
 });
 
 /**
@@ -97,4 +108,31 @@ function enable(id){
    			}
    		}
    	})
+}
+
+
+/**
+ * 编辑过期时期
+ */
+function initEditExpirDate(){
+	$("button[name='editExpirDate']").on('click', function() {
+	      $('#editExpirDate-prompt').modal({
+	        relatedTarget: this,
+	        onConfirm: function(options) {
+	        	var $link = $(this.relatedTarget);
+	        	$.ajax({
+	        		url:getRootPath()+"/user/editExpirDate",
+	           		data:{"id":$link.data("id"), "expirDate":options.data},
+	           		dataType:"text",
+	           		success:function(data){
+	           			var obj = jQuery.parseJSON(data);
+	           			alert(obj.resultDes);
+	           			if(obj.resultCode == '1'){
+	           				doQuery();
+	           			}
+	           		}
+	           	})
+	        }
+	      });
+	    });
 }

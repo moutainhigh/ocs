@@ -25,6 +25,8 @@ public class _MappingKit {
 		arp.addMapping("ocs_recharge_set", "id", RechargeSet.class);
 		arp.addMapping("ocs_user", "id", User.class);
 		arp.addMapping("ocs_user_token", "id", UserToken.class);
+		arp.addMapping("report_interface_call", "id", ReportInterfaceCall.class);
+		arp.addMapping("report_recharge", "id", ReportRecharge.class);
 		arp.addMapping("system_admin", "id", SystemAdmin.class);
 		arp.addMapping("system_config", "id", SystemConfig.class);
 		arp.addMapping("system_resource", "id", SystemResource.class);

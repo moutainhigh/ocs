@@ -45,6 +45,7 @@
 							<th>所属代理</th>
 							<th>登录ip</th>
 							<th>最后登录时间</th>
+							<th>过期时间</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -64,9 +65,11 @@
                                 <td>${item.agent_id }</td>
                                 <td>${item.login_ip }</td>
                                 <td><fmt:formatDate value="${item.login_time }" pattern="yyyy-MM-dd HH:mm" /></td>
+                                <td><fmt:formatDate value="${item.expir_date }" pattern="yyyy-MM-dd 00:00" /></td>
 								<td>
 									<div class="am-btn-toolbar">
 										<div class="am-btn-group am-btn-group-xs">
+										    <button type="button" name="editExpirDate" data-id="${item.id }"  data-expirDate="${item.expir_data }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">修改过期时间</button>
 										    <button type="button" name="resetPwdBtn" data-id="${item.id }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">重置密码</button>
 										    <c:if test="${item.state  }">
 										      <button type="button" name="disableBtn" onclick="disable(${item.id })" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">冻结</button>
@@ -103,6 +106,19 @@
 				                class="am-modal-btn" data-am-modal-confirm>提交</span>
 				        </div>
 				    </div>
+                </div>
+                
+                <div class="am-modal am-modal-prompt" tabindex="-1" id="editExpirDate-prompt">
+                    <div class="am-modal-dialog">
+                        <div class="am-modal-hd">修改过期时间</div>
+                        <div class="am-modal-bd">
+	                        <input type="text" class="am-modal-prompt-input" value="" placeholder="请填入过期时间 " name="expirDate" id="expirDate" required="required">
+                        </div>
+                        <div class="am-modal-footer">
+                            <span class="am-modal-btn" data-am-modal-cancel>取消</span> <span
+                                class="am-modal-btn" data-am-modal-confirm>提交</span>
+                        </div>
+                    </div>
                 </div>
 				
 				

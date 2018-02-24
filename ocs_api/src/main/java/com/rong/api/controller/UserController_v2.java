@@ -80,7 +80,7 @@ public class UserController_v2 extends Controller {
 		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
 			return;
 		}
-		Qq qqFind = qqService.findByQq(qq);
+		Qq qqFind = qqService.findByQqAndUserName(qq,userName);
 		Record returnObj = null;
 		// 校验qq是否存在，存在则直接取数据库token
 		if(qqFind!=null){
@@ -98,7 +98,7 @@ public class UserController_v2 extends Controller {
 		}else{
 			// 保存qq
 			returnObj = consumBusiness(userName, projectId,true,data);
-			qqService.save(qq, qqPwd, returnObj.getStr("token"));
+			qqService.save(qq, qqPwd, returnObj.getStr("token"),userName);
 			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,returnObj ,"计费成功");
 		}
 	}

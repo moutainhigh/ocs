@@ -14,6 +14,7 @@ public interface UserService extends BaseService<User>{
 	//管理后台方法
 	Page<Record> getUserList(int page,int pageSize,Kv param);
 	boolean resetPwd(long id, String pwd);
+	boolean editExpirDate(long id, String date);
 	boolean setEnable(long id, boolean isEnable);
 	User findByUserName(String userName);
 	User findByUserNameAndPwd(String userName,String pwd);

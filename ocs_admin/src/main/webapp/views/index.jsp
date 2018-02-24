@@ -87,6 +87,9 @@
 							<a href="javascript:loadRight('<%=basePath %>/user/list','用户列表')"> <i
 									class="am-icon-angle-right"></i> <span>用户列表</span>
 							</a>
+							<a href="javascript:loadRight('<%=basePath %>/user/loginList','最近登录用户')"> <i
+                                    class="am-icon-angle-right"></i> <span>最近登录用户</span>
+                            </a>
 							</li>
 						</ul>
 				</li>
