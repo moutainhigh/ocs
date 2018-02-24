@@ -18,7 +18,7 @@ function onuserInfo(){
    		dataType:"text",
    		success:function(data){
    			var obj = jQuery.parseJSON(data);
-   			$("#my-popup1 #dataForm1 label[id='userName']").text(obj.resultData.userName);
+   			$("#my-popup1 #dataForm1 label[id='userName']").text(obj.resultData.user_name);
    			$("#my-popup1 #dataForm1 label[id='role']").text(obj.resultData.role);
    			$("#my-popup1 #dataForm1 label[id='mobile']").text(obj.resultData.mobile);
    			$("#my-popup1 #dataForm1 label[id='email']").text(obj.resultData.email);
@@ -41,7 +41,7 @@ function onuserInfoEdit(){
    		dataType:"text",
    		success:function(data){
    			var obj = jQuery.parseJSON(data);
-   			$("#my-popup2 #dataForm2 label[id='userName']").text(obj.resultData.user.userName);
+   			$("#my-popup2 #dataForm2 label[id='userName']").text(obj.resultData.user.user_name);
    			$("#my-popup2 #dataForm2 label[id='role']").text(obj.resultData.user.role);
    			$("#my-popup2 #dataForm2 input[id='mobile']").val(obj.resultData.user.mobile);
    			$("#my-popup2 #dataForm2 input[id='email']").val(obj.resultData.user.email);
