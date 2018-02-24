@@ -53,7 +53,7 @@ public class AdminController extends BaseController{
 	    	if(u==null){
 	    		throw new CommonException("loginError", "用户不存在");
 	    	}
-	    	password = genPassword(password, u.getStr("salt"));
+	    	password = CommonUtil.genPassword(password, u.getSalt());
 	        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 	        Subject subject = SecurityUtils.getSubject();
 	        // 进行用用户名和密码验证,如果验证不过会throw exception
@@ -66,15 +66,7 @@ public class AdminController extends BaseController{
 	    }
 	}
 	
-	/**
-	 * 后台密码加密采用salt
-	 * @param password
-	 * @param salt
-	 * @return
-	 */
-	private String genPassword(String password, String salt) {
-		return CommonUtil.getMD5((password + salt));
-	}
+	
 
 	/**
 	 * 退出登录
@@ -128,8 +120,8 @@ public class AdminController extends BaseController{
 			model.setUserName(userName);
 			model.setCreateTime(new Date());
 			model.setRole(role);
-			String salt = genSalt();
-			model.setUserPassword(genPassword(password, salt));
+			String salt = CommonUtil.genSalt();
+			model.setUserPassword(CommonUtil.genPassword(password, salt));
 			model.setSalt(salt);
 			model.setEmail(email);
 			model.setMobile(mobile);
@@ -194,12 +186,14 @@ public class AdminController extends BaseController{
 			BaseRenderJson.returnJsonS(this,0,"新密码与旧密码一样");
 			return;
 		}
-		String oldEnpassword = genPassword(oldPassword, au.getStr("salt"));
-		if (!oldEnpassword.equals(au.getStr("password"))) {
+		String oldEnpassword = CommonUtil.genPassword(oldPassword, au.getSalt());
+		if (!oldEnpassword.equals(au.getUserPassword())) {
 			BaseRenderJson.returnJsonS(this,0,"旧密码输入错误");
 			return;
 		}
-		au.set("password", genPassword(password, au.getStr("salt")));
+		String salt = CommonUtil.genSalt();
+		au.setSalt(salt);
+		au.setUserPassword(CommonUtil.genPassword(password, salt));
 		if (au.update()) {
 			BaseRenderJson.returnUpdateObj(this, true);
 			logger.info("[操作日志]用户"+au.getUserName()+"更新密码成功");
@@ -217,18 +211,13 @@ public class AdminController extends BaseController{
 		render("/views/system/user/list.jsp");
 	}
 
-	private String genSalt() {
-		int x = (int) (Math.random() * 10000);
-		String salt = String.valueOf(x);
-		return salt;
-	}
 	public void userInfo(){
-		SystemAdmin user = getSessionAttr("ADMIN_USER");
+		SystemAdmin user = getSessionAttr(MyConst.SESSION_KEY);
 		BaseRenderJson.returnViewObjectTmplate(this, "1", user);
 	}
 	
 	public void userInfoToEdit(){
-		SystemAdmin user = getSessionAttr("ADMIN_USER");
+		SystemAdmin user = getSessionAttr(MyConst.SESSION_KEY);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("user", user);
 		map.put("roles", roleService.getRolesList());
@@ -236,7 +225,7 @@ public class AdminController extends BaseController{
 	}
 	
 	public void userInfoEdit(){
-		SystemAdmin user = getSessionAttr("ADMIN_USER");
+		SystemAdmin user = getSessionAttr(MyConst.SESSION_KEY);
 		String role = getPara("role");
 		String email = getPara("email");
 		String mobile = getPara("mobile");

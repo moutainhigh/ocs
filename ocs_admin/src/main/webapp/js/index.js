@@ -42,14 +42,7 @@ function onuserInfoEdit(){
    		success:function(data){
    			var obj = jQuery.parseJSON(data);
    			$("#my-popup2 #dataForm2 label[id='userName']").text(obj.resultData.user.userName);
-   			$("#my-popup2 #dataForm2 #role").empty();
-   			for(var i=0;i<obj.resultData.roles.length;i++){
-   				if(obj.resultData.roles[i] == obj.resultData.user.role){
-   					$("#my-popup2 #dataForm2 #role").append("<option value='"+obj.resultData.roles[i]+"' selected >"+obj.resultData.roles[i]+"</option>");
-   				}else{
-   					$("#my-popup2 #dataForm2 #role").append("<option value='"+obj.resultData.roles[i]+"'>"+obj.resultData.roles[i]+"</option>");
-   				}
-   			}
+   			$("#my-popup2 #dataForm2 label[id='role']").text(obj.resultData.user.role);
    			$("#my-popup2 #dataForm2 input[id='mobile']").val(obj.resultData.user.mobile);
    			$("#my-popup2 #dataForm2 input[id='email']").val(obj.resultData.user.email);
    			$('#my-popup2').modal({

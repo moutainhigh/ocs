@@ -63,4 +63,20 @@ public class CommonUtil {
 		}
 		return sb.toString();
 	}
+	
+	public static String genSalt() {
+		int x = (int) (Math.random() * 10000);
+		String salt = String.valueOf(x);
+		return salt;
+	}
+	
+	/**
+	 * 后台密码加密采用salt
+	 * @param password
+	 * @param salt
+	 * @return
+	 */
+	public static String genPassword(String password,String salt) {
+		return CommonUtil.getMD5((password + salt));
+	}
 }

@@ -50,7 +50,9 @@ public class SystemAdminServiceImpl implements SystemAdminService {
 	@Override
 	public boolean backPassword(long id) {
 		SystemAdmin admin = dao.findById(id);
-		admin.setUserPassword(CommonUtil.getMD5(MyConst.DEFAULT_PASSWORD)+admin.getSalt());
+		String salt = CommonUtil.genSalt();
+		admin.setSalt(salt);
+		admin.setUserPassword(CommonUtil.genPassword(MyConst.DEFAULT_PASSWORD, salt));
 		return dao.update(admin);
 	}
 

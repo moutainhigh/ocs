@@ -9,7 +9,7 @@ import com.rong.common.util.PropertiesUtils;
  */
 public class MyConst {
 	/** ~~~~~~~~~~~~~~~~~~~~系统参数配置~~~~~~~~~~~~~~~~~~~~ */
-	public static final String SESSION_KEY = "session_login";
+	public static final String SESSION_KEY = "ADMIN_USER";
 
 	public static String version = PropertiesUtils.get("version", "1.0.0.20180131_beta");
 	public static boolean devMode = false;

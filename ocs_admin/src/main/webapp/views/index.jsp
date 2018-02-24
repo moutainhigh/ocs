@@ -345,7 +345,7 @@
   					<div class="am-form-group">
 		   				<label for="role" class="am-u-sm-5 am-form-label">角色</label>
 		    			<div class="am-u-sm-6">
-		      				<select id="role" name="role"></select>
+		      				<label id="role"  class="am-u-sm-2 am-form-label"></label>
 		    			</div>
 					</div>
 		
