@@ -79,17 +79,33 @@ public class ReportInterfaceCallDao extends BaseDao<ReportInterfaceCall> {
 		List<Record> list3 = Db.find(sql3);
 		
 		List<Record> returnList = new ArrayList<Record>();
-		for (int i = 0;i<list.size();i++) {
+		for (int i = 0;i<list3.size();i++) {
 			Record model = new Record();
-			model.set("projectName", list.get(i).get("project_name"));
-			model.set("todaySuccess", list.get(i).get("success"));
-			model.set("todayFail", list.get(i).get("fail"));
-			model.set("yesterDaySuccess", list1.get(i).get("success"));
-			model.set("yesterDayFail", list1.get(i).get("fail"));
-			model.set("beforeYesterDaySuccess", list2.get(i).get("success"));
-			model.set("beforeYesterDayFail", list2.get(i).get("fail"));
+			String allProjectName = list3.get(i).get("project_name");
+			model.set("projectName", list3.get(i).get("project_name"));
 			model.set("allSuccess", list3.get(i).get("success"));
 			model.set("allFail", list3.get(i).get("fail"));
+			for (Record record : list2) {
+				if(allProjectName.equals(record.get("project_name"))){
+					model.set("beforeYesterDaySuccess", record.get("success"));
+					model.set("beforeYesterDayFail", record.get("fail"));
+					break;
+				}
+			}
+			for (Record record : list1) {
+				if(allProjectName.equals(record.get("project_name"))){
+					model.set("yesterDaySuccess", record.get("success"));
+					model.set("yesterDayFail", record.get("fail"));
+					break;
+				}
+			}
+			for (Record record : list) {
+				if(allProjectName.equals(record.get("project_name"))){
+					model.set("todaySuccess", record.get("success"));
+					model.set("todayFail", record.get("fail"));
+					break;
+				}
+			}
 			returnList.add(model);
 		}
 		return returnList;
