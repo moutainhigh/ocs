@@ -16,7 +16,7 @@ public class AdDao extends BaseDao<Ad> {
 
 	public static final Ad dao = Ad.dao;
 
-	public static final String FILEDS = "id,create_time,content,user_name";
+	public static final String FILEDS = "id,create_time,content,user_name,count_call";
 
 	public Page<Ad> page(int pageNumber, int pageSize, Kv param) {
 		String select = "select " + FILEDS;

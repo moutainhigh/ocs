@@ -13,18 +13,6 @@
     </div>
 	<form class="am-form am-form-horizontal form-border" id="queryForm" role="form" action="<%=basePath %>/ad/list">
 		<input type="hidden" id="page" name="page" value="${page.pageNumber}">
-		<div class="am-g tpl-amazeui-form">
-			<div class="am-u-lg-4">
-				<label for="projectName" class="am-u-sm-4 am-form-label">项目名：</label>
-				<div class="am-input-group">
-					<input type="text" class="am-form-field" name="projectName" value="${projectName}" placeholder="请输入项目名">
-				</div>
-			</div>
-
-             <div class="am-u-lg-6 am-u-end">
-                <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doQuery();">查询</button>
-            </div>
-		</div>
 	</form>
 	<div class="tpl-block">
 		<div class="am-g">
