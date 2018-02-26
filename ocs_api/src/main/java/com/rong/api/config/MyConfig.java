@@ -13,6 +13,7 @@ import com.jfinal.plugin.activerecord.tx.TxByActionKeyRegex;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
+import com.rong.api.controller.AdController;
 import com.rong.api.controller.RechargeController;
 import com.rong.api.controller.UserController;
 import com.rong.api.controller.UserController_v2;
@@ -71,6 +72,7 @@ public class MyConfig extends JFinalConfig {
 		me.add("/api/user", UserController.class);
 		me.add("/api/v2/user", UserController_v2.class);
 		me.add("/api/recharge", RechargeController.class);
+		me.add("/api/ad", AdController.class);
 	}
 
 	@Override

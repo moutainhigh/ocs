@@ -17,6 +17,7 @@ public class _MappingKit {
 
 	public static void mapping(ActiveRecordPlugin arp) {
 		arp.addMapping("ocs_account", "id", Account.class);
+		arp.addMapping("ocs_ad", "id", Ad.class);
 		arp.addMapping("ocs_consume", "id", Consume.class);
 		arp.addMapping("ocs_interface_call", "id", InterfaceCall.class);
 		arp.addMapping("ocs_project", "id", Project.class);

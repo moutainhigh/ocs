@@ -18,6 +18,7 @@ import com.jfinal.plugin.activerecord.tx.TxByActionKeyRegex;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
+import com.rong.admin.controller.AdController;
 import com.rong.admin.controller.AdminController;
 import com.rong.admin.controller.BaseController;
 import com.rong.admin.controller.IndexController;
@@ -27,6 +28,7 @@ import com.rong.admin.controller.ProjectController;
 import com.rong.admin.controller.QqController;
 import com.rong.admin.controller.RechargeController;
 import com.rong.admin.controller.RechargeSetController;
+import com.rong.admin.controller.ReportController;
 import com.rong.admin.controller.ResourceController;
 import com.rong.admin.controller.RoleController;
 import com.rong.admin.controller.SystemConfigController;
@@ -109,6 +111,8 @@ public class MyConfig extends JFinalConfig {
 		me.add("/rechargeSet", RechargeSetController.class);
 		me.add("/qq", QqController.class);
 		me.add("/interfaceCall", InterfaceCallController.class);
+		me.add("/report",ReportController.class);
+		me.add("/ad",AdController.class);
 	}
 
 	@Override

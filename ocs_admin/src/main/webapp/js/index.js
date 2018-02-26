@@ -99,3 +99,65 @@ function passwordSubmit(){
 		}
 	})
 }
+
+function initRechargeReport(){
+	var regList;
+	var dateArr = [];
+	var sumMoneyRechargeArr = [];
+	$.ajax({
+		url:getRootPath()+"/report/rechargeIndex",
+		async : false
+	}).done(function(dataInfo){
+		var data = dataInfo.resultData;
+		var j = 0;
+		for (var i = data.length-1; i >=0 ; i--) {
+			dateArr[j] = data[i].report_date;
+			sumMoneyRechargeArr[j] = data[i].sum_recharge_money;
+			j++;
+		}
+	});
+	
+		
+	//图表赋值展示
+	var echartsA = echarts.init(document.getElementById('tpl-echarts-rechargeReport'));
+
+	option = {
+	    color: ['#3398DB'],
+	    tooltip : {
+	        trigger: 'axis',
+	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+	        }
+	    },
+	    grid: {
+	        left: '3%',
+	        right: '4%',
+	        bottom: '3%',
+	        containLabel: true
+	    },
+	    xAxis : [
+	        {
+	            type : 'category',
+	            data : dateArr,
+	            axisTick: {
+	                alignWithLabel: true
+	            }
+	        }
+	    ],
+	    yAxis : [
+	        {
+	            type : 'value'
+	        }
+	    ],
+	    series : [
+	        {
+	            name:'充值金额',
+	            type:'bar',
+	            barWidth: '60%',
+	            data:sumMoneyRechargeArr
+	        }
+	    ]
+	};
+	
+	echartsA.setOption(option);
+}

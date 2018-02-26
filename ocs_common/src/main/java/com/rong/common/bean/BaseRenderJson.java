@@ -302,6 +302,10 @@ public class BaseRenderJson {
 	}
 	
 	public static void apiReturnObj(Controller ai,String code  ,Object obj,String tag){
+		if(obj==null){
+			BaseRenderJson.apiReturnObj(ai, MyErrorCodeConfig.REQUEST_SUCCESS, null, "无数据返回");
+			return;
+		}
 		BaseTemplate tmp = new BaseTemplate();
 		tmp.setResultCode(code);
 		tmp.setResultDes(tag);
