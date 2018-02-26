@@ -104,6 +104,11 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
                                 href="javascript:loadRight('<%=mybasePath %>/ad/list','广告列表')">
                                     <i class="am-icon-angle-right"></i> <span>广告列表</span>
                             </a></li>
+                            
+                            <li><a
+                                href="javascript:loadRight('<%=mybasePath %>/ad/userAdList','用户提交广告')">
+                                    <i class="am-icon-angle-right"></i> <span>用户提交广告</span>
+                            </a></li>
                         </ul></li>
             </shiro:hasPermission>
 			

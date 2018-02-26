@@ -1,6 +1,9 @@
 package com.rong.business.service;
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.rong.persist.base.BaseService;
 import com.rong.persist.model.ReportInterfaceCall;
 
@@ -13,4 +16,5 @@ public interface ReportInterfaceCallService extends BaseService<ReportInterfaceC
 	Page<ReportInterfaceCall> page(int pageNumber, int pageSize, Kv param);
 	Long sumCall();
 	Long sumCall7day();
+	List<Record> list();
 }

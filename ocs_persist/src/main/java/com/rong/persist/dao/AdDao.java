@@ -25,11 +25,17 @@ public class AdDao extends BaseDao<Ad> {
 		if(param!=null){
 			String content = param.getStr("content");
 			if (!StringUtils.isNullOrEmpty(content)) {
-				where.append(" and user_name like '%" + content + "%'");
+				where.append(" and content like '%" + content + "%'");
 			}
 			String userName = param.getStr("userName");
 			if (!StringUtils.isNullOrEmpty(userName)) {
 				where.append(" and user_name = '" + userName + "'");
+			}
+			String isAdmin = param.getStr("isAdmin");
+			if (!StringUtils.isNullOrEmpty(isAdmin)) {
+				where.append(" and user_name is null");
+			}else{
+				where.append(" and user_name is not null");
 			}
 			String date = param.getStr("date");
 			if (!StringUtils.isNullOrEmpty(date)) {
@@ -48,11 +54,15 @@ public class AdDao extends BaseDao<Ad> {
 	
 	
 	public Ad Rand(){
-		String sql = "select " + FILEDS + " from " + Ad.TABLE + " order by RAND() limit 1;";
+		String sql = "select " + FILEDS + " from " + Ad.TABLE + " where user_name is null order by RAND() limit 1;";
 		return dao.findFirst(sql);
 	}
 	
 	public boolean countCallAutoAdd(long id){
 		return Db.update("UPDATE "+Ad.TABLE+" SET count_call = count_call+1 WHERE id = " + id)>0;
+	}
+	
+	public boolean delAll(){
+		return Db.update("delete from "+Ad.TABLE+" WHERE user_name is not null")>0;
 	}
 }

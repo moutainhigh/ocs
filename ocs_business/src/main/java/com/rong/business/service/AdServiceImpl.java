@@ -46,6 +46,11 @@ public class AdServiceImpl extends BaseServiceImpl<Ad> implements AdService{
 		}
 		return ad;
 	}
+
+	@Override
+	public boolean delAll() {
+		return dao.delAll();
+	}
 	
 
 }

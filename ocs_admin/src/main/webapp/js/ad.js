@@ -8,6 +8,15 @@ $(function() {
 	initDelete();
 	initAdd();
 	initEdit();
+	//日期时间选择器（开始、结束）
+    $("#date").datepicker({
+        language: 'zh-CN', 
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        maxView: "decade",
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    })
 });
 
 /**
@@ -91,4 +100,19 @@ function initEdit(){
 	        }
 	      });
 	    });
+}
+
+function clearBtn(){
+	$.ajax({
+		url:getRootPath()+"/ad/delAll",
+   		data:{},
+   		dataType:"text",
+   		success:function(data){
+   			var obj = jQuery.parseJSON(data);
+   			alert(obj.resultDes);
+   			if(obj.resultCode == '1'){
+   				doQuery();
+   			}
+   		}
+   	})
 }

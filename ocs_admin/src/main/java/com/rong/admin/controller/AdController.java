@@ -1,4 +1,5 @@
 package com.rong.admin.controller;
+import com.jfinal.kit.Kv;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Page;
 import com.rong.business.service.AdService;
@@ -45,9 +46,28 @@ public class AdController extends BaseController{
 
 	public void list() {
 		int page = getParaToInt("page", 1);
-		Page<Ad> list = adService.page(page, pageSize, null);
+		Kv param = Kv.by("isAdmin","isAdmin");
+		Page<Ad> list = adService.page(page, pageSize, param);
 		keepPara();
 		setAttr("page", list);
 		render("/views/ad/list.jsp");
+	}
+	
+	public void userAdList() {
+		int page = getParaToInt("page", 1);
+		String content = getPara("content");
+		String userName = getPara("userName");
+		String date = getPara("date");
+		Kv param = Kv.by("content", content).set("userName",userName).set("date",date);
+		Page<Ad> list = adService.page(page, pageSize, param);
+		keepPara();
+		setAttr("page", list);
+		render("/views/ad/userAdList.jsp");
+	}
+	
+	public void delAll() {
+		adService.delAll();
+		BaseRenderJson.returnDelObj(this, true);
+		logger.info("[操作日志]删除所有成功");
 	}
 }

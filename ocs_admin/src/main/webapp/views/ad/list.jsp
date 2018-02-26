@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-	<form class="am-form am-form-horizontal form-border" id="queryForm" role="form" action="<%=basePath %>/ad/list">
+	<form class="am-form am-form-horizontal" id="queryForm" role="form" action="<%=basePath %>/ad/list">
 		<input type="hidden" id="page" name="page" value="${page.pageNumber}">
 	</form>
 	<div class="tpl-block">
@@ -22,7 +22,6 @@
 					<thead>
 						<tr>
 							<th>编号</th>
-							<th>用户</th>
 							<th>内容</th>
 							<th>调用次数</th>
 							<th>创建时间</th>
@@ -33,7 +32,6 @@
 						<c:forEach items="${page.list}" var="item">
 							<tr>
 								<td>${item.id }</td>
-                                <td>${item.user_name==null?"admin": item.user_name}</td>
                                 <td>${item.content }</td>
 								<td>${item.count_call }</td>
 								<td><fmt:formatDate value="${item.create_time }" pattern="yyyy-MM-dd HH:mm" /></td>

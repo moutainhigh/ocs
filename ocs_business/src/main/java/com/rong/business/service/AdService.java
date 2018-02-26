@@ -14,4 +14,5 @@ public interface AdService extends BaseService<Ad>{
 	Page<Ad> page(int pageNumber, int pageSize, Kv param);
 	Ad findByContent(String content);
 	Ad rand();
+	boolean delAll();
 }
