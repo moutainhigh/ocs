@@ -58,24 +58,20 @@ public class ReportInterfaceCallDao extends BaseDao<ReportInterfaceCall> {
 	
 	public List<Record> list(){
 		// 今天
-		String sql = "select i.project_name ,count(if(call_success=1,true,null)) success,count(if(call_success=0,true,null)) fail "
-				+ "from ocs_interface_call i "
-				+ "where TO_DAYS(NOW()) - TO_DAYS(i.create_time) = 0 group by i.project_name order by i.project_name desc";
+		String sql = "select project_name ,count_success_call success,count_fail_call fail " + "from "
+				+ ReportInterfaceCall.TABLE + " where TO_DAYS(NOW()) - TO_DAYS(report_date) = 0";
 		List<Record> list = Db.find(sql);
 		// 昨天
-		String sql1 = "select i.project_name ,count(if(call_success=1,true,null)) success,count(if(call_success=0,true,null)) fail "
-				+ "from ocs_interface_call i "
-				+ "where TO_DAYS(NOW()) - TO_DAYS(i.create_time) = 1 group by i.project_name order by i.project_name desc";
+		String sql1 = "select project_name ,count_success_call success,count_fail_call fail " + "from "
+				+ ReportInterfaceCall.TABLE + " where TO_DAYS(NOW()) - TO_DAYS(report_date) = 1";
 		List<Record> list1 = Db.find(sql1);
 		// 前天
-		String sql2 = "select i.project_name ,count(if(call_success=1,true,null)) success,count(if(call_success=0,true,null)) fail "
-				+ "from ocs_interface_call i "
-				+ "where TO_DAYS(NOW()) - TO_DAYS(i.create_time) = 2 group by i.project_name order by i.project_name desc";
+		String sql2 = "select project_name ,count_success_call success,count_fail_call fail " + "from "
+				+ ReportInterfaceCall.TABLE + " where TO_DAYS(NOW()) - TO_DAYS(report_date) = 2";
 		List<Record> list2 = Db.find(sql2);
 		// 总计
-		String sql3 = "select i.project_name ,count(if(call_success=1,true,null)) success,count(if(call_success=0,true,null)) fail "
-				+ "from ocs_interface_call i "
-				+ "group by i.project_name order by i.project_name desc";
+		String sql3 = "select project_name ,sum(count_success_call) success,sum(count_fail_call) fail from "
+				+ ReportInterfaceCall.TABLE +" group by project_name";
 		List<Record> list3 = Db.find(sql3);
 		
 		List<Record> returnList = new ArrayList<Record>();

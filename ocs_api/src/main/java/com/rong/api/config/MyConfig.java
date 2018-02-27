@@ -93,7 +93,7 @@ public class MyConfig extends JFinalConfig {
 		//1.主库
 		DruidPlugin druidPlugin = new DruidPlugin(source1_url, username, password);
 		druidPlugin.setDriverClass("com.mysql.jdbc.Driver");
-		druidPlugin.setInitialSize(2).setMaxActive(300).setMinIdle(50).setTestOnBorrow(false).setMaxWait(1000);
+		druidPlugin.setInitialSize(10).setMaxActive(1000).setMinIdle(10).setTestOnBorrow(false).setMaxWait(20*1000);
 		me.add(druidPlugin);
 		// 配置ActiveRecord插件
 		ActiveRecordPlugin arp = new ActiveRecordPlugin("yun", druidPlugin);
