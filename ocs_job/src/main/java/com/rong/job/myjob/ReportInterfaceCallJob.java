@@ -29,7 +29,7 @@ public class ReportInterfaceCallJob implements Job {
 		try {
 			String sql = "select i.project_name ,p.price,count(if(call_success=1,true,null)) success,count(if(call_success=0,true,null)) fail "
 					+ "from "+InterfaceCall.TABLE+" i , ocs_project p "
-					+ "where i.project_name = p.project_name and TO_DAYS(NOW()) - TO_DAYS(i.create_time) = 0 group by i.project_name";
+					+ "where i.project_name = p.project_name and TO_DAYS(NOW()) - TO_DAYS(i.create_time) = 1 group by i.project_name";
 			List<Record> list = Db.find(sql);
 			if(list!=null && list.size()>0){
 				for (Record item : list) {

@@ -143,6 +143,7 @@ public class UserController extends Controller {
 		returnObj.set("userName", userName);
 		returnObj.set("token", token);
 		BaseRenderJson.baseRenderObj.returnObj(this, returnObj, MyErrorCodeConfig.REQUEST_SUCCESS, "登录成功");
+		logger.info(userName+"登录");
 	}
 	
 	/**
