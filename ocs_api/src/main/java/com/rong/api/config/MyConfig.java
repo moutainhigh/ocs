@@ -1,5 +1,7 @@
 package com.rong.api.config;
 
+import com.alibaba.druid.filter.stat.StatFilter;
+import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -17,6 +19,7 @@ import com.rong.api.controller.AdController;
 import com.rong.api.controller.RechargeController;
 import com.rong.api.controller.UserController;
 import com.rong.api.controller.UserController_v2;
+import com.rong.api.handler.DruidMonitorHandler;
 import com.rong.common.bean.MyConst;
 import com.rong.persist.dao.SystemConfigDao;
 import com.rong.persist.model.SystemConfig;
@@ -94,6 +97,17 @@ public class MyConfig extends JFinalConfig {
 		DruidPlugin druidPlugin = new DruidPlugin(source1_url, username, password);
 		druidPlugin.setDriverClass("com.mysql.jdbc.Driver");
 		druidPlugin.setInitialSize(10).setMaxActive(1000).setMinIdle(10).setTestOnBorrow(false).setMaxWait(20*1000);
+		// 2.druid监控
+		StatFilter statFilter = new StatFilter();
+		statFilter.setMergeSql(true);
+		statFilter.setLogSlowSql(true);
+		// 2.1慢查询目前设置为1s,随着优化一步步进行慢慢更改
+		statFilter.setSlowSqlMillis(1000);
+		// 2.2防注入插件
+		WallFilter wall = new WallFilter();
+		wall.setDbType("mysql");
+		druidPlugin.addFilter(statFilter).addFilter(wall);
+		me.add(druidPlugin);
 		me.add(druidPlugin);
 		// 配置ActiveRecord插件
 		ActiveRecordPlugin arp = new ActiveRecordPlugin("yun", druidPlugin);
@@ -113,7 +127,8 @@ public class MyConfig extends JFinalConfig {
 
 	@Override
 	public void configHandler(Handlers me) {
-		// TODO Auto-generated method stub
+		// 开启druid监控
+		me.add(new DruidMonitorHandler("/druid"));
 
 	}
 
