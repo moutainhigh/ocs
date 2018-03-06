@@ -14,4 +14,5 @@ public interface QqService extends BaseService<Qq>{
 	boolean save(String qq,String pwd,String token,String userName);
 	boolean saveOrUpdate(String qq,String userName,String data);
 	Qq findByQqAndUserName(String qq,String userName);
+	void clear();
 }

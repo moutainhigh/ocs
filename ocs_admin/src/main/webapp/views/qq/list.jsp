@@ -5,6 +5,12 @@
 	<form class="am-form am-form-horizontal form-border" id="queryForm" role="form" action="<%=basePath %>/qq/list">
 		<input type="hidden" id="page" name="page" value="${page.pageNumber}">
 		<div class="am-g tpl-amazeui-form">
+		    <div class="am-u-lg-4">
+                <label for="qq" class="am-u-sm-4 am-form-label">QQ：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" placeholder="qq" name="qq" value="${qq}">
+                </div>
+            </div>  
 			<div class="am-u-lg-4">
 				<label for="date" class="am-u-sm-4 am-form-label">日期：</label>
 				<div class="am-input-group">
@@ -14,6 +20,7 @@
 
              <div class="am-u-lg-6 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doQuery();">查询</button>
+                <button class="am-btn am-btn-secondary am-radius" type="button" onclick="clearQq();">清空数据</button>
             </div>
 		</div>
 	</form>
@@ -28,6 +35,7 @@
 							<th>QQ</th>
 							<th>密码</th>
 							<th>token</th>
+							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -37,6 +45,13 @@
                                 <td>${item.qq }</td>
 								<td>${item.pwd }</td>
 								<td>${item.token }</td>
+								<td>
+								    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <button type="button" name="delBtn" data-id="${item.id }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">删除</button>
+                                        </div>
+                                    </div>
+								</td>
 							</tr>
 						</c:forEach>
 					</tbody>

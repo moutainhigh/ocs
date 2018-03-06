@@ -26,6 +26,10 @@ public class QqDao extends BaseDao<Qq> {
 			if (!StringUtils.isNullOrEmpty(date)) {
 				where.append(" and to_days(create_time) = to_days('"+date+"')");
 			}
+			String qq = param.getStr("qq");
+			if (!StringUtils.isNullOrEmpty(qq)) {
+				where.append(" and qq = '"+qq+"'");
+			}
 		}
 		String orderBy = " order by id desc";
 		sqlExceptSelect = sqlExceptSelect + where + orderBy;

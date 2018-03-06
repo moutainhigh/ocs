@@ -3,6 +3,7 @@ package com.rong.business.service;
 import java.util.Date;
 
 import com.jfinal.kit.Kv;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.QqDao;
@@ -56,6 +57,11 @@ public class QqServiceImpl extends BaseServiceImpl<Qq> implements QqService{
 		}
 		item.setData(data);
 		return dao.update(item);
+	}
+
+	@Override
+	public void clear() {
+		Db.update("delete from "+Qq.TABLE+" where id>0");
 	}
 
 }
