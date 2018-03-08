@@ -26,4 +26,5 @@ public class MyErrorCodeConfig {
 	public static final String REG_ORDERCODE_ERROR = "1010"; //注册时异常，使用无效的订单号
 	public static final String AGENT_NOT_EXIST = "1011"; // 代理不存在
 	public static final String RECHARGE_ORDERCODE_ERROR = "1012"; //充值时异常，订单号已使用
+	public static final String NOT_EXIST = "1013"; //查询数据不存在
 }

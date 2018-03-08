@@ -1,4 +1,6 @@
 package com.rong.business.service;
+import java.math.BigDecimal;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -19,4 +21,7 @@ public interface UserService extends BaseService<User>{
 	User findByUserName(String userName);
 	User findByUserNameAndPwd(String userName,String pwd);
 	boolean saveUserMeal(String userName,Long mealId);
+	//接口开通套餐方法
+	boolean openMeal(String userName, Long mealId,BigDecimal account,BigDecimal mealMoney);
+	boolean haveValidMealProject(String userName,Long projectId);
 }

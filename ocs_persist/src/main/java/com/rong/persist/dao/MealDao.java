@@ -1,14 +1,19 @@
 package com.rong.persist.dao;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.kit.Kv;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.rong.common.util.DateTimeUtil;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
 import com.rong.persist.model.Meal;
+import com.rong.persist.model.MealProject;
 import com.rong.persist.model.UserMeal;
 
 /**
@@ -97,7 +102,24 @@ public class MealDao extends BaseDao<Meal> {
 			}
 		}
 		String orderBy = " order by id desc";
-		sqlExceptSelect = sqlExceptSelect + orderBy;
+		sqlExceptSelect = sqlExceptSelect + where + orderBy;
 		return UserMeal.dao.paginate(pageNumber, pageSize, select, sqlExceptSelect);
+	}
+	
+	/**
+	 * 获取有效期的套餐包含项目-用户计费校验
+	 * @param userName
+	 * @return
+	 */
+	public List<Long> userValidProjectList(String userName){
+		String sql = "select mp.project_id proId from " + UserMeal.TABLE + " um,"+ MealProject.TABLE + " mp ";
+		String where = " where um.meal_id = mp.meal_id and um.expir_date > now() and um.user_name = ?";
+		String orderBy = " group by mp.project_id";
+		List<Record> list = Db.find(sql+where+orderBy,userName);
+		List<Long> returnList = new ArrayList<Long>();
+		for (Record record : list) {
+			returnList.add(record.getLong("proId"));
+		}
+		return returnList;
 	}
 }

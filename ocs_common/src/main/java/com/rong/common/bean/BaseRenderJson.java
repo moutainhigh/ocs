@@ -301,10 +301,18 @@ public class BaseRenderJson {
 		ai.renderJson(tmp);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static void apiReturnObj(Controller ai,String code  ,Object obj,String tag){
 		if(obj==null){
 			BaseRenderJson.apiReturnObj(ai, MyErrorCodeConfig.REQUEST_SUCCESS, "", "无数据返回");
 			return;
+		}
+		if(obj instanceof List){
+			List temp = (List)obj;
+			if(temp.size()==0){
+				BaseRenderJson.apiReturnObj(ai, MyErrorCodeConfig.REQUEST_SUCCESS, "", "无数据返回");
+				return;
+			}
 		}
 		BaseTemplate tmp = new BaseTemplate();
 		tmp.setResultCode(code);

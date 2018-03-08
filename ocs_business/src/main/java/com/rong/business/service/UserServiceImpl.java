@@ -1,11 +1,15 @@
 package com.rong.business.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.common.bean.MyConst;
 import com.rong.common.util.CommonUtil;
 import com.rong.persist.base.BaseServiceImpl;
+import com.rong.persist.dao.AccountDao;
 import com.rong.persist.dao.MealDao;
 import com.rong.persist.dao.UserDao;
 import com.rong.persist.model.User;
@@ -18,6 +22,7 @@ import com.rong.persist.model.User;
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService{
 	private UserDao dao = new UserDao();
 	private MealDao mealDao = new MealDao();
+	private AccountDao accountDao = new AccountDao();
 	@Override
 	public Page<Record> getUserList(int page,int pagesize,Kv param) {
 		return dao.page(page,pagesize,param);
@@ -52,5 +57,21 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	@Override
 	public boolean saveUserMeal(String userName, Long mealId) {
 		return mealDao.saveUserMeal(userName, mealId);
+	}
+
+	@Override
+	public boolean openMeal(String userName, Long mealId,BigDecimal account,BigDecimal mealMoney) {
+		//扣除金额
+		boolean result = accountDao.consumed(userName, account, mealMoney);
+		if(result){
+			return mealDao.saveUserMeal(userName, mealId);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean haveValidMealProject(String userName, Long projectId) {
+		List<Long> proList = mealDao.userValidProjectList(userName);
+		return proList.contains(projectId);
 	}
 }
