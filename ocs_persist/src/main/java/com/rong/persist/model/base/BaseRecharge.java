@@ -70,7 +70,7 @@ public abstract class BaseRecharge<M extends BaseRecharge<M>> extends Model<M> i
 	}
 
 	public java.lang.Boolean getUseState() {
-		return getBoolean("use_state");
+		return get("use_state");
 	}
 
 	public void setUserName(java.lang.String userName) {
@@ -80,7 +80,7 @@ public abstract class BaseRecharge<M extends BaseRecharge<M>> extends Model<M> i
 	public java.lang.String getUserName() {
 		return getStr("user_name");
 	}
-	
+
 	public void setGiveMoney(java.lang.Integer giveMoney) {
 		set("give_money", giveMoney);
 	}
@@ -88,15 +88,15 @@ public abstract class BaseRecharge<M extends BaseRecharge<M>> extends Model<M> i
 	public java.lang.Integer getGiveMoney() {
 		return getInt("give_money");
 	}
-	
+
 	public void setRegState(java.lang.Boolean regState) {
 		set("reg_state", regState);
 	}
-	
+
 	public java.lang.Boolean getRegState() {
-		return getBoolean("reg_state");
+		return get("reg_state");
 	}
-	
+
 	public void setAgentId(java.lang.Long agentId) {
 		set("agent_id", agentId);
 	}

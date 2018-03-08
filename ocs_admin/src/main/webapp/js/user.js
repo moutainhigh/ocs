@@ -11,6 +11,7 @@ $(function() {
 	initDelete();
 	initResetPwd();
 	initEditExpirDate();
+	initEditAccount();
 	
 	//日期时间选择器
 	$("#expirDate").datepicker({
@@ -123,6 +124,32 @@ function initEditExpirDate(){
 	        	$.ajax({
 	        		url:getRootPath()+"/user/editExpirDate",
 	           		data:{"id":$link.data("id"), "expirDate":options.data},
+	           		dataType:"text",
+	           		success:function(data){
+	           			var obj = jQuery.parseJSON(data);
+	           			alert(obj.resultDes);
+	           			if(obj.resultCode == '1'){
+	           				doQuery();
+	           			}
+	           		}
+	           	})
+	        }
+	      });
+	    });
+}
+
+/**
+ * 编辑账户余额
+ */
+function initEditAccount(){
+	$("button[name='editAccountDate']").on('click', function() {
+	      $('#editAccount-prompt').modal({
+	        relatedTarget: this,
+	        onConfirm: function(options) {
+	        	var $link = $(this.relatedTarget);
+	        	$.ajax({
+	        		url:getRootPath()+"/user/editAccount",
+	           		data:{"userName":$link.data("username"), "money":options.data},
 	           		dataType:"text",
 	           		success:function(data){
 	           			var obj = jQuery.parseJSON(data);

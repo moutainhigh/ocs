@@ -70,6 +70,7 @@
 									<div class="am-btn-toolbar">
 										<div class="am-btn-group am-btn-group-xs">
 										    <button type="button" name="editExpirDate" data-id="${item.id }"  data-expirDate="${item.expir_data }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">修改过期时间</button>
+										    <button type="button" name="editAccountDate" data-username="${item.user_name }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">修改余额</button>
 										    <button type="button" name="resetPwdBtn" data-id="${item.id }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">重置密码</button>
 										    <c:if test="${item.state  }">
 										      <button type="button" name="disableBtn" onclick="disable(${item.id })" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">冻结</button>
@@ -78,6 +79,7 @@
 										      <button type="button" name="enableBtn" onclick="enable(${item.id })" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">启用</button>
 										    </c:if>             
 											<button type="button" name="delBtn" data-id="${item.id }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">删除</button>
+											<button type="button" onclick="loadRight('<%=basePath %>/meal/userMealList?userName=${item.user_name}','用户套餐')" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">套餐</button>
 										</div>
 									</div>
 								</td>
@@ -113,6 +115,19 @@
                         <div class="am-modal-hd">修改过期时间</div>
                         <div class="am-modal-bd">
 	                        <input type="text" class="am-modal-prompt-input" value="" placeholder="请填入过期时间 " name="expirDate" id="expirDate" required="required">
+                        </div>
+                        <div class="am-modal-footer">
+                            <span class="am-modal-btn" data-am-modal-cancel>取消</span> <span
+                                class="am-modal-btn" data-am-modal-confirm>提交</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="am-modal am-modal-prompt" tabindex="-1" id="editAccount-prompt">
+                    <div class="am-modal-dialog">
+                        <div class="am-modal-hd">修改账户余额</div>
+                        <div class="am-modal-bd">
+                            <input type="text" class="am-modal-prompt-input" value="" placeholder="请填入余额 " name="money" id="money" required="required">
                         </div>
                         <div class="am-modal-footer">
                             <span class="am-modal-btn" data-am-modal-cancel>取消</span> <span

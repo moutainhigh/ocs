@@ -18,4 +18,5 @@ public interface UserService extends BaseService<User>{
 	boolean setEnable(long id, boolean isEnable);
 	User findByUserName(String userName);
 	User findByUserNameAndPwd(String userName,String pwd);
+	boolean saveUserMeal(String userName,Long mealId);
 }

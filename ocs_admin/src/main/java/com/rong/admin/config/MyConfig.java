@@ -5,7 +5,6 @@ import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.beanutils.converters.SqlTimestampConverter;
 
 import com.alibaba.druid.filter.stat.StatFilter;
-import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -26,6 +25,8 @@ import com.rong.admin.controller.BaseController;
 import com.rong.admin.controller.IndexController;
 import com.rong.admin.controller.InterfaceCallController;
 import com.rong.admin.controller.LogController;
+import com.rong.admin.controller.MealController;
+import com.rong.admin.controller.NoticeController;
 import com.rong.admin.controller.ProjectController;
 import com.rong.admin.controller.QqController;
 import com.rong.admin.controller.RechargeController;
@@ -116,6 +117,8 @@ public class MyConfig extends JFinalConfig {
 		me.add("/interfaceCall", InterfaceCallController.class);
 		me.add("/report",ReportController.class);
 		me.add("/ad",AdController.class);
+		me.add("/notice",NoticeController.class);
+		me.add("/meal",MealController.class);
 	}
 
 	@Override
@@ -147,10 +150,11 @@ public class MyConfig extends JFinalConfig {
 		statFilter.setLogSlowSql(true);
 		// 2.1慢查询目前设置为1s,随着优化一步步进行慢慢更改
 		statFilter.setSlowSqlMillis(1000);
+		druidPlugin.addFilter(statFilter);
 		// 2.2防注入插件
-		WallFilter wall = new WallFilter();
-		wall.setDbType("mysql");
-		druidPlugin.addFilter(statFilter).addFilter(wall);
+//		WallFilter wall = new WallFilter();
+//		wall.setDbType("mysql");
+//		druidPlugin.addFilter(wall);
 		me.add(druidPlugin);
 		// 配置ActiveRecord插件
 		ActiveRecordPlugin arp = new ActiveRecordPlugin("yun", druidPlugin);

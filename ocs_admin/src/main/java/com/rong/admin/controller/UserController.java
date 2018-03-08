@@ -1,18 +1,23 @@
 package com.rong.admin.controller;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.rong.business.service.AccountService;
+import com.rong.business.service.AccountServiceImpl;
 import com.rong.business.service.UserService;
 import com.rong.business.service.UserServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.util.CommonUtil;
+import com.rong.persist.model.Account;
 
 public class UserController extends BaseController{
 	private final Log logger = Log.getLog(this.getClass());
 	private UserService userService = new UserServiceImpl();
+	private AccountService accountService = new AccountServiceImpl();
 	
 	public void delete() {
 		Long id = getParaToLong("id");
@@ -72,5 +77,15 @@ public class UserController extends BaseController{
 		userService.editExpirDate(id, expirDate);
 		BaseRenderJson.returnUpdateObj(this, true);
 		logger.info("[操作日志]编辑用户过期时间成功,id：" + id+",expirDate:"+expirDate);
+	}
+	
+	public void editAccount() {
+		String userName = getPara("userName");
+		String money = getPara("money");
+		Account account = accountService.findByUserName(userName);
+		account.setAccount(new BigDecimal(money));
+		account.update();
+		BaseRenderJson.returnUpdateObj(this, true);
+		logger.info("[操作日志]修改用户账户成功,userName：" + userName+",account:"+money);
 	}
 }

@@ -40,7 +40,7 @@ public abstract class BaseAd<M extends BaseAd<M>> extends Model<M> implements IB
 	public java.util.Date getCreateTime() {
 		return get("create_time");
 	}
-	
+
 	public void setCountCall(java.lang.Long countCall) {
 		set("count_call", countCall);
 	}

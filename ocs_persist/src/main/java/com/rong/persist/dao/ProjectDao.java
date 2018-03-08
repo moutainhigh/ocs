@@ -2,11 +2,13 @@ package com.rong.persist.dao;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
+import com.rong.persist.model.MealProject;
 import com.rong.persist.model.Project;
 
 /**
@@ -40,5 +42,19 @@ public class ProjectDao extends BaseDao<Project> {
 		pro.setPrice(price);
 		pro.setRemark(remark);
 		return save(pro);
+	}
+	
+	public boolean saveMealProject(Long mealId,Long projectId,String projectName){
+		MealProject item = new MealProject();
+		item.setCreateTime(new Date());
+		item.setMealId(mealId);
+		item.setProjectId(projectId);
+		item.setProjectName(projectName);
+		return save(item);
+	}
+	
+	public List<MealProject> findMealProject(Long mealId){
+		String sql = "select * from " + MealProject.TABLE + " where meal_id = ?" ;
+		return MealProject.dao.find(sql, mealId);
 	}
 }

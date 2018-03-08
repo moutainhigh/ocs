@@ -64,7 +64,7 @@ public abstract class BaseInterfaceCall<M extends BaseInterfaceCall<M>> extends 
 	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
-	
+
 	public void setCallbackSuccess(java.lang.Boolean callbackSuccess) {
 		set("callback_success", callbackSuccess);
 	}

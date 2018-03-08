@@ -4,20 +4,9 @@
 package com.rong.admin.controller;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.gson.JsonObject;
 import com.jfinal.core.Controller;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.rong.common.bean.MyConst;
-import com.rong.common.bean.ResultBean;
-import com.rong.common.exception.ParamIsEmpty;
-import com.rong.common.exception.ParamNotFound;
 import com.rong.persist.model.SystemAdmin;
 
 public class BaseController extends Controller {
@@ -46,42 +35,6 @@ public class BaseController extends Controller {
 		return "/views/" + name;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void list() {
-		try {
-			Integer pageNumber = getParaToInt("page", 1);
-			Map<String, Object> paraMap = getParas();
-			Class service = getService().getType();
-			Method method = service.getMethod("query", Integer.class, Integer.class, Map.class);
-			Object obj = getService().get(this);
-			Object result = method.invoke(obj, pageNumber, pageSize, paraMap);
-			Page<Record> page = (Page<Record>)result;
-			setAttr("page", page);
-			paraMap.remove("page");
-			setAttrs(paraMap);
-			render(path() + "/list.jsp");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void toEdit() {
-		try {
-			Integer id = getParaToInt("id");
-			if (id != null) {
-				Class service = getService().getType();
-				Method method = service.getMethod("findById", Integer.class);
-				Object obj = getService().get(this);
-				Object result = method.invoke(obj, id);
-				setAttr("bean", result);
-			}
-			render(path() + "/edit.jsp");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public SystemAdmin getUser(){
 		SystemAdmin u = (SystemAdmin) getSessionAttr(MyConst.SESSION_KEY);
 		return u;
@@ -93,48 +46,5 @@ public class BaseController extends Controller {
 			return true;
 		}
 		return false;
-	}
-	
-	public Map<String, Object> getParas(){
-		Map<String, String[]> paraMap = getParaMap();
-		Map<String, Object> result = new HashMap<>();
-		for (Map.Entry<String, String[]> entry : paraMap.entrySet()) {
-			result.put(entry.getKey(), entry.getValue()[0]);
-		}
-		return result;
-	}
-	
-	public void renderJudge(boolean succ){
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("result", succ ? 1 : 0);
-		renderJson(jsonObject.toString());
-	}
-
-	public void renderJudge(boolean succ, String msg){
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("result", succ ? 1 : 0);
-		jsonObject.addProperty("msg", msg);
-		renderJson(jsonObject.toString());
-	}
-
-	public void renderJudge(boolean succ, String msg, Object data){
-		renderJson(new ResultBean(succ ? "1" : "0", msg, data, null));
-	}
-	
-	public void paramCheck(String names) throws ParamNotFound, ParamIsEmpty{
-		String[] nameArray = names.split(",");
-		for (String name : nameArray) {
-			if (!isParaExists(name)) {
-				ParamNotFound paramNotExists = new ParamNotFound(String.format("param [%s] not found", name));
-				paramNotExists.setParam(name);
-				throw paramNotExists;
-			}else {
-				if (StringUtils.isEmpty(getPara(name))) {
-					ParamIsEmpty paramIsEmpty = new ParamIsEmpty(String.format("param [%s] is empty", name));
-					paramIsEmpty.setParam(name);
-					throw paramIsEmpty;
-				}
-			}
-		}
 	}
 }

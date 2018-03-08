@@ -6,6 +6,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.rong.common.bean.MyConst;
 import com.rong.common.util.CommonUtil;
 import com.rong.persist.base.BaseServiceImpl;
+import com.rong.persist.dao.MealDao;
 import com.rong.persist.dao.UserDao;
 import com.rong.persist.model.User;
 
@@ -16,6 +17,7 @@ import com.rong.persist.model.User;
  */
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService{
 	private UserDao dao = new UserDao();
+	private MealDao mealDao = new MealDao();
 	@Override
 	public Page<Record> getUserList(int page,int pagesize,Kv param) {
 		return dao.page(page,pagesize,param);
@@ -45,5 +47,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	@Override
 	public boolean editExpirDate(long id, String date) {
 		return dao.updateField(id, "expir_date", date);
+	}
+
+	@Override
+	public boolean saveUserMeal(String userName, Long mealId) {
+		return mealDao.saveUserMeal(userName, mealId);
 	}
 }

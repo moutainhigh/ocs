@@ -17,6 +17,14 @@ public abstract class BaseAccount<M extends BaseAccount<M>> extends Model<M> imp
 		return getLong("id");
 	}
 
+	public void setUserName(java.lang.String userName) {
+		set("user_name", userName);
+	}
+
+	public java.lang.String getUserName() {
+		return getStr("user_name");
+	}
+
 	public void setAccount(java.math.BigDecimal account) {
 		set("account", account);
 	}
@@ -57,11 +65,4 @@ public abstract class BaseAccount<M extends BaseAccount<M>> extends Model<M> imp
 		return get("update_time");
 	}
 
-	public void setUserName(java.lang.String userName) {
-		set("user_name", userName);
-	}
-
-	public java.lang.String getUserName() {
-		return getStr("user_name");
-	}
 }

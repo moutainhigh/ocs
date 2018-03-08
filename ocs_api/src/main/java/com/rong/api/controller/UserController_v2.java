@@ -3,6 +3,7 @@ package com.rong.api.controller;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,9 +20,12 @@ import com.rong.business.service.QqService;
 import com.rong.business.service.QqServiceImpl;
 import com.rong.business.service.UserService;
 import com.rong.business.service.UserServiceImpl;
+import com.rong.business.service.UserTokenService;
+import com.rong.business.service.UserTokenServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.exception.CommonException;
+import com.rong.common.util.CommonUtil;
 import com.rong.common.util.StringUtils;
 import com.rong.common.validator.CommonValidatorUtils;
 import com.rong.persist.model.Account;
@@ -43,6 +47,7 @@ public class UserController_v2 extends Controller {
 	private InterfaceCallService interfaceCallService = new InterfaceCallServiceImpl();
 	private ProjectService projectService = new ProjectServiceImpl();
 	private QqService qqService = new QqServiceImpl();
+	private UserTokenService userTokenService = new UserTokenServiceImpl();
 	
 	/**
 	 * 接口调用计费
@@ -190,5 +195,51 @@ public class UserController_v2 extends Controller {
 		item.setCallbackSuccess(true);
 		item.update();
 		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "确认成功");
+	}
+	
+	/**
+	 * 用户注册，校验规则只要用户名不重复，且长度不超过11位即可
+	 */
+	public void reg() {
+		String userName = getPara("userName");
+		String userPwd = getPara("userPwd");
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("userName", userName);
+		paramMap.put("userPwd", userPwd);
+		// 校验所有参数
+		if (CommonValidatorUtils.requiredValidate(paramMap, this)) {
+			return;
+		}
+		// 校验用户名：不超过11长度
+		if (userName.length()<=11) {
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_NAME_ERROR, "用户名只允许11位长度字符串");
+			return;
+		}
+		// 校验该用户名是否已被注册
+		if (userService.findByUserName(userName) != null) {
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_EXIST, "用户名已被使用，请重新填写");
+			return;
+		}
+		User user = new User();
+		user.setUserName(userName);
+		user.setUserPwd(CommonUtil.getMD5(userPwd));
+		user.setCreateTime(new Date());
+		user.setState(true);
+		try {
+			// 注册信息保存
+			user.save();
+			// token处理
+			String token = userTokenService.saveToken(user);
+			// 生成相应的账户信息
+			accountService.save(userName);
+			// 组织返回信息
+			Record returnObj = new Record();
+			returnObj.set("userName", userName);
+			returnObj.set("token", token);
+			BaseRenderJson.baseRenderObj.returnObj(this, returnObj, MyErrorCodeConfig.REQUEST_SUCCESS, "注册成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.ERROR_FAIL, "注册异常");
+		}
 	}
 }

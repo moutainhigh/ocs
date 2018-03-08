@@ -22,7 +22,7 @@ public abstract class BaseRechargeSet<M extends BaseRechargeSet<M>> extends Mode
 	}
 
 	public java.lang.Integer getRechargeMoney() {
-		return get("recharge_money");
+		return getInt("recharge_money");
 	}
 
 	public void setGive(java.lang.Integer give) {

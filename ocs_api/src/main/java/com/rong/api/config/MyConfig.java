@@ -1,7 +1,6 @@
 package com.rong.api.config;
 
 import com.alibaba.druid.filter.stat.StatFilter;
-import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -103,11 +102,11 @@ public class MyConfig extends JFinalConfig {
 		statFilter.setLogSlowSql(true);
 		// 2.1慢查询目前设置为1s,随着优化一步步进行慢慢更改
 		statFilter.setSlowSqlMillis(1000);
+		druidPlugin.addFilter(statFilter);
 		// 2.2防注入插件
-		WallFilter wall = new WallFilter();
-		wall.setDbType("mysql");
-		druidPlugin.addFilter(statFilter).addFilter(wall);
-		me.add(druidPlugin);
+//		WallFilter wall = new WallFilter();
+//		wall.setDbType("mysql");
+//		druidPlugin.addFilter(wall);
 		me.add(druidPlugin);
 		// 配置ActiveRecord插件
 		ActiveRecordPlugin arp = new ActiveRecordPlugin("yun", druidPlugin);
