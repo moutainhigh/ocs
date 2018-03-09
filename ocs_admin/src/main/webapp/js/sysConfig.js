@@ -66,7 +66,7 @@ function initRefreshBtn(){
 }
 
 function refreshConf(){
-	var arr_write_ip = new Array("39.108.75.150:8090","127.0.0.1:8080");
+	var arr_write_ip = new Array("111.230.153.96:80","127.0.0.1:8080");
 	var alertStr = "";
 	for(i in arr_write_ip){
 			$.ajax({

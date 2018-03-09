@@ -1,0 +1,5 @@
+jdbcUrl = jdbc:mysql://39.108.75.150:3306/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+user=ocs
+password=xiaowu123.
+devMode = false
+ 
