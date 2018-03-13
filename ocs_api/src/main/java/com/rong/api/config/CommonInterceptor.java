@@ -33,6 +33,7 @@ public class CommonInterceptor implements Interceptor {
 	private boolean doMain(Invocation ai) {
 		try {
 			ai.invoke();// 然后调用
+			setResponseHeader(ai.getController().getResponse());
 		} catch (CommonException e) {
 			e.printStackTrace();
 			BaseRenderJson.apiReturnJson(ai.getController(), e.getCode(), e.getMessage());

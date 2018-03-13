@@ -39,23 +39,31 @@
 							<th>总消费次数</th>
 							<th>总消费金额</th>
 							<th>创建时间</th>
+							<th>状态</th>
 							<th>备注</th>
 							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${page.list}" var="item">
-							<tr onclick="loadRight('<%=basePath %>/interfaceCall/list?projectId=${item.id }')">
+							<tr>
 								<td>${item.id }</td>
-                                <td>${item.project_name }</td>
+                                <td><a href="javascript:loadRight('<%=basePath %>/interfaceCall/list?projectId=${item.id }')">${item.project_name }</a></td>
 								<td>${item.price }￥/次</td>
 								<td>${item.count }次</td>
 								<td>${item.count*item.price }￥</td>
 								<td><fmt:formatDate value="${item.create_time }" pattern="yyyy-MM-dd HH:mm" /></td>
+								<td>${item.enable?"启用":"停用" }</td>
 								<td>${item.remark }</td>
 								<td>
 									<div class="am-btn-toolbar">
 										<div class="am-btn-group am-btn-group-xs">
+										   <c:if test="${item.enable  }">
+                                              <button type="button" name="disableBtn" onclick="enableProject(${item.id },false)" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">停用</button>
+                                            </c:if>   
+                                            <c:if test="${!item.enable  }">
+                                              <button type="button" name="enableBtn" onclick="enableProject(${item.id },true)" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">启用</button>
+                                            </c:if>  
 										    <button type="button" name="editBtn" onclick="javascript:loadRight('<%=basePath %>/project/toEdit?id=${item.id}')" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">修改</button>
 											<button type="button" name="delBtn" data-id="${item.id }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">删除</button>
 										</div>

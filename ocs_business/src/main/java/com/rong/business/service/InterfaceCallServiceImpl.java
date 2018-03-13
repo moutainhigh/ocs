@@ -8,6 +8,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.AccountDao;
 import com.rong.persist.dao.InterfaceCallDao;
+import com.rong.persist.dao.ReportInterfaceCallDao;
 import com.rong.persist.model.Consume;
 import com.rong.persist.model.InterfaceCall;
 
@@ -24,6 +25,7 @@ import com.rong.persist.model.InterfaceCall;
 public class InterfaceCallServiceImpl extends BaseServiceImpl<InterfaceCall> implements InterfaceCallService{
 	private InterfaceCallDao dao = new InterfaceCallDao();
 	private AccountDao accountDao = new AccountDao();
+	private ReportInterfaceCallDao reportInterfaceCallDao = new ReportInterfaceCallDao();
 	
 	@Override
 	public Page<InterfaceCall> page(int pageNumber, int pageSize, Kv param) {
@@ -31,8 +33,8 @@ public class InterfaceCallServiceImpl extends BaseServiceImpl<InterfaceCall> imp
 	}
 
 	@Override
-	public int countByProjectId(long projectId) {
-		return dao.countByProjectId(projectId);
+	public int countByProjectName(String projectName) {
+		return reportInterfaceCallDao.sumCall(projectName).intValue();
 	}
 	@Override
 	public Long save(String userName,boolean callSuccess,long projectId,String projectName,String remark){

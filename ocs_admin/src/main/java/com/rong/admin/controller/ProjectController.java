@@ -66,7 +66,7 @@ public class ProjectController extends BaseController{
 		for (Project project : plist) {
 			Record record = new Record();
 			record.setColumns(project);
-			int count = interfaceCallService.countByProjectId(project.getId());
+			int count = interfaceCallService.countByProjectName(project.getProjectName());
 			record.set("count", count);
 			returnList.add(record);
 		}
@@ -74,5 +74,14 @@ public class ProjectController extends BaseController{
 		keepPara();
 		setAttr("page", returnPage);
 		render("/views/project/list.jsp");
+	}
+	
+	public void enable(){
+		Long id = getParaToLong("id");
+		Boolean enable = getParaToBoolean("enable");
+		Project model = projectService.findById(id);
+		model.setEnable(enable);
+		model.update();
+		BaseRenderJson.returnUpdateObj(this, true);
 	}
 }

@@ -56,6 +56,15 @@ public class ReportInterfaceCallDao extends BaseDao<ReportInterfaceCall> {
 		return 0L;
 	}
 	
+	public Long sumCall(String projectName){
+		String sql = "select sum(count_success_call)+sum(count_fail_call) sumCall from "+ReportInterfaceCall.TABLE +" where project_name =?";
+		Record item = Db.findFirst(sql,projectName);
+		if(item!=null){
+			return item.getLong("sumCall")==null?0L:item.getLong("sumCall");
+		}
+		return 0L;
+	}
+	
 	public List<Record> list(){
 		// 今天
 		String sql = "select project_name ,count_success_call success,count_fail_call fail " + "from "

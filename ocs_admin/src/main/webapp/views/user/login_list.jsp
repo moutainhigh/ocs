@@ -23,20 +23,24 @@
 				<table
 					class="am-table am-table-striped am-table-hover table-main am-text-nowrap">
 					<thead>
+					    <tr>
+                            <th colspan="3">今日登录：${countLoginToday}</th>
+                        </tr>
 						<tr>
 							<th>用户名</th>
 							<th>登录ip</th>
+							<th>地址</th>
 							<th>最后登录时间</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${page.list}" var="item">
 							<!-- 根据最近登录时间转化为天数 当天登录红色-->
-							<c:set var="loginDays"
-								value="${nowDate.time - item.login_time.time}" />
+							<c:set var="loginDays" value="${nowDate.time - item.login_time.time}" />
 							<tr <c:if test="${loginDays <= 1*1000*60*60*24  }">style="color: red;"</c:if>>
 								<td>${item.user_name }</td>
 								<td>${item.login_ip }</td>
+								<td>${item.city }</td>
 								<td><fmt:formatDate value="${item.login_time }" pattern="yyyy-MM-dd HH:mm" /></td>
 							</tr>
 

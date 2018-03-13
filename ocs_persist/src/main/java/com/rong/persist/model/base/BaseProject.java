@@ -56,5 +56,13 @@ public abstract class BaseProject<M extends BaseProject<M>> extends Model<M> imp
 	public java.util.Date getUpdateTime() {
 		return get("update_time");
 	}
+	
+	public void setEnable(java.lang.Boolean enable) {
+		set("enable", enable);
+	}
+
+	public java.lang.Boolean getEnable() {
+		return get("enable");
+	}
 
 }

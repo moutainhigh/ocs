@@ -115,8 +115,8 @@ public class ConsumController extends Controller {
 		}
 		// 1.1校验项目是否存在
 		Project project = projectService.findById(projectId);
-		if(project==null){//项目不存在
-			throw new CommonException(MyErrorCodeConfig.PROJECT_NOT_EXIST, "项目不存在");
+		if(project==null || project.getEnable()==false){//项目不存在
+			throw new CommonException(MyErrorCodeConfig.PROJECT_NOT_EXIST, "项目不存在，或者项目已禁用");
 		}
 		// 2.校验余额是否足够
 		Account userAccount = accountService.findByUserName(userName);

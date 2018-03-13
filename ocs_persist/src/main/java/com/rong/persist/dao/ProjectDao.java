@@ -18,7 +18,7 @@ import com.rong.persist.model.Project;
  */
 public class ProjectDao extends BaseDao<Project> {
 	public static final Project dao = Project.dao;
-	public static final String FILEDS = "id,create_time,update_time,project_name,price,remark";
+	public static final String FILEDS = "id,create_time,update_time,project_name,price,remark,enable";
 	
 	public Page<Project> page(int pageNumber, int pageSize, Kv param) {
 		String select = "select " + FILEDS;

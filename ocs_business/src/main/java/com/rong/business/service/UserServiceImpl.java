@@ -74,4 +74,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		List<Long> proList = mealDao.userValidProjectList(userName);
 		return proList.contains(projectId);
 	}
+
+	@Override
+	public int countLoginToday() {
+		return dao.countLoginToday();
+	}
 }

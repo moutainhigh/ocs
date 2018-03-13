@@ -1,6 +1,7 @@
 package com.rong.admin.controller;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.log.Log;
@@ -12,6 +13,9 @@ import com.rong.business.service.UserService;
 import com.rong.business.service.UserServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.util.CommonUtil;
+import com.rong.common.util.GsonUtil;
+import com.rong.common.util.HttpUtil;
+import com.rong.common.util.StringUtils;
 import com.rong.persist.model.Account;
 
 public class UserController extends BaseController{
@@ -65,9 +69,29 @@ public class UserController extends BaseController{
 			param.set("agentId", getUser().getId());
 		}
 		Page<Record> list = userService.getUserList(page, pageSize,param);
+		for (Record item : list.getList()) {
+			String ip = item.getStr("login_ip");
+			if(StringUtils.isNullOrEmpty(ip)){
+				continue;
+			}
+			// {"code":0,"data":{"ip":"210.21.41.52","country":"中国","area":"",
+			// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
+			// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}
+			try {
+				String jsonString = HttpUtil.getInstance().doGet("http://ip.taobao.com/service/getIpInfo.php?ip="+ip);
+				Map map = (Map)GsonUtil.fromJson(jsonString, Map.class);
+				Map dataMap =  (Map)map.get("data");
+				String region = (String)dataMap.get("region");
+				String city = (String)dataMap.get("city");
+				item.set("city", region+city);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		keepPara();
 		setAttr("nowDate", new Date());
 		setAttr("page", list);
+		setAttr("countLoginToday",userService.countLoginToday());
 		render("/views/user/login_list.jsp");
 	}
 	

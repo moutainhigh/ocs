@@ -62,4 +62,13 @@ public class UserDao extends BaseDao<User> {
 		String sql = "select " + FILEDS + " from " + User.TABLE + " where user_name = ? and user_pwd = ?";
 		return dao.findFirst(sql, userName,pwd);
 	}
+	
+	public int countLoginToday(){
+		String sql = "select count(*) countLoginUser from " + User.TABLE + " where to_days(login_time) = to_days(now())";
+		Record record = Db.findFirst(sql);
+		if(record==null){
+			return 0;
+		}
+		return record.getInt("countLoginUser");
+	}
 }

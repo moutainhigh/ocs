@@ -37,3 +37,21 @@ function initDelete() {
 		});
 	});
 }
+
+/**
+ * 启用true|停用false
+ */
+function enableProject(id,enable){
+	$.ajax({
+		url:getRootPath()+"/project/enable",
+   		data:{"id":id,"enable":enable},
+   		dataType:"text",
+   		success:function(data){
+   			var obj = jQuery.parseJSON(data);
+   			alert(obj.resultDes);
+   			if(obj.resultCode == '1'){
+   				doQuery();
+   			}
+   		}
+   	})
+}
