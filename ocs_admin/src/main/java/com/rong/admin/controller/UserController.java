@@ -14,7 +14,7 @@ import com.rong.business.service.UserServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.util.CommonUtil;
 import com.rong.common.util.GsonUtil;
-import com.rong.common.util.HttpUtil;
+import com.rong.common.util.HttpUtils;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.model.Account;
 
@@ -61,6 +61,7 @@ public class UserController extends BaseController{
 		render("/views/user/list.jsp");
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void loginList() {
 		int page = getParaToInt("page", 1);
 		String userName = getPara("userName");
@@ -78,12 +79,13 @@ public class UserController extends BaseController{
 			// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
 			// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}
 			try {
-				String jsonString = HttpUtil.getInstance().doGet("http://ip.taobao.com/service/getIpInfo.php?ip="+ip);
+				String jsonString = HttpUtils.sendGet("http://ip.taobao.com/service/getIpInfo.php?ip="+ip);
 				Map map = (Map)GsonUtil.fromJson(jsonString, Map.class);
 				Map dataMap =  (Map)map.get("data");
+				String country = (String)dataMap.get("country");
 				String region = (String)dataMap.get("region");
 				String city = (String)dataMap.get("city");
-				item.set("city", region+city);
+				item.set("city", country+region+city);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
