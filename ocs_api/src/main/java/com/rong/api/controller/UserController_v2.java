@@ -211,7 +211,7 @@ public class UserController_v2 extends Controller {
 			return;
 		}
 		// 校验用户名：不超过11长度
-		if (userName.length()<=11) {
+		if (userName.length()>11) {
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_NAME_ERROR, "用户名只允许11位长度字符串");
 			return;
 		}
