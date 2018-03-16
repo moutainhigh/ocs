@@ -71,7 +71,12 @@ public class MealController extends Controller{
 	 * 获取所有套餐
 	 */
 	public void allList(){
-		Page<Meal> page = mealService.page(1, 99, null);
+		String mealName = getPara("mealName","");
+		if(mealName.contains("-")){
+			mealName = mealName.split("-")[0];
+		}
+		Kv param = Kv.by("mealName", mealName);
+		Page<Meal> page = mealService.page(1, 99, param);
 		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,page.getList(), "获取成功");
 	}
 }

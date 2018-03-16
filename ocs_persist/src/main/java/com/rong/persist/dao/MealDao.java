@@ -43,7 +43,7 @@ public class MealDao extends BaseDao<Meal> {
 			}
 		}
 		String orderBy = " order by id asc";
-		sqlExceptSelect = sqlExceptSelect + orderBy;
+		sqlExceptSelect = sqlExceptSelect + where + orderBy;
 		return dao.paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}
 	
