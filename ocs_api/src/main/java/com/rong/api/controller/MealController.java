@@ -1,5 +1,6 @@
 package com.rong.api.controller;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.jfinal.core.Controller;
@@ -63,7 +64,7 @@ public class MealController extends Controller{
 			return;
 		}
 		Kv param = Kv.by("userName", userName);
-		Page<UserMeal> page = mealService.pageUserMeal(1, 99, param);
+		Page<UserMeal> page = mealService.pageUserMeal(1, 999, param);
 		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,page.getList(), "获取成功");
 	}
 	
@@ -71,12 +72,19 @@ public class MealController extends Controller{
 	 * 获取所有套餐
 	 */
 	public void allList(){
-		String mealName = getPara("mealName","");
+		String mealName = getPara("mealName","包月");
 		if(mealName.contains("-")){
 			mealName = mealName.split("-")[0];
 		}
 		Kv param = Kv.by("mealName", mealName);
-		Page<Meal> page = mealService.page(1, 99, param);
-		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,page.getList(), "获取成功");
+		Page<Meal> page = mealService.page(1, 999, param);
+		List<Meal> returnList = page.getList();
+		if("包月".equals(mealName)){
+			for (Meal meal : returnList) {
+				meal.setMealName(meal.getMealName().split("-")[0]);
+			}
+		}
+		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,returnList, "获取成功");
+		
 	}
 }
