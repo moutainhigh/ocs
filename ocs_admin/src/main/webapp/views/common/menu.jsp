@@ -27,91 +27,23 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
 							href="javascript:loadRight('<%=mybasePath %>/user/loginList','最近登录用户')">
 								<i class="am-icon-angle-right"></i> <span>最近登录用户</span>
 						</a></li>
+                        <li>
+                        <shiro:hasPermission name="recharge-list">
+                                <a
+                                    href="javascript:loadRight('<%=mybasePath %>/recharge/list','充值列表')">
+                                    <i class="am-icon-angle-right"></i> <span>充值列表</span>
+                                </a>
+                            </shiro:hasPermission> 
+                            <shiro:hasPermission name="rechargeSet-list">
+                                <a
+                                    href="javascript:loadRight('<%=mybasePath %>/rechargeSet/list','充值赠送管理')">
+                                    <i class="am-icon-angle-right"></i> <span>充值赠送管理</span>
+                                </a>
+                            </shiro:hasPermission></li>
 					</ul></li>
+					
 			</shiro:hasPermission>
 
-			<shiro:hasPermission name="recharge">
-				<li class="tpl-left-nav-item"><a href="javascript:void(0);"
-					class="nav-link tpl-left-nav-link-list"> <i
-						class="am-icon-user-md"></i> <span>充值管理</span> <i
-						class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
-				</a>
-					<ul class="tpl-left-nav-sub-menu" style="display: none;">
-						<li><shiro:hasPermission name="recharge-list">
-								<a
-									href="javascript:loadRight('<%=mybasePath %>/recharge/list','充值列表')">
-									<i class="am-icon-angle-right"></i> <span>充值列表</span>
-								</a>
-							</shiro:hasPermission> <shiro:hasPermission name="rechargeSet-list">
-								<a
-									href="javascript:loadRight('<%=mybasePath %>/rechargeSet/list','充值赠送管理')">
-									<i class="am-icon-angle-right"></i> <span>充值赠送管理</span>
-								</a>
-							</shiro:hasPermission></li>
-					</ul></li>
-			</shiro:hasPermission>
-
-			<shiro:hasPermission name="qq">
-				<li class="tpl-left-nav-item"><a href="javascript:void(0);"
-					class="nav-link tpl-left-nav-link-list"> <i
-						class="am-icon-user-md"></i> <span>QQ管理</span> <i
-						class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
-				</a>
-					<ul class="tpl-left-nav-sub-menu" style="display: none;">
-						<li><a
-							href="javascript:loadRight('<%=mybasePath %>/qq/list','QQ列表')">
-								<i class="am-icon-angle-right"></i> <span>QQ列表</span>
-						</a></li>
-					</ul></li>
-			</shiro:hasPermission>
-
-			<shiro:hasPermission name="interfaceCall">
-				<li class="tpl-left-nav-item"><a href="javascript:void(0);"
-					class="nav-link tpl-left-nav-link-list"> <i
-						class="am-icon-user-md"></i> <span>接口调用实况</span> <i
-						class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
-				</a>
-					<ul class="tpl-left-nav-sub-menu" style="display: none;">
-						<li><a
-							href="javascript:loadRight('<%=mybasePath %>/interfaceCall/list?userName=0','接口调用列表')">
-								<i class="am-icon-angle-right"></i> <span>接口调用列表</span>
-						</a></li>
-					</ul></li>
-			</shiro:hasPermission>
-
-			<shiro:hasPermission name="project">
-				<li class="tpl-left-nav-item"><a href="javascript:void(0);"
-					class="nav-link tpl-left-nav-link-list"> <i
-						class="am-icon-user-md"></i> <span>消费项目管理</span> <i
-						class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
-				</a>
-					<ul class="tpl-left-nav-sub-menu" style="display: none;">
-						<li><a
-							href="javascript:loadRight('<%=mybasePath %>/project/list','消费项目列表')">
-								<i class="am-icon-angle-right"></i> <span>消费项目列表</span>
-						</a></li>
-					</ul></li>
-			</shiro:hasPermission>
-			
-			<shiro:hasPermission name="ad">
-                <li class="tpl-left-nav-item"><a href="javascript:void(0);"
-                        class="nav-link tpl-left-nav-link-list"> <i
-                            class="am-icon-user-md"></i> <span>广告管理</span> <i
-                            class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
-                    </a>
-                        <ul class="tpl-left-nav-sub-menu" style="display: none;">
-                            <li><a
-                                href="javascript:loadRight('<%=mybasePath %>/ad/list','广告列表')">
-                                    <i class="am-icon-angle-right"></i> <span>广告列表</span>
-                            </a></li>
-                            
-                            <li><a
-                                href="javascript:loadRight('<%=mybasePath %>/ad/userAdList','用户提交广告')">
-                                    <i class="am-icon-angle-right"></i> <span>用户提交广告</span>
-                            </a></li>
-                        </ul></li>
-            </shiro:hasPermission>
-			
 			<shiro:hasPermission name="report">
 				<li class="tpl-left-nav-item"><a href="javascript:void(0);"
 	                    class="nav-link tpl-left-nav-link-list"> <i
@@ -128,13 +60,19 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
                                 href="javascript:loadRight('<%=mybasePath %>/report/callList','接口调用报表')">
                                     <i class="am-icon-angle-right"></i> <span>接口调用报表</span>
                             </a></li>
+                         <shiro:hasPermission name="interfaceCall">
+                        <li><a
+                            href="javascript:loadRight('<%=mybasePath %>/interfaceCall/list?userName=0','接口调用列表')">
+                                <i class="am-icon-angle-right"></i> <span>接口调用实况</span>
+                        </a></li>
+                        </shiro:hasPermission>
 	                    </ul></li>
 			</shiro:hasPermission>
 			
 			<shiro:hasPermission name="meal">
                 <li class="tpl-left-nav-item"><a href="javascript:void(0);"
                         class="nav-link tpl-left-nav-link-list"> <i
-                            class="am-icon-user-md"></i> <span>套餐</span> <i
+                            class="am-icon-user-md"></i> <span>套餐配置</span> <i
                             class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
                         <ul class="tpl-left-nav-sub-menu" style="display: none;">
@@ -142,13 +80,19 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
                                 href="javascript:loadRight('<%=mybasePath %>/meal/list','套餐列表')">
                                     <i class="am-icon-angle-right"></i> <span>套餐列表</span>
                             </a></li>
+                                <shiro:hasPermission name="project">
+                        <li><a
+                            href="javascript:loadRight('<%=mybasePath %>/project/list','消费项目列表')">
+                                <i class="am-icon-angle-right"></i> <span>消费项目列表</span>
+                        </a></li>
+            </shiro:hasPermission>
                         </ul></li>
             </shiro:hasPermission>
 			
 			<shiro:hasPermission name="notice">
                 <li class="tpl-left-nav-item"><a href="javascript:void(0);"
                         class="nav-link tpl-left-nav-link-list"> <i
-                            class="am-icon-user-md"></i> <span>公告</span> <i
+                            class="am-icon-user-md"></i> <span>信息配置</span> <i
                             class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
                         <ul class="tpl-left-nav-sub-menu" style="display: none;">
@@ -156,6 +100,23 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
                                 href="javascript:loadRight('<%=mybasePath %>/notice/list','公告列表')">
                                     <i class="am-icon-angle-right"></i> <span>公告列表</span>
                             </a></li>
+                            <shiro:hasPermission name="ad">
+                            <li><a
+                                href="javascript:loadRight('<%=mybasePath %>/ad/list','广告列表')">
+                                    <i class="am-icon-angle-right"></i> <span>广告列表</span>
+                            </a></li>
+                            
+                            <li><a
+                                href="javascript:loadRight('<%=mybasePath %>/ad/userAdList','用户提交广告')">
+                                    <i class="am-icon-angle-right"></i> <span>用户提交广告</span>
+                            </a></li>
+                             </shiro:hasPermission>
+                             <shiro:hasPermission name="qq">
+	                        <li><a
+	                            href="javascript:loadRight('<%=mybasePath %>/qq/list','QQ列表')">
+	                                <i class="am-icon-angle-right"></i> <span>QQ列表</span>
+	                        </a></li>
+	                      </shiro:hasPermission>
                         </ul></li>
             </shiro:hasPermission>
 
