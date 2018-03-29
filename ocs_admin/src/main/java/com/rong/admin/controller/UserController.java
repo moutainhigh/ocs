@@ -15,8 +15,10 @@ import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.util.CommonUtil;
 import com.rong.common.util.GsonUtil;
 import com.rong.common.util.HttpUtils;
+import com.rong.common.util.NumberUtil;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.model.Account;
+import com.rong.persist.model.Recharge;
 
 public class UserController extends BaseController{
 	private final Log logger = Log.getLog(this.getClass());
@@ -109,8 +111,19 @@ public class UserController extends BaseController{
 		String userName = getPara("userName");
 		String money = getPara("money");
 		Account account = accountService.findByUserName(userName);
+		BigDecimal oldMoney = account.getAccount();
 		account.setAccount(new BigDecimal(money));
 		account.update();
+		Recharge recharge = new Recharge();
+		recharge.setUserName(userName);
+		recharge.setCreateTime(new Date());
+		recharge.setMoney(account.getAccount().subtract(oldMoney));
+		recharge.setType(3);
+		recharge.setRechargeCode(NumberUtil.createOrderCode(3));
+		recharge.setGiveMoney(0);
+		recharge.setUseState(true);
+		recharge.setRemark("手动将账户余额["+oldMoney+"]调整为："+money);
+		recharge.save();
 		BaseRenderJson.returnUpdateObj(this, true);
 		logger.info("[操作日志]修改用户账户成功,userName：" + userName+",account:"+money);
 	}
