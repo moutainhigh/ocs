@@ -31,6 +31,7 @@ public class MyConst {
 	public static final String REGEX = "(?!^\\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{6,12}";
 	// 对用户名格式的限制
 	public static final String REG_USER_NAME = "\\d{5,11}";
+	public static final String REG_MOBILE = "\\d{11}";
 	public static final String DEFAULT_PASSWORD = "123456";
 
 }

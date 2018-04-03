@@ -88,5 +88,13 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 	public java.util.Date getExpirDate() {
 		return get("expir_date");
 	}
+	
+	public void setMobile(java.lang.String mobile) {
+		set("mobile", mobile);
+	}
+
+	public java.lang.String getMobile() {
+		return getStr("mobile");
+	}
 
 }

@@ -117,6 +117,12 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
 	                                <i class="am-icon-angle-right"></i> <span>QQ列表</span>
 	                        </a></li>
 	                      </shiro:hasPermission>
+	                       <shiro:hasPermission name="qq">
+                            <li><a
+                                href="javascript:loadRight('<%=mybasePath %>/adtask/list','广告任务')">
+                                    <i class="am-icon-angle-right"></i> <span>广告任务</span>
+                            </a></li>
+                          </shiro:hasPermission>
                         </ul></li>
             </shiro:hasPermission>
 

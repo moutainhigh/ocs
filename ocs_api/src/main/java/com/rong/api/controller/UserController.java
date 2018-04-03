@@ -64,6 +64,7 @@ public class UserController extends Controller {
 		String userName = getPara("userName");
 		String userPwd = getPara("userPwd");
 		String orderCode = getPara("orderCode");// 订单号
+		String mobile = getPara("mobile");// 手机号码
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("userName", userName);
 		paramMap.put("userPwd", userPwd);
@@ -75,6 +76,11 @@ public class UserController extends Controller {
 		// 校验用户名：5-11位数字
 		if (!userName.matches(MyConst.REG_USER_NAME)) {
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_NAME_ERROR, "用户名只允许5-11位数字");
+			return;
+		}
+		// 校验手机号码：11位数字
+		if (mobile!=null && !mobile.matches(MyConst.REG_MOBILE)) {
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.ERROR_BAD_REQUEST, "手机号码格式不正确");
 			return;
 		}
 		// 校验该用户名是否已被注册
@@ -94,6 +100,7 @@ public class UserController extends Controller {
 		user.setCreateTime(new Date());
 		user.setState(true);
 		user.setAgentId(recharge.getAgentId());
+		user.setMobile(mobile);
 		try {
 			// 注册信息保存
 			user.save();

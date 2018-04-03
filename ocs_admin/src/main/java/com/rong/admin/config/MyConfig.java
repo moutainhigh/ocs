@@ -20,6 +20,7 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.rong.admin.controller.AdController;
+import com.rong.admin.controller.AdTaskController;
 import com.rong.admin.controller.AdminController;
 import com.rong.admin.controller.BaseController;
 import com.rong.admin.controller.IndexController;
@@ -119,6 +120,7 @@ public class MyConfig extends JFinalConfig {
 		me.add("/ad",AdController.class);
 		me.add("/notice",NoticeController.class);
 		me.add("/meal",MealController.class);
+		me.add("/adtask",AdTaskController.class);
 	}
 
 	@Override
