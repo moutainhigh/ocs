@@ -31,7 +31,7 @@ public class AdTaskServiceImpl extends BaseServiceImpl<AdTask> implements AdTask
 		return dao.Rand();
 	}
 	@Override
-	public boolean save(String userName, String content, Long projectId, Boolean back, BigDecimal moeny,
+	public String save(String userName, String content, Long projectId, Boolean back, BigDecimal moeny,
 			Integer countCall) {
 		return dao.save(userName, content, projectId, back, moeny, countCall);
 	}

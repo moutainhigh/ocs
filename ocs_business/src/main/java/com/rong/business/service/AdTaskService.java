@@ -40,9 +40,9 @@ public interface AdTaskService extends BaseService<AdTask>{
 	 * @param back
 	 * @param moeny
 	 * @param countCall
-	 * @return
+	 * @return orderCode
 	 */
-	boolean save(String userName,String content,Long projectId,Boolean back,BigDecimal moeny,Integer countCall);
+	String save(String userName,String content,Long projectId,Boolean back,BigDecimal moeny,Integer countCall);
 	/**
 	 * 根据广告任务的订单号查询执行详情-分页
 	 * @param pageNumber

@@ -96,5 +96,13 @@ public abstract class BaseAdTask<M extends BaseAdTask<M>> extends Model<M> imple
 	public java.lang.String getUserName() {
 		return getStr("user_name");
 	}
+	
+	public void setCountCalled(java.lang.Integer countCalled) {
+		set("count_called", countCalled);
+	}
+
+	public java.lang.Integer getCountCalled() {
+		return getInt("count_called");
+	}
 
 }

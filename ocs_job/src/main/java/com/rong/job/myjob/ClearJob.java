@@ -20,35 +20,35 @@ public class ClearJob implements Job{
 	
 	/**
 	 * 因目前数据量过于庞大，每天200W左右调记录，所以采用清理旧数据
-	 * 清理接口表数据，只保留最近10天数据
+	 * 清理接口表数据，只保留最近3天数据
 	 */
 	private void clearTable4InterfaceCall(){
-		logger.info("接口表：开始清理超过10天的数据");
+		logger.info("接口表：开始清理超过3天的数据");
 		try{
-			String sql = "delete from "+InterfaceCall.TABLE +" where TO_DAYS(NOW()) - TO_DAYS(create_time) >= 10 ";
+			String sql = "delete from "+InterfaceCall.TABLE +" where TO_DAYS(NOW()) - TO_DAYS(create_time) >= 3 ";
 			int count = Db.update(sql);
-			logger.info("接口表：清理超过10天的数据成功，总计："+count);
+			logger.info("接口表：清理超过3天的数据成功，总计："+count);
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			logger.error("error:接口表：开始清理超过10天的数据出现异常"+e);
+			logger.error("error:接口表：开始清理超过3天的数据出现异常"+e);
 		}		
 	}
 	
 	/**
 	 * 因目前数据量过于庞大，每天200W左右调记录，所以采用清理旧数据
-	 * 清理消费记录表数据，只保留最近10天数据
+	 * 清理消费记录表数据，只保留最近3天数据
 	 */
 	private void clearTable4Consume(){
-		logger.info("接口表：开始清理超过10天的数据");
+		logger.info("接口表：开始清理超过3天的数据");
 		try{
-			String sql = "delete from "+Consume.TABLE +" where TO_DAYS(NOW()) - TO_DAYS(create_time) >= 10 ";
+			String sql = "delete from "+Consume.TABLE +" where TO_DAYS(NOW()) - TO_DAYS(create_time) >= 3 ";
 			int count = Db.update(sql);
-			logger.info("接口表：清理超过10天的数据成功，总计："+count);
+			logger.info("接口表：清理超过3天的数据成功，总计："+count);
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			logger.error("error:接口表：开始清理超过10天的数据出现异常"+e);
+			logger.error("error:接口表：开始清理超过3天的数据出现异常"+e);
 		}		
 	}
 }

@@ -243,6 +243,36 @@ public class DateTimeUtil {
 		return after - start;
 	}
 	
+	/**
+	 * 获取两个时间差之间的秒数
+	 * @param startTime 开始时间
+	 * @param afterTime 结束时间
+	 * @return
+	 */
+	public static long getBetweenSecond(Date startTime, Date afterTime) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(startTime);
+		long start = calendar.getTimeInMillis();
+		calendar.setTime(afterTime);
+		long after = calendar.getTimeInMillis();
+		return (after - start)/1000;
+	}
+	
+	/**
+	 * 获取两个时间差之间的分钟数
+	 * @param startTime 开始时间
+	 * @param afterTime 结束时间
+	 * @return
+	 */
+	public static long getBetweenMinute(Date startTime, Date afterTime) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(startTime);
+		long start = calendar.getTimeInMillis();
+		calendar.setTime(afterTime);
+		long after = calendar.getTimeInMillis();
+		return (after - start)/1000/60;
+	}
+	
 	public static String lastMonth() {
 		String now = formatDateTime(new Date(), "yyyy-MM-dd");
 		Date today = parseDateTime(now + " 00:00:00", "yyyy-MM-dd HH:mm:ss");

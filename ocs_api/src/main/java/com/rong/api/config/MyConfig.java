@@ -15,6 +15,7 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.rong.api.controller.AdController;
+import com.rong.api.controller.AdTaskController;
 import com.rong.api.controller.ConsumController;
 import com.rong.api.controller.MealController;
 import com.rong.api.controller.NoticeController;
@@ -81,6 +82,7 @@ public class MyConfig extends JFinalConfig {
 		me.add("/api/notice", NoticeController.class);
 		me.add("/api/meal", MealController.class);
 		me.add("/api/consum", ConsumController.class);
+		me.add("/api/adtask", AdTaskController.class);
 	}
 
 	@Override

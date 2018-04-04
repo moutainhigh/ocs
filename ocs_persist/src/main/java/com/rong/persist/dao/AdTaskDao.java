@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
+import com.rong.common.util.NumberUtil;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
 import com.rong.persist.model.AdTask;
@@ -58,17 +59,19 @@ public class AdTaskDao extends BaseDao<AdTask> {
 	
 	
 	public AdTask Rand(){
-		String sql = "select " + FILEDS + " from " + AdTask.TABLE + " where state == 1 order by RAND() limit 1;";
+		String sql = "select " + FILEDS + " from " + AdTask.TABLE + " where state = 1 order by RAND() limit 1";
 		AdTask item = dao.findFirst(sql);
-		item.setState(2);
-		boolean result = item.update();
-		if(result){
-			return item;
+		if(item!=null){
+			item.setState(2);
+			boolean result = item.update();
+			if(result){
+				return item;
+			}
 		}
 		return null;
 	}
 	
-	public boolean save(String userName,String content,Long projectId,Boolean back,BigDecimal moeny,Integer countCall) {
+	public String save(String userName,String content,Long projectId,Boolean back,BigDecimal moeny,Integer countCall) {
 		AdTask model = new AdTask();
 		model.setCreateTime(new Date());
 		model.setContent(content);
@@ -77,6 +80,9 @@ public class AdTaskDao extends BaseDao<AdTask> {
 		model.setBack(back);
 		model.setMoeny(moeny);
 		model.setUserName(userName);
-		return save(model);
+		String orderCode = NumberUtil.createOrderCode(3);
+		model.setOrderCode(orderCode);
+		save(model);
+		return orderCode;
 	}
 }
