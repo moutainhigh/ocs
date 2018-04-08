@@ -27,8 +27,8 @@ public class AdTaskServiceImpl extends BaseServiceImpl<AdTask> implements AdTask
 		return dao.findByOrderCode(orderCode);
 	}
 	@Override
-	public AdTask rand() {
-		return dao.Rand();
+	public AdTask getFirst() {
+		return dao.getFirst();
 	}
 	@Override
 	public String save(String userName, String content, Long projectId, Boolean back, BigDecimal moeny,

@@ -47,12 +47,14 @@ public class AdTaskController extends Controller{
 	}
 	
 	/**
-	 * 随机返回一条待执行记录，并更新其状态为执行中
+	 * 返回最早的一条待执行记录，并更新其状态为执行中
 	 */
-	public void rand(){
-		AdTask adTask = service.rand();
-		adTask.removeNullValueAttrs();
-		adTask.remove("create_time","update_time","user_name","state","id");
+	public void first(){
+		AdTask adTask = service.getFirst();
+		if(adTask!=null){
+			adTask.removeNullValueAttrs();
+			adTask.remove("create_time","update_time","user_name","state","id");
+		}
 		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS, adTask, "获取成功");
 	}
 	

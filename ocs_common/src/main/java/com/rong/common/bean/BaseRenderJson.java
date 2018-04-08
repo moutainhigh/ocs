@@ -304,13 +304,13 @@ public class BaseRenderJson {
 	@SuppressWarnings("rawtypes")
 	public static void apiReturnObj(Controller ai,String code  ,Object obj,String tag){
 		if(obj==null){
-			BaseRenderJson.apiReturnObj(ai, MyErrorCodeConfig.REQUEST_SUCCESS, "", "无数据返回");
+			BaseRenderJson.apiReturnJson(ai, MyErrorCodeConfig.DATA_NULL,"无数据返回");
 			return;
 		}
 		if(obj instanceof List){
 			List temp = (List)obj;
 			if(temp.size()==0){
-				BaseRenderJson.apiReturnObj(ai, MyErrorCodeConfig.REQUEST_SUCCESS, "", "无数据返回");
+				BaseRenderJson.apiReturnJson(ai, MyErrorCodeConfig.DATA_NULL,"无数据返回");
 				return;
 			}
 		}

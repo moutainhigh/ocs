@@ -58,8 +58,8 @@ public class AdTaskDao extends BaseDao<AdTask> {
 	}
 	
 	
-	public AdTask Rand(){
-		String sql = "select " + FILEDS + " from " + AdTask.TABLE + " where state = 1 order by RAND() limit 1";
+	public AdTask getFirst(){
+		String sql = "select " + FILEDS + " from " + AdTask.TABLE + " where state = 1 order by create_time asc limit 1";
 		AdTask item = dao.findFirst(sql);
 		if(item!=null){
 			item.setState(2);

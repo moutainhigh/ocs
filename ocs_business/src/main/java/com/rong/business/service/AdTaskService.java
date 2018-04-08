@@ -28,10 +28,10 @@ public interface AdTaskService extends BaseService<AdTask>{
 	 */
 	AdTask findByOrderCode(String orderCode);
 	/**
-	 * 随机获取一条待执行的广告任务
+	 * 获取最早的一条待执行的广告任务
 	 * @return AdTask
 	 */
-	AdTask rand();
+	AdTask getFirst();
 	/**
 	 * 保存广告任务
 	 * @param userName

@@ -13,6 +13,7 @@ public class MyErrorCodeConfig {
 	public static final String ERROR_IP_NOT_AUTH = "303"; // ip没有访问权限，非白名单
 	public static final String REQUEST_SUCCESS = "1"; // 请求成功
 	public static final String REQUEST_FAIL = "0"; // 请求失败
+	public static final String DATA_NULL = "4"; // 数据为空
 	
 	public static final String USER_EXIST = "1001"; // 用户已经存在
 	public static final String USER_NOT_EXIST = "1002"; // 用户不存在
