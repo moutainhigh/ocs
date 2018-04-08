@@ -52,7 +52,12 @@ public class AdTaskJob implements Job{
 					}else{
 						// 最后一条执行详情记录，是否已经超过2分钟，超过则异常
 						AdTaskDetail adTaskDetail = adTaskDetailDao.findFirst("select create_time from " + AdTaskDetail.TABLE + " where order_code = ? order by create_time desc limit 1",adTask.getOrderCode());
-						long timeVal = DateTimeUtil.getBetweenMinute(adTaskDetail.getCreateTime(), new Date());
+						long timeVal = 0;
+						if(adTaskDetail!=null){
+							timeVal = DateTimeUtil.getBetweenMinute(adTaskDetail.getCreateTime(), new Date());
+						}else{
+							timeVal = DateTimeUtil.getBetweenMinute(adTask.getCreateTime(), new Date());
+						}
 						if(timeVal>2){
 							error++;
 							adTask.setState(1);
