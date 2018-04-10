@@ -23,6 +23,7 @@ import com.rong.admin.controller.AdController;
 import com.rong.admin.controller.AdTaskController;
 import com.rong.admin.controller.AdminController;
 import com.rong.admin.controller.BaseController;
+import com.rong.admin.controller.ConsumeController;
 import com.rong.admin.controller.IndexController;
 import com.rong.admin.controller.InterfaceCallController;
 import com.rong.admin.controller.LogController;
@@ -121,6 +122,7 @@ public class MyConfig extends JFinalConfig {
 		me.add("/notice",NoticeController.class);
 		me.add("/meal",MealController.class);
 		me.add("/adtask",AdTaskController.class);
+		me.add("/consume",ConsumeController.class);
 	}
 
 	@Override

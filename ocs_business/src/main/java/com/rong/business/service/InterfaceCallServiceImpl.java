@@ -1,15 +1,14 @@
 package com.rong.business.service;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.AccountDao;
+import com.rong.persist.dao.ConsumeDao;
 import com.rong.persist.dao.InterfaceCallDao;
 import com.rong.persist.dao.ReportInterfaceCallDao;
-import com.rong.persist.model.Consume;
 import com.rong.persist.model.InterfaceCall;
 
 /****
@@ -25,6 +24,7 @@ import com.rong.persist.model.InterfaceCall;
 public class InterfaceCallServiceImpl extends BaseServiceImpl<InterfaceCall> implements InterfaceCallService{
 	private InterfaceCallDao dao = new InterfaceCallDao();
 	private AccountDao accountDao = new AccountDao();
+	private ConsumeDao consumeDao = new ConsumeDao();
 	private ReportInterfaceCallDao reportInterfaceCallDao = new ReportInterfaceCallDao();
 	
 	@Override
@@ -46,17 +46,20 @@ public class InterfaceCallServiceImpl extends BaseServiceImpl<InterfaceCall> imp
 			BigDecimal account) {
 		// 1.保存调用记录
 		Long result = dao.save(userName, true, projectId, projectName, null);
-		// 2.保存消费记录
-		Consume consume = new Consume();
-		consume.setCreateTime(new Date());
-		consume.setMoney(projectPrice);
-		consume.setProjectId(projectId);
-		consume.setProjectName(projectName);
-		consume.setUserName(userName);
-		consume.save();
-		// 3.更新余额
+		// 2.更新余额
 		accountDao.consumed(userName, account, projectPrice);
+		// 3.保存消费记录
+		consumeDao.save(projectPrice, userName, projectId, projectName);
 		return result;
+	}
+
+	@Override
+	public boolean consumeMoney(long projectId,BigDecimal money, String userName) {
+		BigDecimal account = accountDao.findByUserName(userName).getAccount();
+		// 更新余额
+		accountDao.consumed(userName, account, money);
+		// 保存消费记录
+		return consumeDao.save(money, userName, projectId, "扣除金额");
 	}
 
 }

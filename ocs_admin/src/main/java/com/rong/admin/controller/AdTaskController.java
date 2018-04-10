@@ -24,7 +24,7 @@ public class AdTaskController extends BaseController{
 	public void adDetailList() {
 		int page = getParaToInt("page", 1);
 		String orderCode = getPara("orderCode");
-		Page<AdTaskDetail> list = service.pageDetail(page, page, orderCode);
+		Page<AdTaskDetail> list = service.pageDetail(page, pageSize, orderCode);
 		keepPara();
 		setAttr("page", list);
 		render("/views/adtask/detail_list.jsp");

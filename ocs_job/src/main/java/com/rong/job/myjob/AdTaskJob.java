@@ -30,7 +30,7 @@ public class AdTaskJob implements Job{
 	/**
 	 * 检测执行中状态的广告任务是否完成，超过或者等于98%则设置为执行完成
 	 * 检测执行中状态的广告任务是否异常，异常则变为待执行
-	 * 注：超过2分钟未有新记录产生的执行中的任务则为异常
+	 * 注：超过5分钟未有新记录产生的执行中的任务则为异常
 	 */
 	private void checkAdTaskState(){
 		try{
@@ -58,7 +58,7 @@ public class AdTaskJob implements Job{
 						}else{
 							timeVal = DateTimeUtil.getBetweenMinute(adTask.getCreateTime(), new Date());
 						}
-						if(timeVal>2){
+						if(timeVal>5){
 							error++;
 							adTask.setState(1);
 							adTask.update();

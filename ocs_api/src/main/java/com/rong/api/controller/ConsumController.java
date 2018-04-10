@@ -49,6 +49,7 @@ public class ConsumController extends Controller {
 		String userName = getPara("userName");
 		Long projectId = getParaToLong("projectId");
 		String data = getPara("data");
+		String money = getPara("money");
 		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userName", userName);
 		paraMap.put("projectId", projectId);
@@ -57,6 +58,9 @@ public class ConsumController extends Controller {
 			return;
 		}
 		Record returnObj = consumBusiness(userName, projectId,true,data);
+		if(money!=null){
+			interfaceCallService.consumeMoney(projectId, new BigDecimal(money), userName);
+		}
 		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,returnObj ,"计费成功");
 	}
 	
@@ -69,6 +73,7 @@ public class ConsumController extends Controller {
 		String qqPwd = getPara("qqPwd");
 		String data = getPara("data");
 		Long projectId = getParaToLong("projectId");
+		String money = getPara("money");
 		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userName", userName);
 		paraMap.put("qq", qq);
@@ -98,6 +103,9 @@ public class ConsumController extends Controller {
 			returnObj = consumBusiness(userName, projectId,true,data);
 			qqService.save(qq, qqPwd, returnObj.getStr("token"),userName);
 			BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS,returnObj ,"计费成功");
+		}
+		if(money!=null){
+			interfaceCallService.consumeMoney(projectId, new BigDecimal(money), userName);
 		}
 	}
 

@@ -19,7 +19,7 @@ public class AdTaskDao extends BaseDao<AdTask> {
 
 	public static final AdTask dao = AdTask.dao;
 
-	public static final String FILEDS = "id,create_time,update_time,content,project_id,back,moeny,count_call,order_code,state,user_name";
+	public static final String FILEDS = "id,create_time,update_time,content,project_id,back,moeny,count_call,count_called,order_code,state,user_name";
 
 	public Page<AdTask> page(int pageNumber, int pageSize, Kv param) {
 		String select = "select " + FILEDS;

@@ -10,6 +10,7 @@ import com.rong.common.bean.MyConst;
 import com.rong.common.util.CommonUtil;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.AccountDao;
+import com.rong.persist.dao.ConsumeDao;
 import com.rong.persist.dao.MealDao;
 import com.rong.persist.dao.UserDao;
 import com.rong.persist.model.User;
@@ -23,6 +24,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	private UserDao dao = new UserDao();
 	private MealDao mealDao = new MealDao();
 	private AccountDao accountDao = new AccountDao();
+	private ConsumeDao consumeDao = new ConsumeDao();
 	@Override
 	public Page<Record> getUserList(int page,int pagesize,Kv param) {
 		return dao.page(page,pagesize,param);
@@ -61,8 +63,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
 	@Override
 	public boolean openMeal(String userName, Long mealId,BigDecimal account,BigDecimal mealMoney) {
-		//扣除金额
+		// 扣除金额
 		boolean result = accountDao.consumed(userName, account, mealMoney);
+		// 保存消费记录
+		consumeDao.save(mealMoney, userName, mealId, "开通套餐");
 		if(result){
 			return mealDao.saveUserMeal(userName, mealId);
 		}

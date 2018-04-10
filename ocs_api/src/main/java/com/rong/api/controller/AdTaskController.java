@@ -6,6 +6,7 @@ import java.util.Map;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.rong.business.service.AdTaskService;
 import com.rong.business.service.AdTaskServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
@@ -69,8 +70,16 @@ public class AdTaskController extends Controller{
 		if (CommonValidatorUtils.requiredValidate("orderCode", orderCode, this)) {
 			return;
 		}
+		AdTask adTask = service.findByOrderCode(orderCode);
+		if(adTask!=null){
+			adTask.removeNullValueAttrs();
+			adTask.remove("update_time","order_code","id","user_name");
+		}
 		Page<AdTaskDetail> returnPage = service.pageDetail(page, pageSize, orderCode);
-		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS, returnPage, "获取成功");
+		Record returnRecord = new Record();
+		returnRecord.set("item", adTask);
+		returnRecord.set("list", returnPage);
+		BaseRenderJson.apiReturnObj(this, MyErrorCodeConfig.REQUEST_SUCCESS, returnRecord, "获取成功");
 	}
 	
 	/**

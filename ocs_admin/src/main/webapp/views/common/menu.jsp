@@ -23,10 +23,18 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
 						<li><a
 							href="javascript:loadRight('<%=mybasePath %>/user/list','用户列表')">
 								<i class="am-icon-angle-right"></i> <span>用户列表</span>
-						</a> <a
+						</a>
+						</li>
+						<li>
+						 <a
 							href="javascript:loadRight('<%=mybasePath %>/user/loginList','最近登录用户')">
 								<i class="am-icon-angle-right"></i> <span>最近登录用户</span>
 						</a></li>
+						<li>
+                         <a
+                            href="javascript:loadRight('<%=mybasePath %>/consume/list','消费记录')">
+                                <i class="am-icon-angle-right"></i> <span>消费记录</span>
+                        </a></li>
                         <li>
                         <shiro:hasPermission name="recharge-list">
                                 <a
@@ -34,6 +42,8 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
                                     <i class="am-icon-angle-right"></i> <span>充值列表</span>
                                 </a>
                             </shiro:hasPermission> 
+                            </li>
+                            <li>
                             <shiro:hasPermission name="rechargeSet-list">
                                 <a
                                     href="javascript:loadRight('<%=mybasePath %>/rechargeSet/list','充值赠送管理')">

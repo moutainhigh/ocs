@@ -11,8 +11,8 @@
                     <select id="state" name="state" class="inline-block">
                         <option value="">-请选择-</option>
                         <option value="1" <c:if test="${not empty state and state == 1}">selected</c:if>>待执行</option>
-                        <option value="0" <c:if test="${not empty state and state == 2}">selected</c:if>>执行中</option>
-                        <option value="0" <c:if test="${not empty state and state == 3}">selected</c:if>>完成</option>
+                        <option value="2" <c:if test="${not empty state and state == 2}">selected</c:if>>执行中</option>
+                        <option value="3" <c:if test="${not empty state and state == 3}">selected</c:if>>完成</option>
                     </select>
                 </div>
             </div>
@@ -50,7 +50,7 @@
 							<th>消费项目id</th>
 							<th>是否抢回</th>
 							<th>金额</th>
-							<th>数量</th>
+							<th>已发送数|数量</th>
 							<th>完成率</th>
 							<th>状态</th>
 							<th>操作</th>
@@ -66,8 +66,8 @@
 								<td>${item.project_id }</td>
 								<td>${item.back }</td>
 								<td>${item.money }</td>
-								<td>${item.count_call }</td>
-								<td>${item.count_called/item.count_call }</td>
+								<td>${item.count_called } | ${item.count_call }</td>
+								<td>${item.count_called/item.count_call*100 }%</td>
 								<td>
 								    <c:if test="${item.state == 1}">待执行</c:if>
                                     <c:if test="${item.state == 2}">执行中</c:if>
