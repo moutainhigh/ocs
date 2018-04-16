@@ -13,14 +13,14 @@ public class UsertokenExpirClearJob implements Job{
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		logger.info("开始清理用户过期token");
+		logger.info("开始清理过期token");
 		try{
-			String sql = "update "+UserToken.TABLE +" set state = 0 where TO_DAYS(NOW()) - TO_DAYS(expir_date) >= 0 ";
+			String sql = "update "+UserToken.TABLE +" set is_expir = 0 where TO_DAYS(NOW()) - TO_DAYS(expir_time) >= 0 ";
 			Db.update(sql);
 			logger.info("成功清理用户过期token");
 		}catch(Exception e){
 			e.printStackTrace();
-			logger.error("error:定时清理用户过期token出现异常"+e);
+			logger.error("error:定时清理过期token出现异常"+e);
 		}		
 	}
 }
