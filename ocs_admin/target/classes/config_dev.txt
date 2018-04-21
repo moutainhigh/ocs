@@ -1,5 +1,10 @@
 jdbcUrl = jdbc:mysql://127.0.0.1:3306/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 user=root
 password=test2016
+
+tel_db   = jdbc:mysql://127.0.0.1:3306/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+tel_user = root
+tel_password= test2016
+
 devMode = true
  

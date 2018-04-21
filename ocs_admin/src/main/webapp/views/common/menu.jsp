@@ -135,6 +135,22 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
                           </shiro:hasPermission>
                         </ul></li>
             </shiro:hasPermission>
+            
+            <shiro:hasPermission name="tel">
+				<li class="tpl-left-nav-item">
+				    <a href="javascript:void(0);"
+					    class="nav-link tpl-left-nav-link-list"> <i
+						class="am-icon-user-md"></i> <span>手机号码管理</span> 
+						<i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+				    </a>
+					<ul class="tpl-left-nav-sub-menu" style="display: none;">
+						<li><a
+							href="javascript:loadRight('<%=mybasePath%>/tel/list','手机号码列表')">
+								<i class="am-icon-angle-right"></i> <span>手机号码列表</span>
+						</a></li>
+					</ul>
+			     </li>
+			</shiro:hasPermission>
 
 			<shiro:hasPermission name="system">
 				<li class="tpl-left-nav-item"><a href="javascript:void(0);"
