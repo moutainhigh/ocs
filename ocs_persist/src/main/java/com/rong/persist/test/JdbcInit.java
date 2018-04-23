@@ -20,22 +20,22 @@ public class JdbcInit {
 	/**
 	 * 数据连接地址
 	 */
-	 private static String URL ;
+	 public static String URL ;
 
 	/**
 	 * 数据库账号
 	 */
-	 private static String USERNAME ;
+	 public static String USERNAME ;
 
 	/**
 	 * 数据库密码
 	 */
-	 private static String PASSWORD;
+	 public static String PASSWORD;
 
 	/**
 	 * 数据库驱动
 	 */
-	private static String DRIVER = "com.mysql.jdbc.Driver";
+	 public static String DRIVER = "com.mysql.jdbc.Driver";
 
 	/**
 	 * 数据库类型（如mysql，oracle）

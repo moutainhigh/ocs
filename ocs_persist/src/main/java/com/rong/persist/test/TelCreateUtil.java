@@ -194,7 +194,7 @@ public class TelCreateUtil {
 	 * @param areaCode
 	 * @param operator
 	 */
-	public static void createTel(Tel tel){
+	public static synchronized void createTel(Tel tel){
 		String tableName = "tel_"+tel.getTel().substring(0,4);
 		List<Record> recordList = new ArrayList<Record>();
 		for (int i=1;i<10000;i++) {
@@ -212,7 +212,7 @@ public class TelCreateUtil {
 			record.set("create_time", new Date());
 			record.set("tel", tel.getTel()+val);
 			record.set("tel_province", tel.getTel_province());
-			record.set("tel_city", tel.getTel_province());
+			record.set("tel_city", tel.getTel_city());
 			record.set("tel_area_code", tel.getTel_area_code());
 			record.set("tel_operator", tel.getTel_operator());
 			recordList.add(record);

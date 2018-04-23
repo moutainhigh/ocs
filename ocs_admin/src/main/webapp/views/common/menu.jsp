@@ -145,7 +145,7 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
 				    </a>
 					<ul class="tpl-left-nav-sub-menu" style="display: none;">
 						<li><a
-							href="javascript:loadRight('<%=mybasePath%>/tel/list','手机号码列表')">
+							href="javascript:loadRight('<%=mybasePath%>/tel/list?pageSize=10&pageNumber=1','手机号码列表')">
 								<i class="am-icon-angle-right"></i> <span>手机号码列表</span>
 						</a></li>
 					</ul>

@@ -22,18 +22,14 @@ class TelCreateTask implements Runnable {
     public void run() {
         System.out.println("正在执行task "+taskNum);
         long startTime = System.currentTimeMillis();
-        long endTime  = 0L;
         Tel tel = null;
         try {
         	tel = TelCreateUtil.telQueue.take();
 			TelCreateUtil.createTel(tel);
-			System.out.println();
-    		endTime = System.currentTimeMillis();
-            Thread.currentThread();
-			Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        long endTime = System.currentTimeMillis();
         System.out.println("task "+taskNum+"执行完毕,"+tel.getTel() + "创建数据耗时：" + TelCreateUtil.formatTime(endTime - startTime));
     }
 }

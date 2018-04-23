@@ -45,8 +45,8 @@
                 <div class="am-input-group am-u-sm-8"> 
                     <select id="platform" name="platform" class="inline-block">
                         <option value="">-请选择-</option>
-                        <option value="支付宝" <c:if test="${platform eq '1' }">selected</c:if>>支付宝</option>
-                        <option value="QQ" <c:if test="${platform eq '2' }">selected</c:if>>QQ</option>
+                        <option value="1" <c:if test="${platform eq '1' }">selected</c:if>>支付宝</option>
+                        <option value="2" <c:if test="${platform eq '2' }">selected</c:if>>QQ</option>
                     </select>
                 </div>
             </div>
