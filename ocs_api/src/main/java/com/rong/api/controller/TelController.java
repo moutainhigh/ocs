@@ -23,14 +23,17 @@ public class TelController extends Controller{
 	/**
 	 * 获取手机号码
 	 */
+	@SuppressWarnings("rawtypes")
 	public void list(){
 		int offset = getParaToInt("offset",0);
 		int limit = getParaToInt("limit",20);
 		String tel = getPara("tel");
 		String province = getPara("province");
 		String city = getPara("city");
+		String operator = getPara("operator");
 		String platform = getPara("platform");
-		Kv param = Kv.by("tel", tel).set("province",province).set("city",city).set("platform", platform);
+		String areaCode = getPara("areaCode");
+		Kv param = Kv.by("province",province).set("city",city).set("platform", platform).set("operator",operator).set("areaCode", areaCode);
 		List list = service.list(limit, offset, tel, param);
 		Set<String> returnList = new HashSet<String>(list.size());
 		for (Object object : list) {

@@ -22,7 +22,7 @@ import com.rong.common.util.StringUtils;
 
 public class TelCreateUtil {
 	// 手机号码文件
-	public static String TEL_FILE = "E:\\tel.txt";
+	public static String TEL_FILE = "E:\\test.txt";
 	// 开始行数
 	public static int START_LINE = 1;
 	// 每次提交数量
@@ -153,7 +153,11 @@ public class TelCreateUtil {
   "`col5` varchar(100) DEFAULT NULL COMMENT '备用字段',"+
   "`create_time` datetime NOT NULL,"+
   "PRIMARY KEY (`id`),"+
-  "UNIQUE KEY `tel_uniq` (`tel`) USING HASH COMMENT '手机号码唯一索引'"+
+  "UNIQUE KEY `tel_uniq` (`tel`) USING HASH COMMENT '手机号码唯一索引',"+
+  "KEY `tel_province_normal` (`tel_province`) USING HASH,"+
+  "KEY `tel_city_normal` (`tel_city`) USING HASH,"+
+  "KEY `tel_area_code_normal` (`tel_area_code`) USING HASH,"+
+  "KEY `platform_collection_normal` (`platform_collection`) USING HASH"+
   ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='手机号码表';";
 			Db.update(sql);
 			tableNameList.add(tableName);

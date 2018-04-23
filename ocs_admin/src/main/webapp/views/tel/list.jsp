@@ -51,6 +51,20 @@
                 </div>
             </div>
             
+             <div class="am-u-lg-3">
+                <label for="projectId" class="am-u-sm-4 am-form-label">查询数量：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" name="pageSize" value="${pageSize}" placeholder="请输入查询数量">
+                </div>
+             </div>
+             
+             <div class="am-u-lg-3">
+                <label for="projectId" class="am-u-sm-4 am-form-label">当前页：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" name="pageNumber" value="${pageNumber}" placeholder="请输入当前页">
+                </div>
+             </div>
+            
              <div class="am-u-lg-3 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doQuery();">查询</button>
             </div>

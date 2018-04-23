@@ -19,14 +19,15 @@ public class TelController extends BaseController{
 	}
 	
 	public void list() {
-		int page = getParaToInt("page", 1);
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int limit = getParaToInt("pageSize", pageSize);
 		String tel = getPara("tel","1300");
 		String province = getPara("province");
 		String city = getPara("city");
 		String platform = getPara("platform");
 		String operator = getPara("operator");
 		Kv param = Kv.by("tel", tel).set("province",province).set("city",city).set("platform", platform).set("operator",operator);
-		MyPage list = service.page(page, pageSize, tel, param);
+		MyPage list = service.page(pageNumber, limit, tel, param);
 		keepPara();
 		setAttr("page", list);
 		render("/views/tel/list.jsp");

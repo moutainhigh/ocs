@@ -30,11 +30,22 @@ public class TelDao extends BaseDao<Tel> {
 			tableName = randTableName();
 		}
 		String select = "select "+FILEDS+" from " + tableName ;
+		StringBuffer where = createParam(tel, param);
+		String orderBy = " order by id asc";
+		String page = " limit "+limit+" offset "+offset;
+		select = select + where + orderBy + page;
+		List<Tel> list = dao.find(select);
+		return new MyPage(limit, offset, count(tableName, where.toString()), list);
+	}
+
+	private StringBuffer createParam(String tel, Kv param) {
 		StringBuffer where = new StringBuffer(" where 1=1");
 		if(param!=null){
 			if (!StringUtils.isNullOrEmpty(tel)) {
 				if(tel.length()==11){
 					where.append(" and tel = '" + tel + "'");
+				}else if(tel.length()==7){
+					where.append(" and tel like '" + tel + "%'");
 				}
 			}
 			String province = param.getStr("province");
@@ -70,11 +81,7 @@ public class TelDao extends BaseDao<Tel> {
 				where.append(" and TIMESTAMPDIFF(YEAR, age, CURDATE()) = " + age);
 			}
 		}
-		String orderBy = " order by id asc";
-		String page = " limit "+limit+" offset "+offset;
-		select = select + where + orderBy + page;
-		List<Tel> list = dao.find(select);
-		return new MyPage(limit, offset, count(tableName, where.toString()), list);
+		return where;
 	}
 	
 	public int count(String tableName,String where) {
@@ -84,7 +91,7 @@ public class TelDao extends BaseDao<Tel> {
 		if(record==null){
 			return 0;
 		}
-		return record.getInt("rows");
+		return record.getInt("rows")==null?0:record.getInt("rows");
 	}
 	
 	
@@ -97,41 +104,7 @@ public class TelDao extends BaseDao<Tel> {
 			tableName = randTableName();
 		}
 		String select = "select tel from " + tableName ;
-		StringBuffer where = new StringBuffer(" where 1=1");
-		if(param!=null){
-			String province = param.getStr("province");
-			if (!StringUtils.isNullOrEmpty(province)) {
-				where.append(" and tel_province = '" + province + "'");
-			}
-			String city = param.getStr("city");
-			if (!StringUtils.isNullOrEmpty(city)) {
-				where.append(" and tel_city = '" + city + "'");
-			}
-			String platform = param.getStr("platform");
-			if (!StringUtils.isNullOrEmpty(platform)) {
-				if("0".equals(platform)){
-					where.append(" and platform_collection is null");
-				}else{
-					where.append(" and platform_collection = '" + platform + "'");
-				}
-			}
-			String operator = param.getStr("operator");
-			if (!StringUtils.isNullOrEmpty(operator)) {
-				where.append(" and tel_operator = '" + operator + "'");
-			}
-			String areaCode = param.getStr("areaCode");
-			if (!StringUtils.isNullOrEmpty(areaCode)) {
-				where.append(" and tel_area_code = '" + areaCode + "'");
-			}
-			String sex = param.getStr("sex");
-			if (!StringUtils.isNullOrEmpty(sex)) {
-				where.append(" and sex = '" + sex + "'");
-			}
-			String age = param.getStr("age");
-			if (!StringUtils.isNullOrEmpty(age)) {
-				where.append(" and TIMESTAMPDIFF(YEAR, sex, CURDATE()) = " + age);
-			}
-		}
+		StringBuffer where = createParam(tel, param);
 		String orderBy = " order by id asc";
 		String page = " limit "+limit+" offset "+offset;
 		select = select + where + orderBy + page;
