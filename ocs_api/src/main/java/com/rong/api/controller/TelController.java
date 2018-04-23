@@ -54,7 +54,7 @@ public class TelController extends Controller{
 		String platform = getPara("platform");
 		String alipayName = getPara("alipayName");
 		String qqNickName = getPara("qqNickName");
-		String sex = getPara("sex");
+		String sex = getPara("sex","0");
 		String addr = getPara("addr");
 		Date age = getParaToDate("age");
 		Map<String, Object> paramMap = new HashMap<>();
@@ -63,8 +63,11 @@ public class TelController extends Controller{
 		if (CommonValidatorUtils.requiredValidate(paramMap, this)) {
 			return;
 		}
+		if(service.findTel(tel)==null){
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.DATA_NULL, "手机号码："+tel+"不存在");
+			return;
+		}
 		service.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr);
 		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "保存成功");
-		logger.info("保存成功，手机号码信息：".concat("tel:").concat(tel).concat("alipayName:").concat(alipayName));
 	}
 }
