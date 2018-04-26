@@ -8,11 +8,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.jfinal.core.Controller;
+import com.jfinal.kit.Kv;
 import com.jfinal.log.Log;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.api.jna.WebDll;
 import com.rong.business.service.AccountService;
 import com.rong.business.service.AccountServiceImpl;
+import com.rong.business.service.AdTaskService;
+import com.rong.business.service.AdTaskServiceImpl;
+import com.rong.business.service.ConsumeService;
+import com.rong.business.service.ConsumeServiceImpl;
 import com.rong.business.service.InterfaceCallService;
 import com.rong.business.service.InterfaceCallServiceImpl;
 import com.rong.business.service.ProjectService;
@@ -35,6 +41,8 @@ import com.rong.common.util.StringUtils;
 import com.rong.common.validator.CommonValidatorUtils;
 import com.rong.persist.dao.SystemConfigDao;
 import com.rong.persist.model.Account;
+import com.rong.persist.model.AdTask;
+import com.rong.persist.model.Consume;
 import com.rong.persist.model.Project;
 import com.rong.persist.model.Qq;
 import com.rong.persist.model.Recharge;
@@ -56,7 +64,9 @@ public class UserController extends Controller {
 	private ProjectService projectService = new ProjectServiceImpl();
 	private QqService qqService = new QqServiceImpl();
 	private RechargeService rechargeService = new RechargeServiceImpl();
-
+	private AdTaskService adTaskService = new AdTaskServiceImpl();
+	private ConsumeService consumeService = new ConsumeServiceImpl();
+	
 	/**
 	 * 用户注册
 	 */
@@ -354,5 +364,68 @@ public class UserController extends Controller {
 		}
 		qqService.saveOrUpdate(qq,userName,data);
 		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "保存成功");
+	}
+	
+	/**
+	 * 查询用户已执行的任务
+	 */
+	public void adtaskList() {
+		String userName = getPara("userName");
+		String state = getPara("state");
+		int pageNumber = getParaToInt("pageNumber",1);
+		int pageSize = getParaToInt("pageSize",10);
+		Kv param = Kv.by("userName", userName).set("state",state);
+		Page<AdTask> page = adTaskService.page(pageNumber, pageSize, param);
+		BaseRenderJson.baseRenderObj.returnObj(this, page, MyErrorCodeConfig.REQUEST_SUCCESS, "查询成功");
+	}
+	
+	/**
+	 * 查询用户消费记录
+	 */
+	public void consumList() {
+		String userName = getPara("userName");
+		int pageNumber = getParaToInt("pageNumber",1);
+		int pageSize = getParaToInt("pageSize",10);
+		Kv param = Kv.by("userName", userName);
+		Page<Consume> page = consumeService.page(pageNumber, pageSize, param);
+		BaseRenderJson.baseRenderObj.returnObj(this, page, MyErrorCodeConfig.REQUEST_SUCCESS, "查询成功");
+	}
+	
+	/**
+	 * 查询用户充值记录
+	 */
+	public void rechargeList() {
+		String userName = getPara("userName");
+		int pageNumber = getParaToInt("pageNumber",1);
+		int pageSize = getParaToInt("pageSize",10);
+		Kv param = Kv.by("userName", userName);
+		Page<Recharge> page = rechargeService.page(pageNumber, pageSize, param);
+		BaseRenderJson.baseRenderObj.returnObj(this, page, MyErrorCodeConfig.REQUEST_SUCCESS, "查询成功");
+	}
+	
+	/**
+	 * 修改密码
+	 */
+	public void resetPwd() {
+		String userName = getPara("userName");
+		String userPwd = getPara("userPwd");
+		String newPwd = getPara("newPwd");
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("userName", userName);
+		paramMap.put("userPwd", userPwd);
+		paramMap.put("newPwd", newPwd);
+		// 校验所有参数
+		if (CommonValidatorUtils.requiredValidate(paramMap, this)) {
+			return;
+		}
+		// 校验用户名密码是否正确
+		User user = checkUserNameAndPwd(userName, userPwd);
+		if(user == null){
+			return;
+		}
+		user.setUserPwd(CommonUtil.getMD5(newPwd));
+		user.setUpdateTime(new Date());
+		user.update();
+		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "修改密码成功");
 	}
 }

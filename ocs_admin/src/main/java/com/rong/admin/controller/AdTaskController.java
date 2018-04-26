@@ -3,6 +3,7 @@ import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.rong.business.service.AdTaskService;
 import com.rong.business.service.AdTaskServiceImpl;
+import com.rong.common.bean.BaseRenderJson;
 import com.rong.persist.model.AdTask;
 import com.rong.persist.model.AdTaskDetail;
 
@@ -28,5 +29,11 @@ public class AdTaskController extends BaseController{
 		keepPara();
 		setAttr("page", list);
 		render("/views/adtask/detail_list.jsp");
+	}
+	
+	public void delete() {
+		Long id = getParaToLong("id");
+		service.deleteById(id);
+		BaseRenderJson.returnDelObj(this, true);
 	}
 }
