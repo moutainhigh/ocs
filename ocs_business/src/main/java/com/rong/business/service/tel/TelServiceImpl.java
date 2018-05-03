@@ -39,8 +39,8 @@ public class TelServiceImpl extends BaseServiceImpl<Tel> implements TelService{
 
 	@Override
 	public boolean updateTel(String tel, String platform, String alipayName, String qqNickName, String sex, Date age,
-			String addr) {
-		return dao.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr);
+			String addr,String register) {
+		return dao.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr,register);
 	}
 
 	@Override

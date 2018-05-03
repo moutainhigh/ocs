@@ -101,9 +101,16 @@
                     <input type="text" class="am-form-field" name="pageNumber" value="${pageNumber}" placeholder="请输入当前页">
                 </div>
              </div>
-             <div class="am-u-lg-3">
-             
-             </div>
+             <div class="am-u-lg-3 am-u-end">
+                <label for="register" class="am-u-sm-4 am-form-label">是否注册：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="register" name="register" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${register eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${register eq '0' }">selected</c:if>>否</option>
+                    </select>
+                </div>
+            </div>
         </div>
         
         <div class="am-g tpl-amazeui-form">
@@ -141,6 +148,7 @@
 							<th>性别</th>
 							<th>年龄</th>
 							<th>地址</th>
+							<th>是否注册</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -161,6 +169,10 @@
 								<td>${item.sex }</td>
 								<td>${item.age }</td>
 								<td>${item.addr }</td>
+								<td>
+                                     <c:if test="${item.col2 eq '1'}">注册</c:if>
+                                    <c:if test="${empty item.col2}">未注册</c:if>
+                                </td>
 							</tr>
 						</c:forEach>
 					</tbody>

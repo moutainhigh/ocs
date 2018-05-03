@@ -36,8 +36,9 @@ public class TelController extends Controller{
 		String age = getPara("age");
 		String alipayName = getPara("alipayName");
 		String qqNickName = getPara("qqNickName");
+		String register = getPara("register");
 		Kv param = Kv.by("province",province).set("city",city).set("platform", platform).set("operator",operator).set("areaCode", areaCode);
-		param.set("sex", sex).set("age", age).set("alipayName", alipayName).set("qqNickName", qqNickName).set("unplatform", unplatform);
+		param.set("sex", sex).set("age", age).set("alipayName", alipayName).set("qqNickName", qqNickName).set("unplatform", unplatform).set("register", register);
 		List list = service.list(limit, offset, tel, param);
 		Set<String> returnList = new HashSet<String>(list.size());
 		for (Object object : list) {
@@ -61,6 +62,7 @@ public class TelController extends Controller{
 		String sex = getPara("sex","0");
 		String addr = getPara("addr");
 		Date age = getParaToDate("age");
+		String register = getPara("register");
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("tel", tel);
 		// 校验所有参数
@@ -71,7 +73,7 @@ public class TelController extends Controller{
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.DATA_NULL, "手机号码："+tel+"不存在");
 			return;
 		}
-		service.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr);
+		service.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr,register);
 		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "保存成功");
 	}
 }

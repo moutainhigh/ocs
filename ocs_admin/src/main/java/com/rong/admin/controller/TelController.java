@@ -31,8 +31,9 @@ public class TelController extends BaseController{
 		String age = getPara("age");
 		String alipayName = getPara("alipayName");
 		String qqNickName = getPara("qqNickName");
+		String register = getPara("register");
 		Kv param = Kv.by("tel", tel).set("province",province).set("city",city).set("platform", platform).set("operator",operator);
-		param.set("sex", sex).set("age", age).set("alipayName", alipayName).set("qqNickName", qqNickName).set("unplatform", unplatform);
+		param.set("sex", sex).set("age", age).set("alipayName", alipayName).set("qqNickName", qqNickName).set("unplatform", unplatform).set("register",register);
 		MyPage list = service.page(pageNumber, limit, tel, param);
 		keepPara();
 		setAttr("page", list);

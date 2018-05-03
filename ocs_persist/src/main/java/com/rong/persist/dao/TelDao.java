@@ -112,6 +112,14 @@ public class TelDao extends BaseDao<Tel> {
 			if (!StringUtils.isNullOrEmpty(addr)) {
 				where.append(" and addr = '" + addr + "'");
 			}
+			String register = param.getStr("register");
+			if (!StringUtils.isNullOrEmpty(register)) {
+				if("1".equals(register)){
+					where.append(" and col2 = '" + register + "'");
+				}else{
+					where.append(" and col2 is null ");
+				}
+			}
 			
 		}
 		return where;
@@ -153,7 +161,7 @@ public class TelDao extends BaseDao<Tel> {
 		return returnList;
 	}
 	
-	public boolean updateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr){
+	public boolean updateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register){
 		String tableName = getTableName(tel);
 		Tel item = findTel(tel);
 		// 使用备用字段col1保存采集平台，多平台采集采用，隔开
@@ -169,6 +177,7 @@ public class TelDao extends BaseDao<Tel> {
 		item.setSex(sex);
 		item.setAge(age);
 		item.setAddr(addr);
+		item.setCol2(register);
 		return Db.use("tel").update(tableName, item.toRecord());
 	}
 	
