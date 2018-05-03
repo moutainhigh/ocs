@@ -1,5 +1,6 @@
 package com.rong.persist.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,26 +21,35 @@ public class TelDao extends BaseDao<Tel> {
 
 	public static final Tel dao = Tel.dao;
 
-	public static final String FILEDS = "id,create_time,tel,tel_province,tel_city,tel_area_code,tel_operator,platform_collection,alipay_name,qq_nickname,sex,TIMESTAMPDIFF(YEAR, age, CURDATE()) age,addr";
+	public static final String FILEDS = "id,create_time,tel,tel_province,tel_city,tel_area_code,tel_operator,platform_collection,alipay_name,qq_nickname,sex,TIMESTAMPDIFF(YEAR, age, CURDATE()) age,addr,col1,col2,col3,col4,col5";
 
 	public MyPage page(int limit, int offset, String tel,Kv param) {
 		String tableName;
 		if (!StringUtils.isNullOrEmpty(tel) && tel.length()>=4) {
 			tableName = getTableName(tel);
+			if(tel.length()==11){
+				List<Tel> returnList = new ArrayList<Tel>(limit); 
+				returnList.add(this.findTel(tel));
+				return new MyPage(limit, offset, 1, returnList);
+			}
 		}else{
 			tableName = randTableName();
 		}
-		String select = "select "+FILEDS+" from " + tableName ;
-		StringBuffer where = createParam(tel, param);
-		String orderBy = " order by id asc";
-		String page = " limit "+limit+" offset "+offset;
+		String select = "select t1.* from " + tableName +" AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `"+tableName+"`)-"
+				+ "(SELECT MIN(id) FROM `"+tableName+"`))+(SELECT MIN(id) FROM `"+tableName+"`)) AS id) AS t2 ";
+		StringBuffer where = createParam(new StringBuffer(" where t1.id >= t2.id"),tel, param);
+		String orderBy = " order by t1.id asc";
+		String page = " limit "+(limit/10)+" offset "+offset;
 		select = select + where + orderBy + page;
-		List<Tel> list = dao.find(select);
-		return new MyPage(limit, offset, count(tableName, where.toString()), list);
+		List<Tel> returnList = new ArrayList<Tel>(limit); 
+		for (int i = 0; i < 10; i++) {
+			List<Tel> list = dao.find(select);
+			returnList.addAll(list);
+		}
+		return new MyPage(limit, offset, count(tableName, createParam(new StringBuffer(" where 1=1"),tel, param).toString()), returnList);
 	}
 
-	private StringBuffer createParam(String tel, Kv param) {
-		StringBuffer where = new StringBuffer(" where 1=1");
+	private StringBuffer createParam(StringBuffer where,String tel, Kv param) {
 		if(param!=null){
 			if (!StringUtils.isNullOrEmpty(tel)) {
 				if(tel.length()==11){
@@ -59,10 +69,14 @@ public class TelDao extends BaseDao<Tel> {
 			String platform = param.getStr("platform");
 			if (!StringUtils.isNullOrEmpty(platform)) {
 				if("0".equals(platform)){
-					where.append(" and platform_collection is null");
+					where.append(" and col1 is null");
 				}else{
-					where.append(" and platform_collection = '" + platform + "'");
+					where.append(" and col1 like '%" + platform + "%'");
 				}
+			}
+			String unplatform = param.getStr("unplatform");
+			if (!StringUtils.isNullOrEmpty(unplatform)) {
+				where.append(" and col1 not like '%" + unplatform + "%'");
 			}
 			String operator = param.getStr("operator");
 			if (!StringUtils.isNullOrEmpty(operator)) {
@@ -78,8 +92,27 @@ public class TelDao extends BaseDao<Tel> {
 			}
 			String age = param.getStr("age");
 			if (!StringUtils.isNullOrEmpty(age)) {
-				where.append(" and TIMESTAMPDIFF(YEAR, age, CURDATE()) = " + age);
+				if(age.contains("-")){
+					String [] ageArr = age.split("-");
+					where.append(" and TIMESTAMPDIFF(YEAR, age, CURDATE()) >= " + ageArr[0]);
+					where.append(" and TIMESTAMPDIFF(YEAR, age, CURDATE()) <= " + ageArr[1]);
+				}else{
+					where.append(" and TIMESTAMPDIFF(YEAR, age, CURDATE()) = " + age);
+				}
 			}
+			String alipayName = param.getStr("alipayName");
+			if (!StringUtils.isNullOrEmpty(alipayName)) {
+				where.append(" and alipay_name = '" + alipayName + "'");
+			}
+			String qqNickName = param.getStr("qqNickName");
+			if (!StringUtils.isNullOrEmpty(qqNickName)) {
+				where.append(" and qq_nickname = '" + qqNickName + "'");
+			}
+			String addr = param.getStr("addr");
+			if (!StringUtils.isNullOrEmpty(addr)) {
+				where.append(" and addr = '" + addr + "'");
+			}
+			
 		}
 		return where;
 	}
@@ -100,21 +133,37 @@ public class TelDao extends BaseDao<Tel> {
 		String tableName;
 		if (!StringUtils.isNullOrEmpty(tel) && tel.length()>=4) {
 			tableName = getTableName(tel);
+			if(tel.length()==11){
+				return  Db.use("tel").find("select * from " + tableName +" where tel = ?",tel);
+			}
 		}else{
 			tableName = randTableName();
 		}
-		String select = "select tel from " + tableName ;
-		StringBuffer where = createParam(tel, param);
-		String orderBy = " order by id asc";
-		String page = " limit "+limit+" offset "+offset;
+		String select = "select t1.tel from " + tableName +" AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `"+tableName+"`)-"
+				+ "(SELECT MIN(id) FROM `"+tableName+"`))+(SELECT MIN(id) FROM `"+tableName+"`)) AS id) AS t2 ";
+		StringBuffer where = createParam(new StringBuffer(" where t1.id >= t2.id"),tel, param);
+		String orderBy = " order by t1.id asc";
+		String page = " limit 1 offset "+offset;
 		select = select + where + orderBy + page;
-		return Db.use("tel").find(select);
+		List<Record> returnList = new ArrayList<Record>(limit); 
+		for (int i = 0; i < limit; i++) {
+			List<Record> list = Db.use("tel").find(select);
+			returnList.addAll(list);
+		}
+		return returnList;
 	}
 	
 	public boolean updateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr){
 		String tableName = getTableName(tel);
 		Tel item = findTel(tel);
-		item.setPlatformCollection(platform);
+		// 使用备用字段col1保存采集平台，多平台采集采用，隔开
+		if(item.getCol1()!=null){
+			if(!item.getCol1().contains(platform)){
+				item.setCol1(item.getCol1()+","+platform);
+			}
+		}else{
+			item.setCol1(platform);
+		}
 		item.setAlipayName(alipayName);
 		item.setQqNickname(qqNickName);
 		item.setSex(sex);
@@ -150,4 +199,5 @@ public class TelDao extends BaseDao<Tel> {
 	public static String getTableName(String tel){
 		return "tel_"+tel.substring(0,4);
 	}
+	
 }

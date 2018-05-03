@@ -3,8 +3,11 @@ package com.rong.business.service.tel;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.jfinal.kit.Kv;
 import com.rong.common.bean.MyPage;
+import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.TelDao;
 import com.rong.persist.model.Tel;
@@ -21,7 +24,17 @@ public class TelServiceImpl extends BaseServiceImpl<Tel> implements TelService{
 	public MyPage page(int pageNumber, int pageSize, String tel, Kv param) {
 		int limit = pageSize;
 		int offset = (pageNumber-1)*pageSize;
-		return dao.page(limit, offset, tel, param);
+		MyPage page = dao.page(limit, offset, tel, param);
+		// 如果查询结果为空，则多做2次查询
+		if ((page==null || page.getList().size()==0) && StringUtils.isNullOrEmpty(tel)) {
+			for (int i = 0; i < 2; i++) {
+				page = dao.page(limit, offset, tel, param);
+				if (page!=null && page.getList().size()>0) {
+					break;
+				}
+			}
+		}
+		return page;
 	}
 
 	@Override
@@ -38,7 +51,17 @@ public class TelServiceImpl extends BaseServiceImpl<Tel> implements TelService{
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List list(int limit, int offset, String tel, Kv param) {
-		return dao.list(limit, offset, tel, param);
+		List list = dao.list(limit, offset, tel, param);
+		// 如果查询结果为空，则多做2次查询
+		if (CollectionUtils.isEmpty(list) && StringUtils.isNullOrEmpty(tel)) {
+			for (int i = 0; i < 2; i++) {
+				list = dao.list(limit, offset, tel, param);
+				if(!CollectionUtils.isEmpty(list)){
+					break;
+				}
+			}
+		}
+		return list;
 	}
 
 }

@@ -21,12 +21,18 @@ public class TelController extends BaseController{
 	public void list() {
 		int pageNumber = getParaToInt("pageNumber", 1);
 		int limit = getParaToInt("pageSize", pageSize);
-		String tel = getPara("tel","1300");
+		String tel = getPara("tel");
 		String province = getPara("province");
 		String city = getPara("city");
 		String platform = getPara("platform");
+		String unplatform = getPara("unplatform");
 		String operator = getPara("operator");
+		String sex = getPara("sex");
+		String age = getPara("age");
+		String alipayName = getPara("alipayName");
+		String qqNickName = getPara("qqNickName");
 		Kv param = Kv.by("tel", tel).set("province",province).set("city",city).set("platform", platform).set("operator",operator);
+		param.set("sex", sex).set("age", age).set("alipayName", alipayName).set("qqNickName", qqNickName).set("unplatform", unplatform);
 		MyPage list = service.page(pageNumber, limit, tel, param);
 		keepPara();
 		setAttr("page", list);

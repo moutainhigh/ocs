@@ -2,9 +2,9 @@ jdbcUrl = jdbc:mysql://39.108.75.150:3306/ocs?autoReconnect=true&useUnicode=true
 user=ocs
 password=xiaowu123.
 
-tel_db   = jdbc:mysql://180.142.193.140:7196/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+tel_db   = jdbc:mysql://zcqq.f3322.net:7196/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 tel_user = tel
 tel_password= xiaowu1234.
 
-devMode = false
+devMode = true
  

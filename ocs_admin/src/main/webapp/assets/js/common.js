@@ -14,12 +14,14 @@ function getRootPath(){
 
 function initQueryForm(){
 	$("#queryForm").submit(function() {
+		$('#my-modal-loading').modal('open');
 		$.ajax({
 			url : $('#queryForm').attr("action"),
 			data :$('#queryForm').formSerialize()
 		}).done(function(data) {
 			$("#right").html("");
 			$("#right").html(data);
+			$('#my-modal-loading').modal('close');
 		});
 		return false;
 	});

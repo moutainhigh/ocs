@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Kv;
-import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.business.service.tel.TelService;
 import com.rong.business.service.tel.TelServiceImpl;
@@ -17,7 +16,6 @@ import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.validator.CommonValidatorUtils;
 
 public class TelController extends Controller{
-	private final Log logger = Log.getLog(this.getClass());
 	private TelService service = new TelServiceImpl();
 	
 	/**
@@ -32,8 +30,14 @@ public class TelController extends Controller{
 		String city = getPara("city");
 		String operator = getPara("operator");
 		String platform = getPara("platform");
+		String unplatform = getPara("unplatform");
 		String areaCode = getPara("areaCode");
+		String sex = getPara("sex");
+		String age = getPara("age");
+		String alipayName = getPara("alipayName");
+		String qqNickName = getPara("qqNickName");
 		Kv param = Kv.by("province",province).set("city",city).set("platform", platform).set("operator",operator).set("areaCode", areaCode);
+		param.set("sex", sex).set("age", age).set("alipayName", alipayName).set("qqNickName", qqNickName).set("unplatform", unplatform);
 		List list = service.list(limit, offset, tel, param);
 		Set<String> returnList = new HashSet<String>(list.size());
 		for (Object object : list) {

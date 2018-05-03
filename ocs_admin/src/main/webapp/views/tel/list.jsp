@@ -41,12 +41,49 @@
         
         <div class="am-g tpl-amazeui-form">
             <div class="am-u-lg-3 am-u-end">
+                <label for="sex" class="am-u-sm-4 am-form-label">性别：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="sex" name="sex" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="0" <c:if test="${sex eq '0' }">selected</c:if>>保密</option>
+                        <option value="1" <c:if test="${sex eq '1' }">selected</c:if>>男</option>
+                        <option value="2" <c:if test="${sex eq '2' }">selected</c:if>>女</option>
+                    </select>
+                </div>
+            </div>  
+              
+            <div class="am-u-lg-3">
+                <label for="age" class="am-u-sm-4 am-form-label">年龄：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" name="age" value="${age}" placeholder="格式：年龄段采用-分割如25-32">
+                </div>
+            </div>
+            
+            <div class="am-u-lg-3">
+                <label for="alipayName" class="am-u-sm-4 am-form-label">支付宝名：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" name="alipayName" value="${alipayName}" placeholder="请输入支付宝名称">
+                </div>
+            </div>
+            
+            <div class="am-u-lg-3">
+                <label for="qqNickName" class="am-u-sm-4 am-form-label">QQ昵称：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" name="qqNickName" value="${qqNickName}" placeholder="请输入QQ昵称">
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="am-g tpl-amazeui-form">
+            <div class="am-u-lg-3 am-u-end">
                 <label for="state" class="am-u-sm-4 am-form-label">采集平台：</label> 
                 <div class="am-input-group am-u-sm-8"> 
                     <select id="platform" name="platform" class="inline-block">
                         <option value="">-请选择-</option>
                         <option value="1" <c:if test="${platform eq '1' }">selected</c:if>>支付宝</option>
                         <option value="2" <c:if test="${platform eq '2' }">selected</c:if>>QQ</option>
+                        <option value="3" <c:if test="${platform eq '3' }">selected</c:if>>陆金所</option>
                     </select>
                 </div>
             </div>
@@ -64,6 +101,23 @@
                     <input type="text" class="am-form-field" name="pageNumber" value="${pageNumber}" placeholder="请输入当前页">
                 </div>
              </div>
+             <div class="am-u-lg-3">
+             
+             </div>
+        </div>
+        
+        <div class="am-g tpl-amazeui-form">
+            <div class="am-u-lg-3 am-u-end">
+                <label for="unplatform" class="am-u-sm-4 am-form-label">未采集：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="unplatform" name="unplatform" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${unplatform eq '1' }">selected</c:if>>支付宝</option>
+                        <option value="2" <c:if test="${unplatform eq '2' }">selected</c:if>>QQ</option>
+                        <option value="3" <c:if test="${unplatform eq '3' }">selected</c:if>>陆金所</option>
+                    </select>
+                </div>
+            </div>
             
              <div class="am-u-lg-3 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doQuery();">查询</button>
@@ -97,9 +151,10 @@
 								<td>${item.tel_area_code }</td>
 								<td>${item.tel_operator }</td>
 								<td>
-								    <c:if test="${item.platform_collection eq 1 }">支付宝</c:if>
-								    <c:if test="${item.platform_collection eq 2 }">QQ</c:if>
-								    <c:if test="${empty item.platform_collection or item.platform_collection eq 0}">-</c:if>
+								    <c:if test="${fn:contains(item.col1, '1')}">支付宝 </c:if>
+								    <c:if test="${fn:contains(item.col1, '2')}">QQ </c:if>
+								    <c:if test="${fn:contains(item.col1, '3')}">支陆金所 </c:if>
+								    <c:if test="${empty item.col1 or item.col1 eq '0'}">-</c:if>
 								</td>
 								<td>${item.alipay_name }</td>
 								<td>${item.qq_nickname }</td>
