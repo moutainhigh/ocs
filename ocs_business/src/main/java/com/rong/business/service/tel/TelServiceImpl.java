@@ -3,8 +3,6 @@ package com.rong.business.service.tel;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import com.jfinal.kit.Kv;
 import com.rong.common.bean.MyPage;
 import com.rong.common.util.StringUtils;
@@ -52,15 +50,6 @@ public class TelServiceImpl extends BaseServiceImpl<Tel> implements TelService{
 	@Override
 	public List list(int limit, int offset, String tel, Kv param) {
 		List list = dao.list(limit, offset, tel, param);
-		// 如果查询结果为空，则多做2次查询
-		if (CollectionUtils.isEmpty(list) && StringUtils.isNullOrEmpty(tel)) {
-			for (int i = 0; i < 2; i++) {
-				list = dao.list(limit, offset, tel, param);
-				if(!CollectionUtils.isEmpty(list)){
-					break;
-				}
-			}
-		}
 		return list;
 	}
 

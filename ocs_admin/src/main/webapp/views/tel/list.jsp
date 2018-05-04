@@ -166,7 +166,12 @@
 								</td>
 								<td>${item.alipay_name }</td>
 								<td>${item.qq_nickname }</td>
-								<td>${item.sex }</td>
+								<td>
+                                    <c:if test="${item.sex eq 1}">男 </c:if>
+                                    <c:if test="${item.sex eq 2}">女 </c:if>
+                                    <c:if test="${item.sex eq 0}">保密 </c:if>
+                                    <c:if test="${empty item.sex}">-</c:if>
+                                </td>
 								<td>${item.ageStr }</td>
 								<td>${item.addr }</td>
 								<td>

@@ -3,6 +3,9 @@ package com.rong.persist.dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
@@ -24,29 +27,8 @@ public class TelDao extends BaseDao<Tel> {
 	public static final String FILEDS = "id,create_time,tel,tel_province,tel_city,tel_area_code,tel_operator,platform_collection,alipay_name,qq_nickname,sex,TIMESTAMPDIFF(YEAR, age, CURDATE()) ageStr,addr,col1,col2,col3,col4,col5";
 
 	public MyPage page(int limit, int offset, String tel,Kv param) {
-		String tableName;
-		if (!StringUtils.isNullOrEmpty(tel) && tel.length()>=4) {
-			tableName = getTableName(tel);
-			if(tel.length()==11){
-				List<Tel> returnList = new ArrayList<Tel>(limit); 
-				returnList.add(this.findTel(tel));
-				return new MyPage(limit, offset, 1, returnList);
-			}
-		}else{
-			tableName = randTableName();
-		}
-		String select = "select t1.* from " + tableName +" AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `"+tableName+"`)-"
-				+ "(SELECT MIN(id) FROM `"+tableName+"`))+(SELECT MIN(id) FROM `"+tableName+"`)) AS id) AS t2 ";
-		StringBuffer where = createParam(new StringBuffer(" where t1.id >= t2.id"),tel, param);
-		String orderBy = " order by t1.id asc";
-		String page = " limit "+(limit/10)+" offset "+offset;
-		select = select + where + orderBy + page;
-		List<Tel> returnList = new ArrayList<Tel>(limit); 
-		for (int i = 0; i < 10; i++) {
-			List<Tel> list = dao.find(select);
-			returnList.addAll(list);
-		}
-		return new MyPage(limit, offset, count(tableName, createParam(new StringBuffer(" where 1=1"),tel, param).toString()), returnList);
+		List<Record> returnList = list(limit, offset, tel, param,"t1.*");
+		return new MyPage(limit, offset, 0, returnList);
 	}
 
 	private StringBuffer createParam(StringBuffer where,String tel, Kv param) {
@@ -76,7 +58,7 @@ public class TelDao extends BaseDao<Tel> {
 			}
 			String unplatform = param.getStr("unplatform");
 			if (!StringUtils.isNullOrEmpty(unplatform)) {
-				where.append(" and col1 not like '%" + unplatform + "%'");
+				where.append(" and (col1 not like '%" + unplatform + "%' or col1 is null)");
 			}
 			String operator = param.getStr("operator");
 			if (!StringUtils.isNullOrEmpty(operator)) {
@@ -138,27 +120,66 @@ public class TelDao extends BaseDao<Tel> {
 	
 	@SuppressWarnings("rawtypes")
 	public List list(int limit, int offset, String tel,Kv param) {
+		return list(limit, offset, tel, param,"t1.tel");
+	}
+
+	private List<Record> list(int limit, int offset, String tel, Kv param,String fileds) {
 		String tableName;
+		List<Record> returnList = new ArrayList<Record>(limit); 
 		if (!StringUtils.isNullOrEmpty(tel) && tel.length()>=4) {
 			tableName = getTableName(tel);
 			if(tel.length()==11){
 				return  Db.use("tel").find("select * from " + tableName +" where tel = ?",tel);
 			}
+			String select = getSelect(limit, offset, tel, param, tableName,fileds);
+			for (int i = 0; i < 10; i++) {
+				List<Record> list = Db.use("tel").find(select);
+				returnList.addAll(list);
+			}
 		}else{
-			tableName = randTableName();
-		}
-		String select = "select t1.tel from " + tableName +" AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `"+tableName+"`)-"
-				+ "(SELECT MIN(id) FROM `"+tableName+"`))+(SELECT MIN(id) FROM `"+tableName+"`)) AS id) AS t2 ";
-		StringBuffer where = createParam(new StringBuffer(" where t1.id >= t2.id"),tel, param);
-		String orderBy = " order by t1.id asc";
-		String page = " limit 1 offset "+offset;
-		select = select + where + orderBy + page;
-		List<Record> returnList = new ArrayList<Record>(limit); 
-		for (int i = 0; i < limit; i++) {
-			List<Record> list = Db.use("tel").find(select);
-			returnList.addAll(list);
+			List<String> tableList = randTableName(100);
+			List<String> haveDataTableList = new ArrayList<>();
+			for (int i = 0; i < 10; i++) {
+				tableName = getRandomTable(tableList);
+				String select = getSelect(limit, offset, tel, param, tableName,fileds);
+				List<Record> list = Db.use("tel").find(select);
+				if(!list.isEmpty()){
+					haveDataTableList.add(tableName);
+				}else{
+					//如果未查询到数据，则再次查询，最多尝试5次
+					for (int j = 0; j < 5; j++) {
+						tableName = getRandomTable(tableList);
+						list = Db.use("tel").find(getSelect(limit, offset, tel, param,tableName ,fileds));
+						if(!list.isEmpty()){
+							haveDataTableList.add(tableName);
+							break;
+						}
+					}
+					if(list.isEmpty()){
+						//如果5次后仍未查询到数据，则去有数据的表中再查询
+						if(!haveDataTableList.isEmpty()){
+							tableName = getRandomTable(haveDataTableList);
+							list = Db.use("tel").find(getSelect(limit, offset, tel, param, tableName,fileds));
+						}
+					}
+				}
+				returnList.addAll(list);
+			}
+			
 		}
 		return returnList;
+	}
+
+	private String getSelect(int limit, int offset, String tel, Kv param, String tableName,String fileds) {
+		String select = "select "+fileds+" from " + tableName +" AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `"+tableName+"`)-"
+				+ "(SELECT MIN(id) FROM `"+tableName+"`))+(SELECT MIN(id) FROM `"+tableName+"`)) AS id) AS t2 ";
+		StringBuffer where = createParam(new StringBuffer(" where t1.id >= t2.id"),tel, param);
+		String page = " limit 1 offset "+(10-limit);
+		if(limit>=10){
+			page = " limit "+(limit/10)+" offset "+offset;
+		}
+		select = select + where + page;
+		return select;
 	}
 	
 	public boolean updateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register){
@@ -203,6 +224,23 @@ public class TelDao extends BaseDao<Tel> {
 			return table.getStr("tableName");
 		}
 		return null;
+	}
+	
+	public static List<String> randTableName(int limit){
+		String sql = "SELECT table_name tableName FROM information_schema. TABLES WHERE table_schema = 'tel_db' order by rand() limit ?";
+		List<Record> tableList = Db.use("tel").find(sql,limit);
+		List<String> returnList = new ArrayList<String>();
+		if(CollectionUtils.isNotEmpty(tableList)){
+			for (Record table : tableList) {
+				returnList.add(table.getStr("tableName"));
+			}
+			return returnList;
+		}
+		return null;
+	}
+	
+	public static String getRandomTable(List<String> tableList){
+		return tableList.get(new Random().nextInt(tableList.size()));
 	}
 	
 	public static String getTableName(String tel){
