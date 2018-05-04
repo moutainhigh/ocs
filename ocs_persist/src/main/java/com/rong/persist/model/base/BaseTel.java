@@ -96,6 +96,10 @@ public abstract class BaseTel<M extends BaseTel<M>> extends Model<M> implements 
 	public java.util.Date getAge() {
 		return get("age");
 	}
+	
+	public java.lang.String getAgeStr() {
+		return getStr("ageStr");
+	}
 
 	public void setAddr(java.lang.String addr) {
 		set("addr", addr);

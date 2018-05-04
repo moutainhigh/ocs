@@ -21,7 +21,7 @@ public class TelDao extends BaseDao<Tel> {
 
 	public static final Tel dao = Tel.dao;
 
-	public static final String FILEDS = "id,create_time,tel,tel_province,tel_city,tel_area_code,tel_operator,platform_collection,alipay_name,qq_nickname,sex,TIMESTAMPDIFF(YEAR, age, CURDATE()) age,addr,col1,col2,col3,col4,col5";
+	public static final String FILEDS = "id,create_time,tel,tel_province,tel_city,tel_area_code,tel_operator,platform_collection,alipay_name,qq_nickname,sex,TIMESTAMPDIFF(YEAR, age, CURDATE()) ageStr,addr,col1,col2,col3,col4,col5";
 
 	public MyPage page(int limit, int offset, String tel,Kv param) {
 		String tableName;

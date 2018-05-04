@@ -161,13 +161,13 @@
 								<td>
 								    <c:if test="${fn:contains(item.col1, '1')}">支付宝 </c:if>
 								    <c:if test="${fn:contains(item.col1, '2')}">QQ </c:if>
-								    <c:if test="${fn:contains(item.col1, '3')}">支陆金所 </c:if>
+								    <c:if test="${fn:contains(item.col1, '3')}">陆金所 </c:if>
 								    <c:if test="${empty item.col1 or item.col1 eq '0'}">-</c:if>
 								</td>
 								<td>${item.alipay_name }</td>
 								<td>${item.qq_nickname }</td>
 								<td>${item.sex }</td>
-								<td>${item.age }</td>
+								<td>${item.ageStr }</td>
 								<td>${item.addr }</td>
 								<td>
                                      <c:if test="${item.col2 eq '1'}">注册</c:if>
