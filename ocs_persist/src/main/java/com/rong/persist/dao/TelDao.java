@@ -199,6 +199,7 @@ public class TelDao extends BaseDao<Tel> {
 		item.setAge(age);
 		item.setAddr(addr);
 		item.setCol2(register);
+		item.remove("ageStr");
 		return Db.use("tel").update(tableName, item.toRecord());
 	}
 	
