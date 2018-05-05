@@ -70,7 +70,7 @@ public class JdbcInit {
 		dp.getDataSource();
 		dp.start();
 
-		activeRecord = new ActiveRecordPlugin(dp);
+		activeRecord = new ActiveRecordPlugin("tel",dp);
 		activeRecord.setDialect(new MysqlDialect())
 				.setDevMode(true)
 				.setShowSql(true) // 是否打印sql语句

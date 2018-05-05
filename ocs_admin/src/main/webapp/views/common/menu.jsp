@@ -148,6 +148,10 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
 							href="javascript:loadRight('<%=mybasePath%>/tel/list?pageSize=10&pageNumber=1','手机号码列表')">
 								<i class="am-icon-angle-right"></i> <span>手机号码列表</span>
 						</a></li>
+						<li><a
+							href="javascript:loadRight('<%=mybasePath%>/telStatis','统计')">
+								<i class="am-icon-angle-right"></i> <span>统计</span>
+						</a></li>
 					</ul>
 			     </li>
 			</shiro:hasPermission>

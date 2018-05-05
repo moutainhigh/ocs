@@ -7,6 +7,10 @@
 #user = tel
 #password= xiaowu1234.
 
-jdbcUrl = jdbc:mysql://127.0.0.1:7196/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+#jdbcUrl = jdbc:mysql://127.0.0.1:7196/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+#user=tel
+#password=xiaowu1234.
+
+jdbcUrl = jdbc:mysql://zcqq.f3322.net:7196/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 user=tel
 password=xiaowu1234.

@@ -38,6 +38,7 @@ import com.rong.admin.controller.ResourceController;
 import com.rong.admin.controller.RoleController;
 import com.rong.admin.controller.SystemConfigController;
 import com.rong.admin.controller.TelController;
+import com.rong.admin.controller.TelStatisController;
 import com.rong.admin.controller.UserController;
 import com.rong.admin.handler.DruidMonitorHandler;
 import com.rong.common.bean.MyConst;
@@ -126,6 +127,7 @@ public class MyConfig extends JFinalConfig {
 		me.add("/adtask",AdTaskController.class);
 		me.add("/consume",ConsumeController.class);
 		me.add("/tel",TelController.class);
+		me.add("/telStatis",TelStatisController.class);
 	}
 
 	@Override
