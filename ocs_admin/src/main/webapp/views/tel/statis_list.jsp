@@ -12,21 +12,21 @@
 					  <tr>
 						<c:forEach items="${statisCollection}" var="item">
 							<td>已采集：</td>
-							<td><c:if test="${item.item eq '1'}">支付宝 </c:if>
-								<c:if test="${item.item eq '2'}">QQ </c:if>
-								<c:if test="${item.item eq '3'}">陆金所 </c:if>
+							<td><c:if test="${item.platform eq '1'}">支付宝 </c:if>
+								<c:if test="${item.platform eq '2'}">QQ </c:if>
+								<c:if test="${item.platform eq '3'}">陆金所 </c:if>
 							</td>
-                            <td>${item.count }</td>
+                            <td>${item.telCount }</td>
 						</c:forEach>
 					  </tr>
 					   <tr>
 						<c:forEach items="${statisUnCollection}" var="item">
 							<td>未采集</td>
-							<td><c:if test="${item.item eq '1'}">支付宝 </c:if>
-								<c:if test="${item.item eq '2'}">QQ </c:if>
-								<c:if test="${item.item eq '3'}">陆金所 </c:if>
+							<td><c:if test="${item.platform eq '1'}">支付宝 </c:if>
+								<c:if test="${item.platform eq '2'}">QQ </c:if>
+								<c:if test="${item.platform eq '3'}">陆金所 </c:if>
 							</td>
-                            <td>${item.count }</td>
+                            <td>${item.telCount }</td>
 						</c:forEach>
 					  </tr>
 					</tbody>
@@ -35,7 +35,7 @@
 			</div>
 		</div>
 	</div>
-	<form class="am-form am-form-horizontal" id="queryForm" role="form" action="<%=basePath %>/telStatis/statis">
+	<form class="am-form am-form-horizontal" id="queryForm" role="form" action="<%=basePath %>/telStatis">
 		<div class="am-g tpl-amazeui-form">
 		    <div class="am-u-lg-3 am-u-end">
                 <label for="state" class="am-u-sm-4 am-form-label">是否采集：</label> 
@@ -119,13 +119,17 @@
             </div>
             
              <div class="am-u-lg-3 am-u-end">
-                <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doQuery();">查询</button>
+                <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doSearch();">查询(最近一次统计)</button>
+            </div>
+            
+            <div class="am-u-lg-3 am-u-end">
+                <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doStatis();">开始统计</button>
             </div>
          </div>
          
          <div class="am-g tpl-amazeui-form">
-		    <div class="am-u-lg-3 am-u-end">
-                <label for="state" class="am-u-sm-4 am-form-label">符合条件共：${sum}</label> 
+		    <div class="am-u-lg-6 am-u-end">
+                <label for="state" class="am-u-sm-6 am-form-label">符合条件共：${sum}</label> 
             </div>  
             
           </div>
@@ -160,4 +164,22 @@
 $(function() {
 	initQueryForm();
 });
+
+function doStatis(){
+	var url = getRootPath()+"/telStatis/statis";
+	myalert("统计需要一点时间，请稍后");
+	$.ajax({
+		type: 'post',
+		url:url,
+		data:$('#queryForm').formSerialize()
+	}).done(function(data){
+		$("#right").html(data);
+	});
+}
+
+
+function doSearch(){
+	$("#queryForm").submit();
+}
+
 </script>

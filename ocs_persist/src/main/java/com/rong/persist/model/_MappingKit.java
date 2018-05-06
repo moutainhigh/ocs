@@ -39,6 +39,9 @@ public class _MappingKit {
 		arp.addMapping("system_resource", "id", SystemResource.class);
 		arp.addMapping("system_role", "id", SystemRole.class);
 		arp.addMapping("system_role_resource", "id", SystemRoleResource.class);
+		arp.addMapping("tel_city_statis", "id", TelCityStatis.class);
+		arp.addMapping("tel_collection_statis", "id", TelCollectionStatis.class);
+		arp.addMapping("tel_statis_job", "id", TelStatisJob.class);
 	}
 }
 
