@@ -65,6 +65,23 @@ public class ConsumController extends Controller {
 	}
 	
 	/**
+	 * 自定义扣费
+	 */
+	public void consumMoney(){
+		String userName = getPara("userName");
+		String money = getPara("money");
+		Long projectId = getParaToLong("projectId",-1L);
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userName", userName);
+		paraMap.put("money", money);
+		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
+			return;
+		}
+		interfaceCallService.consumeMoney(projectId, new BigDecimal(money), userName);
+		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS ,"计费成功");
+	}
+	
+	/**
 	 * 接口调用计费-qq项目
 	 */
 	public void consumqq(){
