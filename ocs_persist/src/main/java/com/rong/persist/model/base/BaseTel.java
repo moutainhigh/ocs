@@ -96,10 +96,6 @@ public abstract class BaseTel<M extends BaseTel<M>> extends Model<M> implements 
 	public java.util.Date getAge() {
 		return get("age");
 	}
-	
-	public java.lang.String getAgeStr() {
-		return getStr("ageStr");
-	}
 
 	public void setAddr(java.lang.String addr) {
 		set("addr", addr);
@@ -107,6 +103,14 @@ public abstract class BaseTel<M extends BaseTel<M>> extends Model<M> implements 
 
 	public java.lang.String getAddr() {
 		return getStr("addr");
+	}
+
+	public void setRegister(java.lang.String register) {
+		set("register", register);
+	}
+
+	public java.lang.String getRegister() {
+		return getStr("register");
 	}
 
 	public void setCol1(java.lang.String col1) {
@@ -147,14 +151,6 @@ public abstract class BaseTel<M extends BaseTel<M>> extends Model<M> implements 
 
 	public java.lang.String getCol5() {
 		return getStr("col5");
-	}
-
-	public void setCreateTime(java.util.Date createTime) {
-		set("create_time", createTime);
-	}
-
-	public java.util.Date getCreateTime() {
-		return get("create_time");
 	}
 
 }

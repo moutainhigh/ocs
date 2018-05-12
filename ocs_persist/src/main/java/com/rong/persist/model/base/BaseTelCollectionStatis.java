@@ -41,12 +41,12 @@ public abstract class BaseTelCollectionStatis<M extends BaseTelCollectionStatis<
 		return getStr("platform");
 	}
 
-	public void setTelCount(java.lang.Integer telCount) {
+	public void setTelCount(java.lang.Long telCount) {
 		set("telCount", telCount);
 	}
 
-	public java.lang.Integer getTelCount() {
-		return getInt("telCount");
+	public java.lang.Long getTelCount() {
+		return getLong("telCount");
 	}
 
 }

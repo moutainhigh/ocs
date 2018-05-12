@@ -19,7 +19,7 @@ import com.rong.persist.model.TelStatisJob;
 public interface TelStatisService extends BaseService<Tel>{
 	// 统计
 	Map<String,List<Record>> statisCollection();
-	Map<String,Integer> statisByCity(Kv param);
+	Map<String,Long> statisByCity(Kv param);
 	
 	// 查询保存到数据库的统计数据
 	Long save(Kv param,Date createTime,Date finishTime);

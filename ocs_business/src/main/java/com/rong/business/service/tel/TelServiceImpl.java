@@ -8,6 +8,7 @@ import com.rong.common.bean.MyPage;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.TelDao;
+import com.rong.persist.dao.TelStatisDao;
 import com.rong.persist.model.Tel;
 
 /**
@@ -17,6 +18,7 @@ import com.rong.persist.model.Tel;
  */
 public class TelServiceImpl extends BaseServiceImpl<Tel> implements TelService{
 	private TelDao dao = new TelDao();
+	private TelStatisDao telStatisDao = new TelStatisDao();
 
 	@Override
 	public MyPage page(int pageNumber, int pageSize, String tel, Kv param) {
@@ -35,9 +37,13 @@ public class TelServiceImpl extends BaseServiceImpl<Tel> implements TelService{
 		return page;
 	}
 
+	/**
+	 * 更新本表，并更新统计相对应的表
+	 */
 	@Override
 	public boolean updateTel(String tel, String platform, String alipayName, String qqNickName, String sex, Date age,
 			String addr,String register) {
+		telStatisDao.saveOrUpdateTel(tel, platform, alipayName, qqNickName, sex, age, addr, register);
 		return dao.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr,register);
 	}
 

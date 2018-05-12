@@ -1,5 +1,10 @@
-jdbcUrl = jdbc:mysql://gz-cdb-ahwyiopr.sql.tencentcdb.com:63126/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+jdbcUrl = jdbc:mysql://zcqq.f3322.net:7196/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 user=ocs
 password=xiaowu123@
+
+tel_db   = jdbc:mysql://zcqq.f3322.net:7196/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+tel_user = tel
+tel_password= xiaowu1234.
+
 devMode = false
  

@@ -22,7 +22,7 @@ import com.rong.common.util.StringUtils;
 
 public class TelCreateUtil {
 	// 手机号码文件
-	public static String TEL_FILE = "E:\\test.txt";
+	public static String TEL_FILE = "E:\\tel.txt";
 	// 开始行数
 	public static int START_LINE = 1;
 	// 每次提交数量
@@ -45,7 +45,7 @@ public class TelCreateUtil {
 		long startTime = System.currentTimeMillis();
 		int createTableCount = 0;
 		for (Tel tel : telList) {
-			String tableName = "tel_"+tel.getTel().substring(0,4);
+			String tableName = "tel_"+tel.getTel().substring(0,5);
 			boolean result = createTable(tableName);
 			if(result){
 				tableNameList.add(tableName);
@@ -171,7 +171,7 @@ public class TelCreateUtil {
 	 * @param tableName
 	 * @return
 	 */
-	private static boolean existTableName(String tableName){
+	public static boolean existTableName(String tableName){
 		if(tableNameList.contains(tableName)){
 			return true;
 		}

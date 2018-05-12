@@ -12,6 +12,7 @@
   	<module>ocs_admin</module>
   	<module>ocs_system</module>
   	<module>ocs_business</module>
+  	<module>ocs_job</module>
   </modules>
   
   <properties>

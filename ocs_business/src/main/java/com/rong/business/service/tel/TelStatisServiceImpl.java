@@ -29,7 +29,7 @@ public class TelStatisServiceImpl extends BaseServiceImpl<Tel> implements TelSta
 	}
 
 	@Override
-	public Map<String, Integer> statisByCity(Kv param) {
+	public Map<String, Long> statisByCity(Kv param) {
 		return dao.statisByCity(param);
 	}
 

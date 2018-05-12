@@ -15,18 +15,18 @@
 							<td><c:if test="${item.platform eq '1'}">支付宝 </c:if>
 								<c:if test="${item.platform eq '2'}">QQ </c:if>
 								<c:if test="${item.platform eq '3'}">陆金所 </c:if>
+								:${item.telCount }
 							</td>
-                            <td>${item.telCount }</td>
 						</c:forEach>
 					  </tr>
 					   <tr>
 						<c:forEach items="${statisUnCollection}" var="item">
-							<td>未采集</td>
+							<td>未采集:</td>
 							<td><c:if test="${item.platform eq '1'}">支付宝 </c:if>
 								<c:if test="${item.platform eq '2'}">QQ </c:if>
 								<c:if test="${item.platform eq '3'}">陆金所 </c:if>
+								:${item.telCount }
 							</td>
-                            <td>${item.telCount }</td>
 						</c:forEach>
 					  </tr>
 					</tbody>
@@ -35,14 +35,13 @@
 			</div>
 		</div>
 	</div>
-	<form class="am-form am-form-horizontal" id="queryForm" role="form" action="<%=basePath %>/telStatis">
+	<form class="am-form am-form-horizontal" id="queryForm" role="form" action="<%=basePath %>/telStatis/statis">
 		<div class="am-g tpl-amazeui-form">
 		    <div class="am-u-lg-3 am-u-end">
                 <label for="state" class="am-u-sm-4 am-form-label">是否采集：</label> 
                 <div class="am-input-group am-u-sm-8"> 
                     <select id="collectionType" name="collectionType" class="inline-block">
                         <option value="1" <c:if test="${collectionType}">selected</c:if>>采集</option>
-                        <option value="0" <c:if test="${!collectionType}">selected</c:if>>未采集</option>
                     </select>
                 </div>
             </div>  
@@ -51,7 +50,6 @@
                 <label for="state" class="am-u-sm-4 am-form-label">采集平台：</label> 
                 <div class="am-input-group am-u-sm-8"> 
                     <select id="platform" name="platform" class="inline-block">
-                        <option value="">-请选择-</option>
                         <option value="1" <c:if test="${platform eq '1' }">selected</c:if>>支付宝</option>
                         <option value="2" <c:if test="${platform eq '2' }">selected</c:if>>QQ</option>
                         <option value="3" <c:if test="${platform eq '3' }">selected</c:if>>陆金所</option>
@@ -73,10 +71,10 @@
             <div class="am-u-lg-3 am-u-end">
                 <label for="register" class="am-u-sm-4 am-form-label">精确到市：</label> 
                 <div class="am-input-group am-u-sm-8"> 
-                    <select id="register" name="register" class="inline-block">
+                    <select id="city" name="city" class="inline-block">
                         <option value="">-请选择-</option>
-                        <option value="1" <c:if test="${register eq '1' }">selected</c:if>>是</option>
-                        <option value="0" <c:if test="${register eq '0' }">selected</c:if>>否</option>
+                        <option value="1" <c:if test="${city eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${city eq '0' }">selected</c:if>>否</option>
                     </select>
                 </div>
             </div>
@@ -118,18 +116,16 @@
                 </div>
             </div>
             
-             <div class="am-u-lg-3 am-u-end">
-                <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doSearch();">查询(最近一次统计)</button>
-            </div>
-            
             <div class="am-u-lg-3 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doStatis();">开始统计</button>
             </div>
          </div>
          
          <div class="am-g tpl-amazeui-form">
-		    <div class="am-u-lg-6 am-u-end">
+		    <div class="am-u-lg-4 am-u-end">
                 <label for="state" class="am-u-sm-6 am-form-label">符合条件共：${sum}</label> 
+                <label for="state" class="am-u-sm-6 am-form-label">统计时间：<fmt:formatDate value="${job.create_time }" pattern="yyyy-MM-dd HH:mm" /></label> 
+                <label for="state" class="am-u-sm-6 am-form-label">统计耗时：${job_time}</label> 
             </div>  
             
           </div>
@@ -147,10 +143,12 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${statisSearch}" var="item">
+							<c:if test="${item.city != 'sum' }">
 							<tr>
-								<td>${item.key }</td>
-                                <td>${item.value } | <fmt:formatNumber type="number" value="${item.value / sum * 100 }" pattern="0.00" maxFractionDigits="2"/>%</td>
+								<td>${item.city }</td>
+                                <td>${item.telCount } | <fmt:formatNumber type="number" value="${item.telCount / sum * 100 }" pattern="0.00" maxFractionDigits="2"/>%</td>
 							</tr>
+							</c:if>
 						</c:forEach>
 					</tbody>
 				</table>
@@ -166,19 +164,6 @@ $(function() {
 });
 
 function doStatis(){
-	var url = getRootPath()+"/telStatis/statis";
-	myalert("统计需要一点时间，请稍后");
-	$.ajax({
-		type: 'post',
-		url:url,
-		data:$('#queryForm').formSerialize()
-	}).done(function(data){
-		$("#right").html(data);
-	});
-}
-
-
-function doSearch(){
 	$("#queryForm").submit();
 }
 

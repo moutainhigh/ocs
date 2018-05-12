@@ -33,12 +33,12 @@ public abstract class BaseTelCityStatis<M extends BaseTelCityStatis<M>> extends 
 		return getStr("city");
 	}
 
-	public void setTelCount(java.lang.Integer telCount) {
+	public void setTelCount(java.lang.Long telCount) {
 		set("telCount", telCount);
 	}
 
-	public java.lang.Integer getTelCount() {
-		return getInt("telCount");
+	public java.lang.Long getTelCount() {
+		return getLong("telCount");
 	}
 
 }

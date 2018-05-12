@@ -1,6 +1,7 @@
 package com.rong.persist.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,9 @@ import com.rong.persist.model.Tel;
  * @date 2018年5月5日
  */
 public class TelStatisDao extends BaseDao<Tel> {
+	
+	public static final Tel dao = Tel.dao;
+	public static final TelDao telDao = new TelDao();
 	/**
 	 * 采集平台类型
 	 * @author rongwq
@@ -96,21 +100,21 @@ public class TelStatisDao extends BaseDao<Tel> {
 	 * 统计省份城市
 	 * @return
 	 */
-	public Map<String,Integer> statisByCity(Kv param){
+	public Map<String,Long> statisByCity(Kv param){
 		List<String> allTable = getAllTable();
 		String where = createParam(param);
-		Map<String,Integer> returnMap = new HashMap<>();
-		int sum = 0;
+		Map<String,Long> returnMap = new HashMap<>();
+		long sum = 0;
 		for (String tableName : allTable) {
 			String select = "select tel_province province,count(*) telCount from "+tableName+ where+" group by tel_province ";
 			List<Record> list = Db.use("tel").find(select);
 			for (Record record : list) {
-				sum+= record.getInt("telCount");
+				sum+= record.getLong("telCount");
 				String province = record.getStr("province");
 				if(returnMap.containsKey(province)) {
-					returnMap.put(province, returnMap.get(province)+record.getInt("telCount"));
+					returnMap.put(province, returnMap.get(province)+record.getLong("telCount"));
 				}else {
-					returnMap.put(province, record.getInt("telCount"));
+					returnMap.put(province, record.getLong("telCount"));
 				}
 			}
 		}
@@ -130,7 +134,7 @@ public class TelStatisDao extends BaseDao<Tel> {
 		List<Record> returnList = new ArrayList<>(2);
 		for (Integer item : platform.LIST) {
 			Record record = new Record();
-			String where = " where col1 like '%" + item + "%'";
+			String where = " where platform_collection like '%" + item + "%'";
 			int count = count(tableName, where);
 			// 采集数据
 			// 平台
@@ -164,11 +168,28 @@ public class TelStatisDao extends BaseDao<Tel> {
 	}
 	
 	/**
+	 * 获取所有表总采集数据量
+	 * @param tableName
+	 * @param where
+	 * @return
+	 */
+	public long getAllTableCount() {
+		String select = "select sum(table_rows) rows from information_schema.tables "+
+				"where TABLE_SCHEMA = 'tel_db' and LENGTH(table_name) = 9 and table_rows>0" ;
+		Record record = Db.use("tel").findFirst(select);
+		if(record==null){
+			return 0;
+		}
+		return record.getLong("rows")==null?0:record.getLong("rows");
+	}
+	
+	/**
 	 * 获取所有表
 	 * @return
 	 */
 	public List<String> getAllTable(){
-		String sql = "SELECT table_name tableName FROM information_schema. TABLES WHERE table_schema = 'tel_db'";
+		String sql = "SELECT table_name tableName FROM information_schema. TABLES WHERE table_schema = 'tel_db' "
+				+ "and LENGTH(table_name) = 9 and table_rows>0";
 		List<Record> tableList = Db.use("tel").find(sql);
 		List<String> returnList = new ArrayList<String>();
 		if(CollectionUtils.isNotEmpty(tableList)){
@@ -194,9 +215,7 @@ public class TelStatisDao extends BaseDao<Tel> {
 			// 平台 支付宝 qq 陆金所
 			String platform = param.getStr("platform");
 			if (collectionType) {
-				where.append(" and col1 like '%" + platform + "%'");
-			}else {
-				where.append(" and (col1 not like '%" + platform + "%' or col1 is null)");
+				where.append(" and platform_collection like '%" + platform + "%'");
 			}
 			// 运营商
 			String operator = param.getStr("operator");
@@ -223,9 +242,9 @@ public class TelStatisDao extends BaseDao<Tel> {
 			String register = param.getStr("register");
 			if (!StringUtils.isNullOrEmpty(register)) {
 				if("1".equals(register)){
-					where.append(" and col2 = '" + register + "'");
+					where.append(" and register = '" + register + "'");
 				}else{
-					where.append(" and col2 is null ");
+					where.append(" and (register = '' or register = '0') ");
 				}
 			}
 			
@@ -233,6 +252,60 @@ public class TelStatisDao extends BaseDao<Tel> {
 		return where.toString();
 	}
 	
+	public static String getTableName(String tel){
+		return "tel_"+tel.substring(0,5);
+	}
+	
+	public Tel findTel(String tel){
+		String tableName = getTableName(tel);
+		String sql = "select * from " + tableName + " where tel = ?";
+		return dao.findFirst(sql,tel);
+	}
+	
+	public boolean saveOrUpdateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register){
+		String tableName = getTableName(tel);
+		Tel item = findTel(tel);
+		if(item!=null){
+			if(item.getPlatformCollection()!=null){
+				if(!item.getPlatformCollection().contains(platform)){
+					item.setPlatformCollection(item.getPlatformCollection()+","+platform);
+				}
+			}else{
+				item.setPlatformCollection(platform);
+			}
+			item.setAlipayName(alipayName);
+			item.setQqNickname(qqNickName);
+			item.setSex(sex);
+			item.setAge(age);
+			item.setAddr(addr);
+			item.setRegister(register);
+			item.remove("ageStr");
+			return Db.use("tel").update(tableName, item.toRecord());
+		}else{
+			
+			item = telDao.findTel(tel);
+			if(!StringUtils.isNullOrEmpty(item.getCol1())){
+				if(!item.getCol1().contains(platform)){
+					item.setPlatformCollection(item.getCol1()+","+platform);
+				}else{
+					item.setPlatformCollection(item.getCol1());
+				}
+			}else{
+				item.setPlatformCollection(platform);
+			}
+			item.setAlipayName(alipayName);
+			item.setQqNickname(qqNickName);
+			item.setSex(sex);
+			item.setAge(age);
+			item.setAddr(addr);
+			item.setRegister(register);
+			item.remove("ageStr");
+			item.remove("create_time");
+			item.remove("col1");
+			item.remove("col2");
+			return Db.use("tel").save(tableName, item.toRecord());
+		}
+	}
 	
 	
 }
