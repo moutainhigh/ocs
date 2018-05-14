@@ -34,7 +34,7 @@ class TelTableSplitTask implements Runnable {
 				String newTable = table + i;
 				String tel = newTable.split("_")[1];
 				String selectSql = "select tel,tel_province,tel_city,tel_area_code,tel_operator,col1 platform_collection,alipay_name,qq_nickname,sex,age,addr,col2 register"
-						+ " from " + table +" where tel like '"+tel+"%' and col1 is not null";
+						+ " from " + table +" where tel like '"+tel+"%' and col1 = '3'";
 				List<Record> findResult = Db.find(selectSql);
 				int [] num = Db.batchSave(newTable, findResult, 100);
 				long endTimeOne = System.currentTimeMillis();

@@ -74,6 +74,26 @@ public class TelTableSplitUtil {
 		return null;
 	}
 	
+	public static List<String> getAllTableForTel5() {
+		String sql = "SELECT table_name tableName FROM information_schema. TABLES WHERE table_schema = 'tel_db' and LENGTH(table_name) = 9 and table_rows>0";
+		List<Record> tableList = Db.use("tel").find(sql);
+		List<String> returnList = new ArrayList<String>();
+		if (CollectionUtils.isNotEmpty(tableList)) {
+			for (Record table : tableList) {
+				returnList.add(table.getStr("tableName"));
+			}
+			return returnList;
+		}
+		return null;
+	}
+	
+	public static void clearData(){
+		List<String> tables = getAllTableForTel5();
+		for (String table : tables) {
+			Db.update("delete from " + table + " where id>0");
+		}
+	}
+	
 	/**
 	 * 每张表扩展10个
 	 */
@@ -103,6 +123,7 @@ public class TelTableSplitUtil {
 
 		// 1.初始化数据库
 		JdbcInit.init();
+//		clearData();//清理数据使用
 		getAllTable();
 		//2.创建所有表-仅需要运行一次
 //		createAllTable();

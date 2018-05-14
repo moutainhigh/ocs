@@ -10,8 +10,8 @@
 					class="am-table am-table-striped am-table-hover table-main am-text-nowrap">
 					<tbody>
 					  <tr>
-						<c:forEach items="${statisCollection}" var="item">
 							<td>已采集：</td>
+						<c:forEach items="${statisCollection}" var="item">
 							<td><c:if test="${item.platform eq '1'}">支付宝 </c:if>
 								<c:if test="${item.platform eq '2'}">QQ </c:if>
 								<c:if test="${item.platform eq '3'}">陆金所 </c:if>
@@ -20,8 +20,8 @@
 						</c:forEach>
 					  </tr>
 					   <tr>
-						<c:forEach items="${statisUnCollection}" var="item">
 							<td>未采集:</td>
+						<c:forEach items="${statisUnCollection}" var="item">
 							<td><c:if test="${item.platform eq '1'}">支付宝 </c:if>
 								<c:if test="${item.platform eq '2'}">QQ </c:if>
 								<c:if test="${item.platform eq '3'}">陆金所 </c:if>

@@ -57,10 +57,10 @@ public class JdbcInit {
 
 		dp.addFilter(new StatFilter());
 
-		dp.setInitialSize(3);
+		dp.setInitialSize(50);
 		dp.setMinIdle(2);
-		dp.setMaxActive(5);
-		dp.setMaxWait(60000);
+		dp.setMaxActive(100);
+		dp.setMaxWait(600000);
 		dp.setTimeBetweenEvictionRunsMillis(120000);
 		dp.setMinEvictableIdleTimeMillis(120000);
 
