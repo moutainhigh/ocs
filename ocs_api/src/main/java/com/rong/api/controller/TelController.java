@@ -14,6 +14,7 @@ import com.rong.business.service.tel.TelServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.validator.CommonValidatorUtils;
+import com.rong.persist.dto.TelDTO;
 
 public class TelController extends Controller{
 	private TelService service = new TelServiceImpl();
@@ -63,6 +64,15 @@ public class TelController extends Controller{
 		String addr = getPara("addr");
 		Date age = getParaToDate("age");
 		String register = getPara("register");
+		String qq = getPara("qq");
+		String trueName = getPara("trueName");
+		String idCard = getPara("idCard");
+		String userAccount = getPara("userAccount");
+		String userAccountPwd = getPara("userAccountPwd");
+		String email = getPara("email");
+		String profession = getPara("profession");
+		String education = getPara("education");
+		TelDTO telDTO = new TelDTO(qq, trueName, idCard, userAccount, userAccountPwd, email, profession, education);
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("tel", tel);
 		// 校验所有参数
@@ -73,7 +83,7 @@ public class TelController extends Controller{
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.DATA_NULL, "手机号码："+tel+"不存在");
 			return;
 		}
-		service.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr,register);
+		service.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr,register,telDTO);
 		BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.REQUEST_SUCCESS, "保存成功");
 	}
 }

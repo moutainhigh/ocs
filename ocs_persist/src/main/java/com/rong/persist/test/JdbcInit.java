@@ -5,7 +5,9 @@ import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
+import com.rong.common.bean.MyConst;
 import com.rong.common.util.PropertiesUtils;
+import com.rong.persist.model._MappingKit_TelDb;
 
 /**
  * @author rongwq JFinal的Model测试用例
@@ -70,7 +72,8 @@ public class JdbcInit {
 		dp.getDataSource();
 		dp.start();
 
-		activeRecord = new ActiveRecordPlugin("tel",dp);
+		activeRecord = new ActiveRecordPlugin("tel", dp);
+		_MappingKit_TelDb.mapping(activeRecord);
 		activeRecord.setDialect(new MysqlDialect())
 				.setDevMode(true)
 				.setShowSql(true) // 是否打印sql语句

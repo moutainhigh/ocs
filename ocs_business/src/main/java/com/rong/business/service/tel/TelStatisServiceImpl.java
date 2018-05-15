@@ -53,6 +53,11 @@ public class TelStatisServiceImpl extends BaseServiceImpl<Tel> implements TelSta
 		return jobDao.getLastOne();
 	}
 
+	@Override
+	public List<Tel> getAllTel(String col, int limit, Kv param) {
+		return dao.getAllTel(col, limit, param);
+	}
+
 	
 
 }

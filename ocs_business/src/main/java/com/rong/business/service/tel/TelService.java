@@ -5,6 +5,7 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.rong.common.bean.MyPage;
 import com.rong.persist.base.BaseService;
+import com.rong.persist.dto.TelDTO;
 import com.rong.persist.model.Tel;
 
 /**
@@ -14,7 +15,7 @@ import com.rong.persist.model.Tel;
  */
 public interface TelService extends BaseService<Tel>{
 	MyPage page(int pageNumber, int pageSize, String tel,Kv param);
-	boolean updateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register);
+	boolean updateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register,TelDTO telDTO);
 	Tel findTel(String tel);
 	@SuppressWarnings("rawtypes")
 	List list(int limit, int offset, String tel,Kv param) ;

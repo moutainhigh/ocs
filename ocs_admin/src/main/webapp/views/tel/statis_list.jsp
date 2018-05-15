@@ -118,6 +118,7 @@
             
             <div class="am-u-lg-3 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doStatis();">开始统计</button>
+                <button class="am-btn am-btn-secondary am-radius" type="button" onclick="exportTxt();">导出</button>
             </div>
          </div>
          
@@ -158,6 +159,96 @@
 	</div>
 </div>
 
+<!-- 导出TXT -->
+				<div class="am-modal am-modal-confirm" tabindex="-1" id="my-popup-exportTxt">
+                    <div class="am-modal-dialog">
+                        <div class="am-modal-hd">导出TXT（选择导出列）：</div>
+                        <div class="am-modal-bd">
+                            <div class="am-form-group">
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="tel" checked="checked" disabled="disabled"> 手机号码
+						      </label>
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="tel_province"> 手机归属(省份)
+						      </label>
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="tel_city"> 手机归属(城市)
+						      </label>
+						       <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="tel_area_code"> 区号
+						      </label>
+						       <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="tel_operator"> 运营商
+						      </label>
+						    </div>
+						    
+						    <div class="am-form-group">
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="platform_collection"> 采集平台
+						      </label>
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol2" value="qq"> QQ
+						      </label>
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="qq_nickname"> QQ昵称
+						      </label>
+						       <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="sex"> 性别
+						      </label>
+						       <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="age"> 年龄
+						      </label>
+						    </div>
+						    
+						    <div class="am-form-group">
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="addr"> 地址
+						      </label>
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="register"> 是否注册
+						      </label>
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol" value="alipay_name"> 支付宝名称
+						      </label>
+						       <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol2" value="trueName"> 真实姓名
+						      </label>
+						       <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol2" value="idCard"> 身份证
+						      </label>
+						    </div>
+						    
+						     <div class="am-form-group">
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol2" value="userAccount"> 账号
+						      </label>
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol2" value="userAccountPwd"> 密码
+						      </label>
+						      <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol2" value="email"> 邮箱
+						      </label>
+						       <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol2" value="profession"> 职业
+						      </label>
+						       <label class="am-checkbox-inline">
+						        <input type="checkbox" name="checkCol2" value="education"> 学历
+						      </label>
+						    </div>
+						    
+						    <div class="am-form-group">
+						      <label for="doc-ipt-email-1">导出数量</label>
+						      <input type="text" id="exportLimit" placeholder="输入导出数量,默认10000">
+						    </div>
+						    
+                        </div>
+                        <div class="am-modal-footer">
+                            <span class="am-modal-btn" data-am-modal-cancel>取消</span> <span
+                                class="am-modal-btn" data-am-modal-confirm>确定</span>
+                        </div>
+                    </div>
+                </div>
+
 <script>
 $(function() {
 	initQueryForm();
@@ -165,6 +256,39 @@ $(function() {
 
 function doStatis(){
 	$("#queryForm").submit();
+}
+
+/**
+ * 导出txt
+ */
+function exportTxt() {
+	$('#my-popup-exportTxt').modal({
+        relatedTarget: this,
+        onConfirm: function(options) {
+        	var dataStr = $('#queryForm').formSerialize();
+        	var col_array=new Array();  
+        	$('input[name="checkCol"]:checked').each(function(){  
+        		col_array.push($(this).val());//向数组中添加元素  
+        	});  
+        	var colStr=col_array.join(',');//将数组元素连接起来以构建一个字符串
+        	var exportLimit = $("#exportLimit").val();
+        	var col_array2=new Array();  
+        	$('input[name="checkCol2"]:checked').each(function(){  
+        		col_array2.push($(this).val());//向数组中添加元素  
+        	});  
+        	var colStr2=col_array2.join(',');//将数组元素连接起来以构建一个字符串
+        	if(col_array2.length>0){
+        		colStr += ",col1&col2="+colStr2;
+        	}
+        	dataStr += "&col="+colStr+"&exportLimit="+exportLimit;
+        	$.ajax({
+        		url : getRootPath() + "/telStatis/exportTxt",
+        		data : dataStr
+        	}).done(function(data) {
+        		window.open(getRootPath()+"/导出数据.txt");
+        	});
+        }
+      });
 }
 
 </script>

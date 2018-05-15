@@ -3,7 +3,9 @@ import com.jfinal.kit.Kv;
 import com.rong.business.service.tel.TelService;
 import com.rong.business.service.tel.TelServiceImpl;
 import com.rong.common.bean.MyPage;
+import com.rong.common.util.GsonUtil;
 import com.rong.common.util.StringUtils;
+import com.rong.persist.dto.TelDTO;
 import com.rong.persist.model.Tel;
 
 public class TelController extends BaseController{
@@ -38,5 +40,15 @@ public class TelController extends BaseController{
 		keepPara();
 		setAttr("page", list);
 		render("/views/tel/list.jsp");
+	}
+	
+	public void detail() {
+		String tel = getPara("tel");
+		Tel item = service.findTel(tel);
+		if(!StringUtils.isNullOrEmpty(item.getCol3())){
+			setAttr("other", GsonUtil.fromJson(item.getCol3(), TelDTO.class));
+		}
+		setAttr("item", item);
+		render("/views/tel/detail.jsp");
 	}
 }

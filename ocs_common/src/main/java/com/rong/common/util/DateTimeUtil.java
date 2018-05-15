@@ -187,6 +187,21 @@ public class DateTimeUtil {
     }
 	
 	/**
+	 * 根据日期计算年龄
+	 * @param startDate 开始时间字段串
+	 * @return 年龄
+	 */
+	public static Integer getAge(Date startDate) {
+		Calendar start = Calendar.getInstance();
+		start.setTime(startDate);
+		Calendar end = Calendar.getInstance();
+		end.setTime(new Date());
+		int startYear = start.get(Calendar.YEAR);
+		int endYear = end.get(Calendar.YEAR);
+		return Integer.parseInt(String.valueOf(endYear-startYear));
+	}
+	
+	/**
 	 * 计算两个时间相差多少天
 	 * @param startDate 开始时间字段串
 	 * @param afterDate 结束时间

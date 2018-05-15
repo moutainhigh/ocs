@@ -11,8 +11,10 @@ import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.common.bean.MyPage;
+import com.rong.common.util.GsonUtil;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
+import com.rong.persist.dto.TelDTO;
 import com.rong.persist.model.Tel;
 
 /**
@@ -182,7 +184,7 @@ public class TelDao extends BaseDao<Tel> {
 		return select;
 	}
 	
-	public boolean updateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register){
+	public boolean updateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register,TelDTO telDTO){
 		String tableName = getTableName(tel);
 		Tel item = findTel(tel);
 		// 使用备用字段col1保存采集平台，多平台采集采用，隔开
@@ -199,6 +201,45 @@ public class TelDao extends BaseDao<Tel> {
 		item.setAge(age);
 		item.setAddr(addr);
 		item.setCol2(register);
+		if(StringUtils.isNullOrEmpty(item.getCol3())){
+			item.setCol3(GsonUtil.toJson(telDTO));
+		}else{
+			TelDTO tempDto = (TelDTO)GsonUtil.fromJson(item.getCol3(), TelDTO.class);
+			tempDto.setQq(telDTO.getQq());
+			tempDto.setTrueName(telDTO.getTrueName());
+			tempDto.setIdCard(telDTO.getIdCard());
+			if(StringUtils.isNullOrEmpty(tempDto.getUserAccount())){
+				tempDto.setUserAccount(telDTO.getUserAccount());
+				tempDto.setUserAccountPwd(telDTO.getUserAccountPwd());
+			}else{
+				if(!tempDto.getUserAccount().contains(telDTO.getUserAccount())){
+					tempDto.setUserAccount(tempDto.getUserAccount()+","+telDTO.getUserAccount());
+					tempDto.setUserAccountPwd(tempDto.getUserAccountPwd()+","+telDTO.getUserAccountPwd());
+				}
+			}
+			if(StringUtils.isNullOrEmpty(tempDto.getEmail())){
+				tempDto.setEmail(telDTO.getEmail());
+			}else{
+				if(!tempDto.getEmail().contains(telDTO.getEmail())){
+					tempDto.setEmail(tempDto.getEmail()+","+telDTO.getEmail());
+				}
+			}
+			if(StringUtils.isNullOrEmpty(tempDto.getProfession())){
+				tempDto.setProfession(telDTO.getProfession());
+			}else{
+				if(!tempDto.getProfession().contains(telDTO.getProfession())){
+					tempDto.setProfession(tempDto.getProfession()+","+telDTO.getProfession());
+				}
+			}
+			if(StringUtils.isNullOrEmpty(tempDto.getEducation())){
+				tempDto.setEducation(telDTO.getEducation());
+			}else{
+				if(!tempDto.getEducation().contains(telDTO.getEducation())){
+					tempDto.setEducation(tempDto.getEducation()+","+telDTO.getEducation());
+				}
+			}
+			item.setCol3(GsonUtil.toJson(tempDto));
+		}
 		item.remove("ageStr");
 		return Db.use("tel").update(tableName, item.toRecord());
 	}

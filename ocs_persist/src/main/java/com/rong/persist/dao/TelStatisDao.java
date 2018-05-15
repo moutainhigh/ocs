@@ -11,8 +11,10 @@ import org.apache.commons.collections.CollectionUtils;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.rong.common.util.GsonUtil;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
+import com.rong.persist.dto.TelDTO;
 import com.rong.persist.model.Tel;
 
 /**
@@ -43,6 +45,7 @@ public class TelStatisDao extends BaseDao<Tel> {
 		 */
 		public static final int LUJINSUO = 3;
 		public static final Integer [] LIST = new Integer[]{ALIPAY,QQ,LUJINSUO};
+		public static final String [] NAMELIST = new String[]{"阿里巴巴","QQ","陆金所"};
 	}
 	
 	/**
@@ -262,49 +265,44 @@ public class TelStatisDao extends BaseDao<Tel> {
 		return dao.findFirst(sql,tel);
 	}
 	
-	public boolean saveOrUpdateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register){
+	public boolean saveOrUpdateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register,TelDTO telDTO){
 		String tableName = getTableName(tel);
 		Tel item = findTel(tel);
-		if(item!=null){
-			if(item.getPlatformCollection()!=null){
-				if(!item.getPlatformCollection().contains(platform)){
-					item.setPlatformCollection(item.getPlatformCollection()+","+platform);
-				}
-			}else{
-				item.setPlatformCollection(platform);
-			}
+		if(item==null){
+			item = new Tel();
+			item.setPlatformCollection(platform);
 			item.setAlipayName(alipayName);
 			item.setQqNickname(qqNickName);
 			item.setSex(sex);
 			item.setAge(age);
 			item.setAddr(addr);
 			item.setRegister(register);
+			item.setCol1(GsonUtil.toJson(telDTO));
 			item.remove("ageStr");
-			return Db.use("tel").update(tableName, item.toRecord());
+			return Db.use("tel").save(tableName, item.toRecord());
 		}else{
-			
 			item = telDao.findTel(tel);
-			if(!StringUtils.isNullOrEmpty(item.getCol1())){
-				if(!item.getCol1().contains(platform)){
-					item.setPlatformCollection(item.getCol1()+","+platform);
-				}else{
-					item.setPlatformCollection(item.getCol1());
-				}
-			}else{
-				item.setPlatformCollection(platform);
-			}
-			item.setAlipayName(alipayName);
-			item.setQqNickname(qqNickName);
-			item.setSex(sex);
-			item.setAge(age);
-			item.setAddr(addr);
-			item.setRegister(register);
+			item.setPlatformCollection(item.getCol1());
+			item.setCol1(item.getCol3());
 			item.remove("ageStr");
 			item.remove("create_time");
-			item.remove("col1");
 			item.remove("col2");
-			return Db.use("tel").save(tableName, item.toRecord());
+			item.remove("col3");
+			return Db.use("tel").update(tableName, item.toRecord());
 		}
+	}
+	
+	public List<Tel> getAllTel(String col,int limit,Kv param){
+		List<Tel> returnList = new ArrayList<Tel>();
+		List<String> tables = getAllTable();
+		String where = createParam(param);
+		String sql = "";
+		for (String table : tables) {
+			sql = "select "+col+" from "+table+ where +" limit "+limit;
+			List<Tel> list = dao.find(sql);
+			returnList.addAll(list);
+		}
+		return returnList;
 	}
 	
 	

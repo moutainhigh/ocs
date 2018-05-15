@@ -9,6 +9,7 @@ import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.TelDao;
 import com.rong.persist.dao.TelStatisDao;
+import com.rong.persist.dto.TelDTO;
 import com.rong.persist.model.Tel;
 
 /**
@@ -42,9 +43,10 @@ public class TelServiceImpl extends BaseServiceImpl<Tel> implements TelService{
 	 */
 	@Override
 	public boolean updateTel(String tel, String platform, String alipayName, String qqNickName, String sex, Date age,
-			String addr,String register) {
-		telStatisDao.saveOrUpdateTel(tel, platform, alipayName, qqNickName, sex, age, addr, register);
-		return dao.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr,register);
+			String addr,String register,TelDTO telDTO) {
+		dao.updateTel(tel, platform, alipayName, qqNickName, sex, age, addr,register,telDTO);
+		telStatisDao.saveOrUpdateTel(tel, platform, alipayName, qqNickName, sex, age, addr, register,telDTO);
+		return true;
 	}
 
 	@Override

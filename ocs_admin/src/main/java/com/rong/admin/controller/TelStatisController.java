@@ -1,17 +1,23 @@
 package com.rong.admin.controller;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.jfinal.kit.Kv;
+import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.business.service.tel.TelStatisService;
 import com.rong.business.service.tel.TelStatisServiceImpl;
+import com.rong.common.util.DateTimeUtil;
 import com.rong.common.util.GsonUtil;
+import com.rong.common.util.StringUtils;
+import com.rong.common.util.TxtExportUtil;
 import com.rong.persist.dao.TelStatisDao;
+import com.rong.persist.dto.TelDTO;
+import com.rong.persist.model.Tel;
 import com.rong.persist.model.TelCityStatis;
 import com.rong.persist.model.TelCollectionStatis;
 import com.rong.persist.model.TelStatisJob;
@@ -132,6 +138,161 @@ public class TelStatisController extends BaseController{
 		setAttr("statisUnCollection",unCollectioned);
 		setAttr("statisSearch", statisSearchList);
 		render("/views/tel/statis_list.jsp");
+	}
+	
+	/**
+	 * 导出TXT列表
+	 */
+	public void exportTxt() {
+		Boolean collectionType = getParaToBoolean("collectionType",true);
+		Boolean city = getParaToBoolean("city",false);
+		Integer platform = getParaToInt("platform",TelStatisDao.platform.ALIPAY);
+		String sex = getPara("sex");
+		String age = getPara("age");
+		String register = getPara("register");
+		String operator = getPara("operator");
+		String col = getPara("col");
+		String col2 = getPara("col2");
+		Integer exportLimit = getParaToInt("exportLimit",10000);
+		Kv param = Kv.by("collectionType",collectionType).set("city",city).set("platform", platform).set("operator",operator);
+		param.set("sex", sex).set("age", age).set("register",register);
+		List<Tel> list = service.getAllTel(col, exportLimit, param);
+		StringBuffer write = new StringBuffer();
+		String tab = "-";
+		String enter = "\r\n";
+		for (Tel tel : list) {
+			TelDTO telDTO = null;
+			if(!StringUtils.isNullOrEmpty(tel.getCol1())){
+				telDTO = (TelDTO)GsonUtil.fromJson(tel.getCol1(), TelDTO.class);
+			}
+			if(col.contains("tel")){
+				write.append(tel.getTel());
+			}
+			if(col.contains("tel_province")){
+				write.append(tab).append(tel.getTelProvince());
+			}
+			if(col.contains("tel_city")){
+				write.append(tab).append(tel.getTelCity());
+			}
+			if(col.contains("tel_area_code")){
+				write.append(tab).append(tel.getTelAreaCode());
+			}
+			if(col.contains("tel_operator")){
+				write.append(tab).append(tel.getTelOperator());
+			}
+			if(col.contains("platform_collection")){
+				write.append(tab).append(TelStatisDao.platform.NAMELIST[Integer.parseInt((tel.getPlatformCollection()))-1]);
+			}
+			if(col2.contains("qq")){
+				if(telDTO!=null && !StringUtils.isNullOrEmpty(telDTO.getQq())){
+					write.append(tab).append(telDTO.getQq());
+				}else{
+					write.append(tab).append("无");
+				}
+			}
+			if(col.contains("qq_nickname")){
+				write.append(tab).append(tel.getQqNickname());
+			}
+			if(col.contains("sex")){
+				String str = "保密";
+				if("1".equals(tel.getSex())){
+					str="男";
+				}else if("2".equals(tel.getSex())){
+					str="女";
+				}
+				write.append(tab).append(str);
+			}
+			if(col.contains("age")){
+				if(tel.getAge()!=null){
+					write.append(tab).append(DateTimeUtil.getAge(tel.getAge()));
+				}else{
+					write.append(tab).append("无");
+				}
+			}
+			if(col.contains("addr")){
+				if(!StringUtils.isNullOrEmpty(tel.getAddr())){
+					write.append(tab).append(tel.getAddr());
+				}else{
+					write.append(tab).append("无");
+				}
+			}
+			if(col.contains("register")){
+				String str = "未注册";
+				if("1".equals(tel.getRegister())){
+					str = "注册";
+				}
+				write.append(tab).append(str);
+			}
+			if(col.contains("alipay_name")){
+				if(!StringUtils.isNullOrEmpty(tel.getAlipayName())){
+					write.append(tab).append(tel.getAlipayName());
+				}else{
+					write.append(tab).append("无");
+				}
+			}
+			if(telDTO!=null){
+				if(col2.contains("trueName")){
+					if(!StringUtils.isNullOrEmpty(telDTO.getTrueName())){
+						write.append(tab).append(telDTO.getTrueName());
+					}else{
+						write.append(tab).append("无");
+					}
+				}
+				if(col2.contains("idCard")){
+					if(!StringUtils.isNullOrEmpty(telDTO.getIdCard())){
+						write.append(tab).append(telDTO.getIdCard());
+					}else{
+						write.append(tab).append("无");
+					}
+				}
+				if(col2.contains("userAccount")){
+					if(!StringUtils.isNullOrEmpty(telDTO.getUserAccount())){
+						write.append(tab).append(telDTO.getUserAccount());
+					}else{
+						write.append(tab).append("无");
+					}
+				}
+				if(col2.contains("userAccountPwd")){
+					if(!StringUtils.isNullOrEmpty(telDTO.getUserAccountPwd())){
+						write.append(tab).append(telDTO.getUserAccountPwd());
+					}else{
+						write.append(tab).append("无");
+					}
+				}
+				if(col2.contains("email")){
+					if(!StringUtils.isNullOrEmpty(telDTO.getEmail())){
+						write.append(tab).append(telDTO.getEmail());
+					}else{
+						write.append(tab).append("无");
+					}
+				}
+				if(col2.contains("profession")){
+					if(StringUtils.isNullOrEmpty(telDTO.getProfession())){
+						write.append(tab).append(telDTO.getProfession());
+					}else{
+						write.append(tab).append("无");
+					}
+				}
+				if(col2.contains("education")){
+					if(!StringUtils.isNullOrEmpty(telDTO.getEducation())){
+						write.append(tab).append(telDTO.getEducation());
+					}else{
+						write.append(tab).append("无");
+					}
+				}
+			}
+			write.append(enter);
+		}
+		String webPath = PathKit.getWebRootPath();
+		String pathname = webPath + File.separator + "导出数据.txt";
+		File file = new File(pathname);
+		try {
+			TxtExportUtil.createFile(file);
+			TxtExportUtil.writeTxtFile(write.toString(), file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		renderFile(file);
 	}
 	
 }

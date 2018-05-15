@@ -153,7 +153,7 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${page.list}" var="item">
-							<tr>
+							<tr onclick="loadRight('<%=basePath %>/tel/detail?tel=${item.tel }')">
 								<td>${item.tel }</td>
                                 <td>${item.tel_province } ${item.tel_city }</td>
 								<td>${item.tel_area_code }</td>
