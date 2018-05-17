@@ -151,8 +151,8 @@ public class TelStatisController extends BaseController{
 		String age = getPara("age");
 		String register = getPara("register");
 		String operator = getPara("operator");
-		String col = getPara("col");
-		String col2 = getPara("col2");
+		String col = getPara("col","tel");
+		String col2 = getPara("col2","");
 		Integer exportLimit = getParaToInt("exportLimit",10000);
 		Kv param = Kv.by("collectionType",collectionType).set("city",city).set("platform", platform).set("operator",operator);
 		param.set("sex", sex).set("age", age).set("register",register);

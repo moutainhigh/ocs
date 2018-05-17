@@ -281,10 +281,12 @@ function exportTxt() {
         		colStr += ",col1&col2="+colStr2;
         	}
         	dataStr += "&col="+colStr+"&exportLimit="+exportLimit;
+        	$('#my-modal-loading').modal('open');
         	$.ajax({
         		url : getRootPath() + "/telStatis/exportTxt",
         		data : dataStr
         	}).done(function(data) {
+        		$('#my-modal-loading').modal('close');
         		window.open(getRootPath()+"/导出数据.txt");
         	});
         }
