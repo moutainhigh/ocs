@@ -189,7 +189,7 @@ public class TelDao extends BaseDao<Tel> {
 		Tel item = findTel(tel);
 		// 使用备用字段col1保存采集平台，多平台采集采用，隔开
 		if(item.getCol1()!=null){
-			if(!item.getCol1().contains(platform)){
+			if(!StringUtils.isNullOrEmpty(platform) && !item.getCol1().contains(platform)){
 				item.setCol1(item.getCol1()+","+platform);
 			}
 		}else{
@@ -202,7 +202,9 @@ public class TelDao extends BaseDao<Tel> {
 		item.setAddr(addr);
 		item.setCol2(register);
 		if(StringUtils.isNullOrEmpty(item.getCol3())){
-			item.setCol3(GsonUtil.toJson(telDTO));
+			if(telDTO!=null){
+				item.setCol3(GsonUtil.toJson(telDTO));
+			}
 		}else{
 			TelDTO tempDto = (TelDTO)GsonUtil.fromJson(item.getCol3(), TelDTO.class);
 			tempDto.setQq(telDTO.getQq());
@@ -212,7 +214,7 @@ public class TelDao extends BaseDao<Tel> {
 				tempDto.setUserAccount(telDTO.getUserAccount());
 				tempDto.setUserAccountPwd(telDTO.getUserAccountPwd());
 			}else{
-				if(!tempDto.getUserAccount().contains(telDTO.getUserAccount())){
+				if(!StringUtils.isNullOrEmpty(telDTO.getUserAccount()) &&!tempDto.getUserAccount().contains(telDTO.getUserAccount())){
 					tempDto.setUserAccount(tempDto.getUserAccount()+","+telDTO.getUserAccount());
 					tempDto.setUserAccountPwd(tempDto.getUserAccountPwd()+","+telDTO.getUserAccountPwd());
 				}
@@ -220,21 +222,21 @@ public class TelDao extends BaseDao<Tel> {
 			if(StringUtils.isNullOrEmpty(tempDto.getEmail())){
 				tempDto.setEmail(telDTO.getEmail());
 			}else{
-				if(!tempDto.getEmail().contains(telDTO.getEmail())){
+				if(!StringUtils.isNullOrEmpty(telDTO.getEmail()) && !tempDto.getEmail().contains(telDTO.getEmail())){
 					tempDto.setEmail(tempDto.getEmail()+","+telDTO.getEmail());
 				}
 			}
 			if(StringUtils.isNullOrEmpty(tempDto.getProfession())){
 				tempDto.setProfession(telDTO.getProfession());
 			}else{
-				if(!tempDto.getProfession().contains(telDTO.getProfession())){
+				if(!StringUtils.isNullOrEmpty(telDTO.getProfession()) &&!tempDto.getProfession().contains(telDTO.getProfession())){
 					tempDto.setProfession(tempDto.getProfession()+","+telDTO.getProfession());
 				}
 			}
 			if(StringUtils.isNullOrEmpty(tempDto.getEducation())){
 				tempDto.setEducation(telDTO.getEducation());
 			}else{
-				if(!tempDto.getEducation().contains(telDTO.getEducation())){
+				if(!StringUtils.isNullOrEmpty(telDTO.getEducation()) && !tempDto.getEducation().contains(telDTO.getEducation())){
 					tempDto.setEducation(tempDto.getEducation()+","+telDTO.getEducation());
 				}
 			}
