@@ -84,7 +84,6 @@
         
         
         <div class="am-g tpl-amazeui-form">
-        
         	<div class="am-u-lg-3 am-u-end">
                 <label for="state" class="am-u-sm-4 am-form-label">运营商：</label> 
                 <div class="am-input-group am-u-sm-8"> 
@@ -117,10 +116,28 @@
             </div>
             
             <div class="am-u-lg-3 am-u-end">
+                <label for="profession" class="am-u-sm-4 am-form-label">职业：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" name="profession" value="${profession}" placeholder="职业">
+                </div>
+            </div>
+            
+         </div>
+         
+         <div class="am-g tpl-amazeui-form">
+          	<div class="am-u-lg-3 am-u-end">
+                <label for="profession" class="am-u-sm-4 am-form-label">学历：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" name="education" value="${education}" placeholder="学历">
+                </div>
+            </div>
+            
+             <div class="am-u-lg-3 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doStatis();">开始统计</button>
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="exportTxt();">导出</button>
             </div>
-         </div>
+         </div>  
+            
          
          <div class="am-g tpl-amazeui-form">
 		    <div class="am-u-lg-4 am-u-end">
@@ -128,7 +145,6 @@
                 <label for="state" class="am-u-sm-6 am-form-label">统计时间：<fmt:formatDate value="${job.create_time }" pattern="yyyy-MM-dd HH:mm" /></label> 
                 <label for="state" class="am-u-sm-6 am-form-label">统计耗时：${job_time}</label> 
             </div>  
-            
           </div>
 	</form>
 	<div class="tpl-block">

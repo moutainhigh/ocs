@@ -43,8 +43,13 @@ public class TelStatisDao extends BaseDao<Tel> {
 		 * 陆金所
 		 */
 		public static final int LUJINSUO = 3;
-		public static final Integer [] LIST = new Integer[]{ALIPAY,QQ,LUJINSUO};
-		public static final String [] NAMELIST = new String[]{"阿里巴巴","QQ","陆金所"};
+		
+		/**
+		 * 导入
+		 */
+		public static final int EXPORT = 4;
+		public static final Integer [] LIST = new Integer[]{ALIPAY,QQ,LUJINSUO,EXPORT};
+		public static final String [] NAMELIST = new String[]{"阿里巴巴","QQ","陆金所","导入"};
 	}
 	
 	/**
@@ -99,7 +104,7 @@ public class TelStatisDao extends BaseDao<Tel> {
 	
 	
 	/**
-	 * 统计省份城市
+	 * 统计省份城市或者城市
 	 * @return
 	 */
 	public Map<String,Long> statisByCity(Kv param){
@@ -107,8 +112,12 @@ public class TelStatisDao extends BaseDao<Tel> {
 		String where = createParam(param);
 		Map<String,Long> returnMap = new HashMap<>();
 		long sum = 0;
+		boolean isCity = param.getBoolean("city");
 		for (String tableName : allTable) {
 			String select = "select tel_province province,count(*) telCount from "+tableName+ where+" group by tel_province ";
+			if(isCity){
+				select = "select tel_city province,count(*) telCount from "+tableName+ where+" group by tel_city ";
+			}
 			List<Record> list = Db.use("tel").find(select);
 			for (Record record : list) {
 				sum+= record.getLong("telCount");
@@ -248,6 +257,16 @@ public class TelStatisDao extends BaseDao<Tel> {
 				}else{
 					where.append(" and (register = '' or register = '0') ");
 				}
+			}
+			// 职业
+			String profession = param.getStr("profession");
+			if (!StringUtils.isNullOrEmpty(profession)) {
+				where.append(" and col1 like '%" + profession + "%'");
+			}
+			// 学历
+			String education = param.getStr("education");
+			if (!StringUtils.isNullOrEmpty(education)) {
+				where.append(" and col1 like '%" + education + "%'");
 			}
 			
 		}

@@ -85,8 +85,10 @@ public class TelStatisController extends BaseController{
 		String age = getPara("age");
 		String register = getPara("register");
 		String operator = getPara("operator");
+		String profession = getPara("profession");
+		String education = getPara("education");
 		Kv param = Kv.by("collectionType",collectionType).set("city",city).set("platform", platform).set("operator",operator);
-		param.set("sex", sex).set("age", age).set("register",register);
+		param.set("sex", sex).set("age", age).set("register",register).set("profession",profession).set("education",education);
 		// 统计查询
 		Date createTime = new Date();
 		Map<String, Long> statisSearch = service.statisByCity(param);
