@@ -1,5 +1,4 @@
-jdbcUrl = jdbc:mysql://zcqq.f3322.net:7196/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+jdbcUrl = jdbc:mysql://gz-cdb-2sz55yv4.sql.tencentcdb.com:62669/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 user=ocs
 password=xiaowu123@
-devMode = false
  

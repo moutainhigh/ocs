@@ -11,7 +11,6 @@ import org.apache.commons.collections.CollectionUtils;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.rong.common.util.GsonUtil;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
 import com.rong.persist.dto.TelDTO;
@@ -267,27 +266,16 @@ public class TelStatisDao extends BaseDao<Tel> {
 	
 	public boolean saveOrUpdateTel(String tel,String platform,String alipayName,String qqNickName,String sex,Date age,String addr,String register,TelDTO telDTO){
 		String tableName = getTableName(tel);
-		Tel item = findTel(tel);
-		if(item==null){
-			item = new Tel();
-			item.setPlatformCollection(platform);
-			item.setAlipayName(alipayName);
-			item.setQqNickname(qqNickName);
-			item.setSex(sex);
-			item.setAge(age);
-			item.setAddr(addr);
-			item.setRegister(register);
-			item.setCol1(GsonUtil.toJson(telDTO));
-			item.remove("ageStr");
+		Tel item = telDao.findTel(tel);
+		item.setPlatformCollection(item.getCol1());
+		item.setCol1(item.getCol3());
+		item.remove("ageStr");
+		item.remove("create_time");
+		item.remove("col2");
+		item.remove("col3");
+		if(findTel(tel)==null){
 			return Db.use("tel").save(tableName, item.toRecord());
 		}else{
-			item = telDao.findTel(tel);
-			item.setPlatformCollection(item.getCol1());
-			item.setCol1(item.getCol3());
-			item.remove("ageStr");
-			item.remove("create_time");
-			item.remove("col2");
-			item.remove("col3");
 			return Db.use("tel").update(tableName, item.toRecord());
 		}
 	}
