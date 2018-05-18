@@ -40,13 +40,13 @@
 		<div class="am-g">
 			<div class="am-u-sm-12 am-scrollable-horizontal">
 				<table
-					class="am-table am-table-striped am-table-hover table-main am-text-nowrap">
+					class="am-table am-table-striped am-table-hover table-main">
 					<thead>
 						<tr>
 							<th>创建时间</th>
 							<th>用户</th>
 							<th>订单号</th>
-							<th>内容</th>
+							<th >内容</th>
 							<th>消费项目id</th>
 							<th>是否抢回</th>
 							<th>金额</th>
