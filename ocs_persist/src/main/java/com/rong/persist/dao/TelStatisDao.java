@@ -259,14 +259,76 @@ public class TelStatisDao extends BaseDao<Tel> {
 				}
 			}
 			// 职业
-			String profession = param.getStr("profession");
-			if (!StringUtils.isNullOrEmpty(profession)) {
-				where.append(" and col1 like '%" + profession + "%'");
+			Boolean profession = param.getBoolean("profession");
+			if (profession!=null) {
+				if(profession){
+					where.append(" and col1 like '%profession%'");
+				}else{
+					where.append(" and col1 not like '%profession%'");
+				}
 			}
 			// 学历
-			String education = param.getStr("education");
-			if (!StringUtils.isNullOrEmpty(education)) {
-				where.append(" and col1 like '%" + education + "%'");
+			Boolean education = param.getBoolean("education");
+			if (education!=null) {
+				if(education){
+					where.append(" and col1 like '%education%'");
+				}else{
+					where.append(" and col1 not like '%education%'");
+				}
+			}
+			// QQ
+			Boolean qq = param.getBoolean("qq");
+			if (qq!=null) {
+				if(qq){
+					where.append(" and col1 like '%qq%'");
+				}else{
+					where.append(" and col1 not like '%qq%'");
+				}
+			}
+			// 真实姓名
+			Boolean trueName = param.getBoolean("trueName");
+			if (trueName!=null) {
+				if(trueName){
+					where.append(" and col1 like '%trueName%'");
+				}else{
+					where.append(" and col1 not like '%trueName%'");
+				}
+			}
+			// 身份证
+			Boolean idCard = param.getBoolean("idCard");
+			if (idCard!=null) {
+				if(idCard){
+					where.append(" and col1 like '%idCard%'");
+				}else{
+					where.append(" and col1 not like '%idCard%'");
+				}
+			}
+			// 邮箱
+			Boolean email = param.getBoolean("email");
+			if (email!=null) {
+				if(email){
+					where.append(" and col1 like '%email%'");
+				}else{
+					where.append(" and col1 not like '%email%'");
+				}
+			}
+			// 账号
+			Boolean userAccount = param.getBoolean("userAccount");
+			if (userAccount!=null) {
+				if(userAccount){
+					where.append(" and col1 like '%\"userAccount\"%'");
+				}else{
+					where.append(" and col1 not like '%\"userAccount\"%'");
+				}
+			}
+			// 密码
+			Boolean userAccountPwd = param.getBoolean("userAccountPwd");
+			if (userAccountPwd!=null) {
+				if(userAccountPwd){
+					where.append(" and col1 like '%\"userAccountPwd\"%'");
+				}else{
+					where.append(" and col1 not like '%\"userAccountPwd\"%'");
+				}
 			}
 			
 		}

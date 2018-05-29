@@ -26,6 +26,11 @@ import com.rong.persist.test.TelCreateUtil;
 public class TelStatisController extends BaseController{
 	private TelStatisService service = new TelStatisServiceImpl();
 	
+	/**
+	 * 默认查询方法
+	 * 查询最近一次查询记录
+	 * 5.28补充，查询最近一次相同条件的上一次结果
+	 */
 	@SuppressWarnings("unchecked")
 	public void index() {
 		TelStatisJob job = service.getLastOne();
@@ -74,9 +79,31 @@ public class TelStatisController extends BaseController{
 		setAttr("statisSearch", statisSearchList);
 		setAttr("job", job);
 		setAttr("job_time", TelCreateUtil.formatTime(job.getFinishTime().getTime()-job.getCreateTime().getTime()));
+		//查询最近一次相同条件的数据
+		statisBeforeParam();
 		render("/views/tel/statis_list.jsp");
 	}
+
+	private void statisBeforeParam() {
+		//查询最近一次相同条件的数据
+		TelStatisJob beforeJob = service.getLastOneBeforeData();
+		// 统计查询-最近一次相同条件的数据
+		if(beforeJob!=null){
+			List<TelCityStatis> statisSearchList_before = service.getCityStatis(beforeJob.getId());
+			for (TelCityStatis telCityStatis : statisSearchList_before) {
+				if ("sum".equals(telCityStatis.getCity())) {
+					setAttr("beforeSum", telCityStatis.getTelCount());
+					break;
+				}
+			}
+			setAttr("beforeJob", beforeJob);
+			setAttr("beforeJob_time", TelCreateUtil.formatTime(beforeJob.getFinishTime().getTime()-beforeJob.getCreateTime().getTime()));
+		}
+	}
 	
+	/**
+	 * 统计
+	 */
 	public void statis() {
 		Boolean collectionType = getParaToBoolean("collectionType",true);
 		Boolean city = getParaToBoolean("city",false);
@@ -85,10 +112,17 @@ public class TelStatisController extends BaseController{
 		String age = getPara("age");
 		String register = getPara("register");
 		String operator = getPara("operator");
-		String profession = getPara("profession");
-		String education = getPara("education");
+		Boolean profession = getParaToBoolean("profession");
+		Boolean education = getParaToBoolean("education");
+		Boolean qq = getParaToBoolean("qq");
+		Boolean trueName = getParaToBoolean("trueName");
+		Boolean idCard = getParaToBoolean("idCard");
+		Boolean email = getParaToBoolean("email");
+		Boolean userAccount = getParaToBoolean("userAccount");
+		Boolean userAccountPwd = getParaToBoolean("userAccountPwd");
 		Kv param = Kv.by("collectionType",collectionType).set("city",city).set("platform", platform).set("operator",operator);
 		param.set("sex", sex).set("age", age).set("register",register).set("profession",profession).set("education",education);
+		param.set("qq", qq).set("trueName", trueName).set("idCard",idCard).set("email",email).set("userAccount",userAccount).set("userAccountPwd",userAccountPwd);
 		// 统计查询
 		Date createTime = new Date();
 		Map<String, Long> statisSearch = service.statisByCity(param);
@@ -139,6 +173,8 @@ public class TelStatisController extends BaseController{
 		setAttr("statisCollection", collectioned);
 		setAttr("statisUnCollection",unCollectioned);
 		setAttr("statisSearch", statisSearchList);
+		//查询最近一次相同条件的数据
+		statisBeforeParam();
 		render("/views/tel/statis_list.jsp");
 	}
 	

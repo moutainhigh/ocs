@@ -26,6 +26,7 @@ public interface TelStatisService extends BaseService<Tel>{
 	List<TelCollectionStatis> getCollectionStatis(Long jobId);
 	List<TelCityStatis> getCityStatis(Long jobId);
 	TelStatisJob getLastOne();
+	TelStatisJob getLastOneBeforeData();
 	/**
 	 * 导出数据用到的查询
 	 * @param col

@@ -63,6 +63,15 @@ public class TelStatisJobDao extends BaseDao<TelStatisJob> {
 	}
 	
 	
-	
+	/**
+	 * 获取最后一条任务相同条件的最近一个查询数据
+	 * @return
+	 */
+	public TelStatisJob getLastOneBeforeData() {
+		TelStatisJob lastOne = getLastOne();
+		String param = lastOne.getParam();
+		String sql = "select * from tel_statis_job where param = ? order by id desc limit 1,1";
+		return dao.findFirst(sql,param);
+	}
 	
 }

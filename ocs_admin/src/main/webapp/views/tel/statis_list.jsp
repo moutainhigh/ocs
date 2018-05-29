@@ -115,10 +115,14 @@
                 </div>
             </div>
             
-            <div class="am-u-lg-3 am-u-end">
-                <label for="profession" class="am-u-sm-4 am-form-label">职业：</label>
-                <div class="am-input-group">
-                    <input type="text" class="am-form-field" name="profession" value="${profession}" placeholder="职业">
+             <div class="am-u-lg-3 am-u-end">
+                <label for="profession" class="am-u-sm-4 am-form-label">采集职业：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="profession" name="profession" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${profession eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${profession eq '0' }">selected</c:if>>否</option>
+                    </select>
                 </div>
             </div>
             
@@ -126,11 +130,81 @@
          
          <div class="am-g tpl-amazeui-form">
           	<div class="am-u-lg-3 am-u-end">
-                <label for="profession" class="am-u-sm-4 am-form-label">学历：</label>
-                <div class="am-input-group">
-                    <input type="text" class="am-form-field" name="education" value="${education}" placeholder="学历">
+                <label for="profession" class="am-u-sm-4 am-form-label">采集真实姓名：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="trueName" name="trueName" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${trueName eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${trueName eq '0' }">selected</c:if>>否</option>
+                    </select>
                 </div>
             </div>
+          	<div class="am-u-lg-3 am-u-end">
+                <label for="profession" class="am-u-sm-4 am-form-label">采集身份证：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="idCard" name="idCard" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${idCard eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${idCard eq '0' }">selected</c:if>>否</option>
+                    </select>
+                </div>
+            </div>
+          	<div class="am-u-lg-3 am-u-end">
+                <label for="userAccount" class="am-u-sm-4 am-form-label">采集账号：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="userAccount" name="userAccount" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${userAccount eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${userAccount eq '0' }">selected</c:if>>否</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="am-u-lg-3 am-u-end">
+                <label for="userAccountPwd" class="am-u-sm-4 am-form-label">采集密码：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="userAccountPwd" name="userAccountPwd" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${userAccountPwd eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${userAccountPwd eq '0' }">selected</c:if>>否</option>
+                    </select>
+                </div>
+            </div>
+         </div> 
+         
+          <div class="am-g tpl-amazeui-form">
+          	<div class="am-u-lg-3 am-u-end">
+                <label for="profession" class="am-u-sm-4 am-form-label">采集学历：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="education" name="education" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${education eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${education eq '0' }">selected</c:if>>否</option>
+                    </select>
+                </div>
+            </div>
+          	<div class="am-u-lg-3 am-u-end">
+                <label for="profession" class="am-u-sm-4 am-form-label">采集QQ：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="qq" name="qq" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${qq eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${qq eq '0' }">selected</c:if>>否</option>
+                    </select>
+                </div>
+            </div>
+          	<div class="am-u-lg-3 am-u-end">
+                <label for="profession" class="am-u-sm-4 am-form-label">采集邮箱：</label> 
+                <div class="am-input-group am-u-sm-8"> 
+                    <select id="email" name="email" class="inline-block">
+                        <option value="">-请选择-</option>
+                        <option value="1" <c:if test="${email eq '1' }">selected</c:if>>是</option>
+                        <option value="0" <c:if test="${email eq '0' }">selected</c:if>>否</option>
+                    </select>
+                </div>
+            </div>
+            
+            
             
              <div class="am-u-lg-3 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doStatis();">开始统计</button>
@@ -140,10 +214,17 @@
             
          
          <div class="am-g tpl-amazeui-form">
-		    <div class="am-u-lg-4 am-u-end">
-                <label for="state" class="am-u-sm-6 am-form-label">符合条件共：${sum}</label> 
-                <label for="state" class="am-u-sm-6 am-form-label">统计时间：<fmt:formatDate value="${job.create_time }" pattern="yyyy-MM-dd HH:mm" /></label> 
-                <label for="state" class="am-u-sm-6 am-form-label">统计耗时：${job_time}</label> 
+		    <div class="am-u-lg-6 am-u-end">
+                <label for="state" class="am-u-sm-4 am-form-label">最近统计：<fmt:formatDate value="${job.create_time }" pattern="yyyy-MM-dd HH:mm" /></label> 
+                <label for="state" class="am-u-sm-4 am-form-label">符合条件共：${sum}</label> 
+                <label for="state" class="am-u-sm-4 am-form-label">统计耗时：${job_time}</label> 
+            </div>  
+          </div>
+           <div class="am-g tpl-amazeui-form">
+		    <div class="am-u-lg-6 am-u-end">
+                <label for="state" class="am-u-sm-4 am-form-label">上次统计：<fmt:formatDate value="${beforeJob.create_time }" pattern="yyyy-MM-dd HH:mm" /></label> 
+                <label for="state" class="am-u-sm-4 am-form-label">符合条件共：${beforeSum}</label> 
+                <label for="state" class="am-u-sm-4 am-form-label">统计耗时：${beforeJob_time}</label> 
             </div>  
           </div>
 	</form>
