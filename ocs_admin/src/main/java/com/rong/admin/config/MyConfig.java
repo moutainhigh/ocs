@@ -155,12 +155,12 @@ public class MyConfig extends JFinalConfig {
 		druidPlugin.setDriverClass("com.mysql.jdbc.Driver");
 		druidPlugin.setInitialSize(10).setMaxActive(1000).setMinIdle(10).setTestOnBorrow(false).setMaxWait(20*1000);
 		// 2.druid监控
-		StatFilter statFilter = new StatFilter();
-		statFilter.setMergeSql(true);
-		statFilter.setLogSlowSql(true);
+//		StatFilter statFilter = new StatFilter();
+//		statFilter.setMergeSql(true);
+//		statFilter.setLogSlowSql(true);
 		// 2.1慢查询目前设置为1s,随着优化一步步进行慢慢更改
-		statFilter.setSlowSqlMillis(1000);
-		druidPlugin.addFilter(statFilter);
+//		statFilter.setSlowSqlMillis(1000);
+//		druidPlugin.addFilter(statFilter);
 		me.add(druidPlugin);
 		// 配置ActiveRecord插件
 		ActiveRecordPlugin arp = new ActiveRecordPlugin("tel", druidPlugin);

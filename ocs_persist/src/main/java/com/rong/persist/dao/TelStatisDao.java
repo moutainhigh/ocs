@@ -349,6 +349,7 @@ public class TelStatisDao extends BaseDao<Tel> {
 		String tableName = getTableName(tel);
 		Tel item = telDao.findTel(tel);
 		item.setPlatformCollection(item.getCol1());
+		item.setRegister(item.getCol2());
 		item.setCol1(item.getCol3());
 		item.remove("ageStr");
 		item.remove("create_time");
