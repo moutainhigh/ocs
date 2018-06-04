@@ -53,6 +53,7 @@
                         <option value="1" <c:if test="${platform eq '1' }">selected</c:if>>支付宝</option>
                         <option value="2" <c:if test="${platform eq '2' }">selected</c:if>>QQ</option>
                         <option value="3" <c:if test="${platform eq '3' }">selected</c:if>>陆金所</option>
+                        <option value="4" <c:if test="${platform eq '4' }">selected</c:if>>导入</option>
                     </select>
                 </div>
             </div>

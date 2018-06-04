@@ -6,4 +6,4 @@ tel_db   = jdbc:mysql://127.0.0.1:3306/tel_db?autoReconnect=true&useUnicode=true
 tel_user = root
 tel_password= test2016
 
-devMode = false
+devMode = true

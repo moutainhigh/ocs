@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.jfinal.core.Controller;
@@ -341,12 +342,16 @@ public class UserController extends Controller {
 		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
 			return;
 		}
-		Qq item = qqService.findByQqAndUserName(qq, userName);
-		if(item==null){
+		List<Qq> item = qqService.findByQqsAndUserName(qq, userName);
+		if(item==null || item.size()==0){
 			BaseRenderJson.baseRenderObj.returnObj(this, null, MyErrorCodeConfig.REQUEST_SUCCESS, "无数据");
 			return;
 		}
-		BaseRenderJson.baseRenderObj.returnObj(this, item.getData(), MyErrorCodeConfig.REQUEST_SUCCESS, "查询成功");
+		if(item.size()==1){
+			BaseRenderJson.baseRenderObj.returnObj(this, item.get(0).getData(), MyErrorCodeConfig.REQUEST_SUCCESS, "查询成功");
+			return;
+		}
+		BaseRenderJson.baseRenderObj.returnObj(this, item, MyErrorCodeConfig.REQUEST_SUCCESS, "查询成功");
 	}
 	
 	/**

@@ -1,4 +1,6 @@
 package com.rong.business.service;
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.rong.persist.base.BaseService;
@@ -14,5 +16,6 @@ public interface QqService extends BaseService<Qq>{
 	boolean save(String qq,String pwd,String token,String userName);
 	boolean saveOrUpdate(String qq,String userName,String data);
 	Qq findByQqAndUserName(String qq,String userName);
+	List<Qq> findByQqsAndUserName(String qq,String userName);
 	void clear();
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.PathKit;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.business.service.tel.TelStatisService;
 import com.rong.business.service.tel.TelStatisServiceImpl;
@@ -33,11 +34,17 @@ public class TelStatisController extends BaseController{
 	 */
 	@SuppressWarnings("unchecked")
 	public void index() {
-		TelStatisJob job = service.getLastOne();
-		if(job==null) {
-			render("/views/tel/statis_list.jsp");
-			return;
-		}
+		Long id = getParaToLong("id");
+		TelStatisJob job = null;
+		if(id!=null){
+			job = service.getById(id);
+		}else{
+			job = service.getLastOne();
+			if(job==null) {
+				render("/views/tel/statis_list.jsp");
+				return;
+			}
+	    }
 		Long jobId = job.getId();
 		// 统计查询
 		List<TelCityStatis> statisSearchList = service.getCityStatis(jobId);
@@ -80,13 +87,18 @@ public class TelStatisController extends BaseController{
 		setAttr("job", job);
 		setAttr("job_time", TelCreateUtil.formatTime(job.getFinishTime().getTime()-job.getCreateTime().getTime()));
 		//查询最近一次相同条件的数据
-		statisBeforeParam();
+		statisBeforeParam(id);
 		render("/views/tel/statis_list.jsp");
 	}
 
-	private void statisBeforeParam() {
+	private void statisBeforeParam(Long id) {
 		//查询最近一次相同条件的数据
-		TelStatisJob beforeJob = service.getLastOneBeforeData();
+		TelStatisJob beforeJob = null;
+		if(id==null){
+			beforeJob = service.getLastOneBeforeData();
+		}else{
+			beforeJob = service.getBeforeData(id);
+		}
 		// 统计查询-最近一次相同条件的数据
 		if(beforeJob!=null){
 			List<TelCityStatis> statisSearchList_before = service.getCityStatis(beforeJob.getId());
@@ -174,7 +186,7 @@ public class TelStatisController extends BaseController{
 		setAttr("statisUnCollection",unCollectioned);
 		setAttr("statisSearch", statisSearchList);
 		//查询最近一次相同条件的数据
-		statisBeforeParam();
+		statisBeforeParam(null);
 		render("/views/tel/statis_list.jsp");
 	}
 	
@@ -331,6 +343,18 @@ public class TelStatisController extends BaseController{
 			e.printStackTrace();
 		}
 		renderFile(file);
+	}
+	
+	public void jobList() {
+		int page = getParaToInt("page", 1);
+		Page<TelStatisJob> list = service.pageTelStaisJob(page, pageSize, null);
+		List<TelStatisJob> mylist = list.getList();
+		for (TelStatisJob telStatisJob : mylist) {
+			telStatisJob.put("json", GsonUtil.fromJson(telStatisJob.getParam(), Map.class));
+		}
+		Page<TelStatisJob> returnList = new Page<>(mylist, page, pageSize, list.getTotalPage(), list.getTotalRow());
+		setAttr("page", returnList);
+		render("/views/tel/job_list.jsp");
 	}
 	
 }

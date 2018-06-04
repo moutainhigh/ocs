@@ -1,5 +1,7 @@
 package com.rong.persist.dao;
 
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.rong.common.util.StringUtils;
@@ -36,8 +38,18 @@ public class QqDao extends BaseDao<Qq> {
 		return dao.paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}
 	
+	public List<Qq> findByQqsAndUserName(String qq,String userName){
+		String [] qqArray = qq.split(",");
+		StringBuffer qqStr = new StringBuffer();
+		for (String str : qqArray) {
+			qqStr.append("'").append(str).append("'").append(",");
+		}
+		String sql = "select qq,data from " + Qq.TABLE + " where qq in ("+qqStr.substring(0,qqStr.length()-1)+") and user_name = ?";
+		return dao.find(sql,userName);
+	}
+	
 	public Qq findByQqAndUserName(String qq,String userName){
-		String sql = "select " + FILEDS + " from " + Qq.TABLE + " where qq = ? and user_name = ?";
+		String sql = "select " + FILEDS + " from " + Qq.TABLE + " where qq in (?) and user_name = ?";
 		return dao.findFirst(sql, qq,userName);
 	}
 }

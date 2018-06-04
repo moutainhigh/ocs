@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.jfinal.kit.Kv;
+import com.jfinal.plugin.activerecord.Page;
 import com.rong.persist.base.BaseDao;
 import com.rong.persist.model.TelCityStatis;
 import com.rong.persist.model.TelCollectionStatis;
@@ -72,6 +73,30 @@ public class TelStatisJobDao extends BaseDao<TelStatisJob> {
 		String param = lastOne.getParam();
 		String sql = "select * from tel_statis_job where param = ? order by id desc limit 1,1";
 		return dao.findFirst(sql,param);
+	}
+	
+	/**
+	 * 获取指定id任务相同条件的最近一个查询数据
+	 * @return
+	 */
+	public TelStatisJob getBeforeData(Long id) {
+		TelStatisJob item = findById(id);
+		String param = item.getParam();
+		String sql = "select * from tel_statis_job where param = ? order by id desc limit 1,1";
+		return dao.findFirst(sql,param);
+	}
+	
+	/**
+	 * 获取所有统计数据
+	 * 分页
+	 * @return
+	 */
+	public Page<TelStatisJob> pageTelStaisJob(int pageNumber, int pageSize, Kv param) {
+		String select = "select * ";
+		String sqlExceptSelect = "from tel_statis_job" ;
+		String orderBy = " order by id desc";
+		sqlExceptSelect = sqlExceptSelect + orderBy;
+		return dao.paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}
 	
 }

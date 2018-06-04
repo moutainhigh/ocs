@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jfinal.kit.Kv;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.persist.base.BaseServiceImpl;
 import com.rong.persist.dao.TelStatisDao;
@@ -61,6 +62,21 @@ public class TelStatisServiceImpl extends BaseServiceImpl<Tel> implements TelSta
 	@Override
 	public TelStatisJob getLastOneBeforeData(){
 		return jobDao.getLastOneBeforeData();
+	}
+	
+	@Override
+	public TelStatisJob getBeforeData(Long id){
+		return jobDao.getBeforeData(id);
+	}
+
+	@Override
+	public Page<TelStatisJob> pageTelStaisJob(int pageNumber, int pageSize, Kv param) {
+		return jobDao.pageTelStaisJob(pageNumber, pageSize, param);
+	}
+
+	@Override
+	public TelStatisJob getById(Long id) {
+		return jobDao.findById(id);
 	}
 
 }

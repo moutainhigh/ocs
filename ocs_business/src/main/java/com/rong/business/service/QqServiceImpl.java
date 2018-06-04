@@ -1,6 +1,7 @@
 package com.rong.business.service;
 
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
@@ -62,6 +63,11 @@ public class QqServiceImpl extends BaseServiceImpl<Qq> implements QqService{
 	@Override
 	public void clear() {
 		Db.update("delete from "+Qq.TABLE+" where id>0");
+	}
+
+	@Override
+	public List<Qq> findByQqsAndUserName(String qq, String userName) {
+		return dao.findByQqsAndUserName(qq, userName);
 	}
 
 }

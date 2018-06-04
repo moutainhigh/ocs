@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jfinal.kit.Kv;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.persist.base.BaseService;
 import com.rong.persist.model.Tel;
@@ -35,4 +36,7 @@ public interface TelStatisService extends BaseService<Tel>{
 	 * @return
 	 */
 	List<Tel> getAllTel(String col,int limit,Kv param);
+	Page<TelStatisJob> pageTelStaisJob(int pageNumber, int pageSize, Kv param);
+	TelStatisJob getById(Long id);
+	TelStatisJob getBeforeData(Long id);
 }
