@@ -371,6 +371,10 @@ public class TelStatisDao extends BaseDao<Tel> {
 			sql = "select "+col+" from "+table+ where +" limit "+limit;
 			List<Tel> list = dao.find(sql);
 			returnList.addAll(list);
+			// 当导出量达到时，退出
+			if(returnList.size()>=limit){
+				break;
+			}
 		}
 		return returnList;
 	}
