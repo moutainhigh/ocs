@@ -241,7 +241,12 @@ public class TelStatisController extends BaseController{
 				}
 			}
 			if(col.contains("qq_nickname")){
-				write.append(tab).append(tel.getQqNickname());
+				if(!StringUtils.isNullOrEmpty(tel.getQqNickname())){
+					write.append(tab).append(tel.getQqNickname());
+				}else{
+					write.append(tab).append("无");
+				}
+				
 			}
 			if(col.contains("sex")){
 				String str = "保密";
@@ -317,7 +322,7 @@ public class TelStatisController extends BaseController{
 					}
 				}
 				if(col2.contains("profession")){
-					if(StringUtils.isNullOrEmpty(telDTO.getProfession())){
+					if(!StringUtils.isNullOrEmpty(telDTO.getProfession())){
 						write.append(tab).append(telDTO.getProfession());
 					}else{
 						write.append(tab).append("无");
