@@ -145,7 +145,7 @@ public class ConsumController extends Controller {
 		}
 		// 2.校验余额是否足够
 		Account userAccount = accountService.findByUserName(userName);
-		if(BigDecimal.ZERO.compareTo(userAccount.getAccount())==1){
+		if(BigDecimal.ZERO.compareTo(userAccount.getAccount())!=-1){
 			throw new CommonException(MyErrorCodeConfig.ACCOUNT_NOT_ENOUGH, "余额不足，请及时充值");
 		}
 		// 3.调用Dll获取加密串
