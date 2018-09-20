@@ -25,4 +25,6 @@ public interface UserService extends BaseService<User>{
 	//接口开通套餐方法
 	boolean openMeal(String userName, Long mealId,BigDecimal account,BigDecimal mealMoney);
 	boolean haveValidMealProject(String userName,Long projectId);
+	//批量删除
+	public boolean batchDelete(Object... idValues);
 }

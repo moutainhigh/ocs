@@ -31,6 +31,16 @@ public class UserController extends BaseController{
 		BaseRenderJson.returnDelObj(this, true);
 		logger.info("[操作日志]删除用户成功,id:" + id);
 	}
+	
+	/**
+	 * 批量删除
+	 */
+	public void batchDelete() {
+		String ids = getPara("ids");
+		userService.batchDelete(ids.split(","));
+		BaseRenderJson.returnDelObj(this, true);
+		logger.info("[操作日志]删除用户成功,id:" + ids);
+	}
 
 	public void resetPwd() {
 		Long id = getParaToLong("id");
@@ -72,26 +82,26 @@ public class UserController extends BaseController{
 			param.set("agentId", getUser().getId());
 		}
 		Page<Record> list = userService.getUserList(page, pageSize,param);
-		for (Record item : list.getList()) {
-			String ip = item.getStr("login_ip");
-			if(StringUtils.isNullOrEmpty(ip)){
-				continue;
-			}
-			// {"code":0,"data":{"ip":"210.21.41.52","country":"中国","area":"",
-			// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
-			// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}
-			try {
-				String jsonString = HttpUtils.sendGet("http://ip.taobao.com/service/getIpInfo.php?ip="+ip);
-				Map map = (Map)GsonUtil.fromJson(jsonString, Map.class);
-				Map dataMap =  (Map)map.get("data");
-				String country = (String)dataMap.get("country");
-				String region = (String)dataMap.get("region");
-				String city = (String)dataMap.get("city");
-				item.set("city", country+region+city);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+//		for (Record item : list.getList()) {
+//			String ip = item.getStr("login_ip");
+//			if(StringUtils.isNullOrEmpty(ip)){
+//				continue;
+//			}
+//			// {"code":0,"data":{"ip":"210.21.41.52","country":"中国","area":"",
+//			// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
+//			// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}
+//			try {
+//				String jsonString = HttpUtils.sendGet("http://ip.taobao.com/service/getIpInfo.php?ip="+ip);
+//				Map map = (Map)GsonUtil.fromJson(jsonString, Map.class);
+//				Map dataMap =  (Map)map.get("data");
+//				String country = (String)dataMap.get("country");
+//				String region = (String)dataMap.get("region");
+//				String city = (String)dataMap.get("city");
+//				item.set("city", country+region+city);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 		keepPara();
 		setAttr("nowDate", new Date());
 		setAttr("page", list);

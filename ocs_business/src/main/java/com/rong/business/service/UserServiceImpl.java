@@ -83,4 +83,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	public int countLoginToday() {
 		return dao.countLoginToday();
 	}
+
+	@Override
+	public boolean batchDelete(Object... idValues) {
+		return dao.batchDelete(idValues);
+	}
+	
+	
 }

@@ -335,6 +335,28 @@ public class TelStatisController extends BaseController{
 						write.append(tab).append("无");
 					}
 				}
+			}else{
+				if(col2.contains("trueName")){
+					write.append(tab).append("无");
+				}
+				if(col2.contains("idCard")){
+					write.append(tab).append("无");
+				}
+				if(col2.contains("userAccount")){
+					write.append(tab).append("无");
+				}
+				if(col2.contains("userAccountPwd")){
+					write.append(tab).append("无");
+				}
+				if(col2.contains("email")){
+					write.append(tab).append("无");
+				}
+				if(col2.contains("profession")){
+					write.append(tab).append("无");
+				}
+				if(col2.contains("education")){
+					write.append(tab).append("无");
+				}
 			}
 			write.append(enter);
 		}

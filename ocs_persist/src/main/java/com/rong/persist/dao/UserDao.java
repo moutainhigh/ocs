@@ -18,10 +18,10 @@ public class UserDao extends BaseDao<User> {
 
 	public static final User dao = User.dao;
 
-	public static final String FILEDS = "id,create_time,update_time,state,user_name,user_pwd,login_ip,login_time,expir_date,mobile";
+	public static final String FILEDS = "id,create_time,update_time,state,user_name,user_pwd,login_ip,login_time,expir_date,mobile,ip_addr";
 
 	public Page<Record> page(int pageNumber, int pageSize, Kv param) {
-		String select = "select u.mobile,u.expir_date,u.agent_id,u.login_ip,u.login_time,u.id,u.user_name,u.state,u.create_time,u.update_time,a.account,a.consumed_sum,a.last_consumed_time";
+		String select = "select u.ip_addr city,u.mobile,u.expir_date,u.agent_id,u.login_ip,u.login_time,u.id,u.user_name,u.state,u.create_time,u.update_time,a.account,a.consumed_sum,a.last_consumed_time";
 		String sqlExceptSelect = "from " + User.TABLE + " u ," + Account.TABLE +" a";
 		StringBuffer where = new StringBuffer(" where u.user_name = a.user_name");
 		if(param!=null){
@@ -70,5 +70,12 @@ public class UserDao extends BaseDao<User> {
 			return 0;
 		}
 		return record.getInt("countLoginUser");
+	}
+	
+	public boolean batchDelete(Object... idValues){
+		for (Object object : idValues) {
+			dao.deleteById(object);
+		}
+		return true;
 	}
 }

@@ -25,6 +25,7 @@
             
              <div class="am-u-lg-2 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doQuery();">查询</button>
+                <button class="am-btn am-btn-secondary am-radius" type="button" name="batchDel">批量刪除</button>
             </div>
         </div>
     </form>
@@ -35,6 +36,7 @@
                     class="am-table am-table-striped am-table-hover table-main am-text-nowrap">
                     <thead>
                         <tr>
+                        	<th><input type="checkbox" id="checkAllBox" data-am-ucheck onclick="checkAll()">全选</th>
                             <th>编号</th>
                             <th>用户名</th>
                             <th>手机</th>
@@ -53,6 +55,11 @@
                     <tbody>
                         <c:forEach items="${page.list}" var="item">
                             <tr>
+                            	<td> 
+							         <label class="am-checkbox-inline">
+                                        <input type="checkbox" name="ckb_id" value="${item.id }" data-am-ucheck>
+                                     </label>
+                                </td>
                                 <td>${item.id }</td>
                                 <td>${item.user_name }</td>
                                 <td>${item.mobile }</td>
@@ -138,6 +145,17 @@
                     </div>
                 </div>
                 
+                <!-- 确认批量删除数据 -->
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="batchDel_confirm">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd" id="batchDel_title">确认提示</div>
+            <div class="am-modal-bd" id="batchDel_msg">确定要删除所选中的记录吗？</div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span> <span
+                    class="am-modal-btn" data-am-modal-confirm>确定</span>
+            </div>
+        </div>
+    </div>
                 
             </div>
         </div>

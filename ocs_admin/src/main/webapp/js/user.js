@@ -12,6 +12,7 @@ $(function() {
 	initResetPwd();
 	initEditExpirDate();
 	initEditAccount();
+	initBatchDelete();//初始化批量删除
 	
 	//日期时间选择器
 	$("#expirDate").datepicker({
@@ -152,6 +153,68 @@ function initEditAccount(){
 	           		data:{"userName":$link.data("username"), "money":options.data},
 	           		dataType:"text",
 	           		success:function(data){
+	           			var obj = jQuery.parseJSON(data);
+	           			alert(obj.resultDes);
+	           			if(obj.resultCode == '1'){
+	           				doQuery();
+	           			}
+	           		}
+	           	})
+	        }
+	      });
+	    });
+}
+
+/**
+ * 选中所有，和取消选中
+ */
+function checkAll(){ 
+	if ($("#checkAllBox").is(':checked')) {
+		$('input[name="ckb_id"]').uCheck('check');
+	}else{
+		$('input[name="ckb_id"]').uCheck('uncheck');
+	}
+}
+
+/**
+ * 获取所有id
+ * @returns id
+ */
+function getCheckId(){
+	var allCheckIds = "";
+	$.each($('input[name="ckb_id"]'),function(){
+		var checkId = "";
+        if($(this).is(':checked')){
+        	var id = $(this).val();
+        	checkId = id +",";
+        	allCheckIds += checkId;
+        }
+    });
+	if(allCheckIds==""){
+		return "";
+	}
+	return allCheckIds.substr(0,allCheckIds.length-1);
+}
+
+/**
+ * 初始化批量删除事件
+ */
+function initBatchDelete(){
+	$("button[name='batchDel']").on('click', function() {
+	      $('#batchDel_confirm').modal({
+	        relatedTarget: this,
+	        onConfirm: function(options) {
+	        	var checkIds = getCheckId();
+	        	if(checkIds==""){
+	        		alert("请选择需要删除的数据");
+	        		return;
+	        	}
+	        	$.ajax({
+	           		url:getRootPath()+"/user/batchDelete",
+	           		data:{"ids":checkIds},
+	           		dataType:"text",
+	           		success:function(data){
+	           			$('#batchDel_confirm').modal("close");
 	           			var obj = jQuery.parseJSON(data);
 	           			alert(obj.resultDes);
 	           			if(obj.resultCode == '1'){

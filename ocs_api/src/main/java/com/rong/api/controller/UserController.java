@@ -37,6 +37,8 @@ import com.rong.common.bean.MyConst;
 import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.exception.CommonException;
 import com.rong.common.util.CommonUtil;
+import com.rong.common.util.GsonUtil;
+import com.rong.common.util.HttpUtils;
 import com.rong.common.util.RequestUtils;
 import com.rong.common.util.StringUtils;
 import com.rong.common.validator.CommonValidatorUtils;
@@ -137,6 +139,7 @@ public class UserController extends Controller {
 	/**
 	 * 登录
 	 */
+	@SuppressWarnings("rawtypes")
 	public void login() {
 		String userName = getPara("userName");
 		String userPwd = getPara("userPwd");
@@ -152,7 +155,26 @@ public class UserController extends Controller {
 		}
 		// 更新用户登录ip和登录时间
 		user.setLoginTime(new Date());
+		String ip = RequestUtils.getRequestIpAddress(this.getRequest());
 		user.setLoginIp(RequestUtils.getRequestIpAddress(this.getRequest()));
+		//解析登录地址
+		if(StringUtils.isNullOrEmpty(ip)){
+			// {"code":0,"data":{"ip":"210.21.41.52","country":"中国","area":"",
+			// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
+			// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}
+			try {
+				String jsonString = HttpUtils.sendGet("http://ip.taobao.com/service/getIpInfo.php?ip="+ip);
+				Map map = (Map)GsonUtil.fromJson(jsonString, Map.class);
+				Map dataMap =  (Map)map.get("data");
+				String country = (String)dataMap.get("country");
+				String region = (String)dataMap.get("region");
+				String city = (String)dataMap.get("city");
+				String addr = country+region+city;
+				user.setIpAddr(addr);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		user.update();
 		// 旧的TOKEN失效 删除掉旧的token
 		userTokenService.delByUserName(userName);
