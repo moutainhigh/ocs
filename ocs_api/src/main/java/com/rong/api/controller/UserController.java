@@ -158,7 +158,7 @@ public class UserController extends Controller {
 		String ip = RequestUtils.getRequestIpAddress(this.getRequest());
 		user.setLoginIp(RequestUtils.getRequestIpAddress(this.getRequest()));
 		//解析登录地址
-		if(StringUtils.isNullOrEmpty(ip)){
+		if(!StringUtils.isNullOrEmpty(ip)){
 			// {"code":0,"data":{"ip":"210.21.41.52","country":"中国","area":"",
 			// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
 			// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}

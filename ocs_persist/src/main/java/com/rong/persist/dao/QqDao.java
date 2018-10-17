@@ -44,8 +44,10 @@ public class QqDao extends BaseDao<Qq> {
 		for (String str : qqArray) {
 			qqStr.append("'").append(str).append("'").append(",");
 		}
-		String sql = "select qq,data from " + Qq.TABLE + " where qq in ("+qqStr.substring(0,qqStr.length()-1)+") and user_name = ?";
-		return dao.find(sql,userName);
+//		String sql = "select qq,data from " + Qq.TABLE + " where qq in ("+qqStr.substring(0,qqStr.length()-1)+") and user_name = ?";
+		//2018-10-17代码调整为不需要针对用户，只要用户提供qq号码则可以获取相关信息
+		String sql = "select qq,data from " + Qq.TABLE + " where qq in ("+qqStr.substring(0,qqStr.length()-1)+")";
+		return dao.find(sql);
 	}
 	
 	public Qq findByQqAndUserName(String qq,String userName){
