@@ -50,8 +50,12 @@ public class QqDao extends BaseDao<Qq> {
 		return dao.find(sql);
 	}
 	
+	
+	/**
+		2018-10-17查询时，只根据qq查询，username字段不生效
+	**/
 	public Qq findByQqAndUserName(String qq,String userName){
-		String sql = "select " + FILEDS + " from " + Qq.TABLE + " where qq in (?) and user_name = ?";
-		return dao.findFirst(sql, qq,userName);
+		String sql = "select " + FILEDS + " from " + Qq.TABLE + " where qq in (?)";
+		return dao.findFirst(sql, qq);
 	}
 }

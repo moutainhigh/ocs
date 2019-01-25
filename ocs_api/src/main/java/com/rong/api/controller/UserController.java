@@ -172,7 +172,7 @@ public class UserController extends Controller {
 				String addr = country+region+city;
 				user.setIpAddr(addr);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("获取用户ip信息失败");
 			}
 		}
 		user.update();
