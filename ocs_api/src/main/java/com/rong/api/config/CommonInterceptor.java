@@ -90,17 +90,11 @@ public class CommonInterceptor implements Interceptor {
 					BaseRenderJson.baseRenderObj.returnTokenErrorObj(controller, 2);
 					return;
 				}
-				if (!resultToken.getIsExpir()) {
-					doMain(ai);
-					return;
-				} else {
-					BaseRenderJson.baseRenderObj.returnUserIdErrorObj(controller);
-					return;
-				}
 			} else {
 				BaseRenderJson.baseRenderObj.returnUserIdErrorObj(controller);
 				return;
 			}
+			doMain(ai);
 		}
 		doMain(ai);
 	}
