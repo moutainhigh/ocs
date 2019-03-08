@@ -1,8 +1,8 @@
-jdbcUrl = jdbc:mysql://gz-cdb-oe6s40wb.sql.tencentcdb.com:61572/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+jdbcUrl = jdbc:mysql://129.28.20.199:3306/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 user=root
 password=xiaowu+123
 
-tel_db   = jdbc:mysql://gz-cdb-oe6s40wb.sql.tencentcdb.com:61572/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+tel_db   = jdbc:mysql://129.28.20.199:3306/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 tel_user = root
 tel_password= xiaowu+123
 

@@ -1,4 +1,3 @@
-jdbcUrl = jdbc:mysql://cd-cdb-31fvh39i.sql.tencentcdb.com:63781/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+jdbcUrl = jdbc:mysql://129.28.20.199:3306/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
 user=root
 password=xiaowu+123
- 
