@@ -20,6 +20,7 @@ public class _MappingKit {
 		arp.addMapping("ocs_ad", "id", Ad.class);
 		arp.addMapping("ocs_ad_task", "id", AdTask.class);
 		arp.addMapping("ocs_ad_task_detail", "id", AdTaskDetail.class);
+		arp.addMapping("ocs_auth", "id", Auth.class);
 		arp.addMapping("ocs_consume", "id", Consume.class);
 		arp.addMapping("ocs_interface_call", "id", InterfaceCall.class);
 		arp.addMapping("ocs_meal", "id", Meal.class);
@@ -30,6 +31,7 @@ public class _MappingKit {
 		arp.addMapping("ocs_recharge", "id", Recharge.class);
 		arp.addMapping("ocs_recharge_set", "id", RechargeSet.class);
 		arp.addMapping("ocs_user", "id", User.class);
+		arp.addMapping("ocs_user_auth", "id", UserAuth.class);
 		arp.addMapping("ocs_user_meal", "id", UserMeal.class);
 		arp.addMapping("ocs_user_token", "id", UserToken.class);
 		arp.addMapping("report_interface_call", "id", ReportInterfaceCall.class);

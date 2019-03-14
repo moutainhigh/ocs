@@ -8,7 +8,7 @@
             <div class="am-u-lg-4">
                 <label for="userName" class="am-u-sm-4 am-form-label">用户名：</label>
                 <div class="am-input-group">
-                    <input type="text" class="am-form-field" name="userName" value="${userName}" placeholder="请输入用户名">
+                    <input type="text" class="am-form-field" name="userName" id="userName" value="${userName}" placeholder="请输入用户名">
                 </div>
             </div>
 
@@ -23,9 +23,20 @@
                 </div>
             </div>
             
-             <div class="am-u-lg-2 am-u-end">
+            <div class="am-u-lg-4">
+                <label for="userName" class="am-u-sm-4 am-form-label">小于N天过期：</label>
+                <div class="am-input-group">
+                    <input type="text" class="am-form-field" name="dayExpir" id="dayExpir" value="${dayExpir}" placeholder="请输入N天数">
+                </div>
+            </div>
+            
+             <div class="am-u-lg-4 am-u-end">
                 <button class="am-btn am-btn-secondary am-radius" type="button" onclick="doQuery();">查询</button>
                 <button class="am-btn am-btn-secondary am-radius" type="button" name="batchDel">批量刪除</button>
+            </div>
+             <div class="am-u-lg-4 am-u-end">
+                <button class="am-btn am-btn-secondary am-radius" type="button" onclick="toBatchEdit()">批量更新（复制所有符合条件的用户名）</button>
+             	<label class="am-u-sm-3 am-form-label">总计：${page.totalRow }</label>
             </div>
         </div>
     </form>
@@ -78,6 +89,7 @@
                                 <td>
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
+                                            <button type="button" name="userAuth" onclick="loadRight('<%=basePath %>/userAuth/userAuthList?userName=${item.user_name}','软件授权')" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">软件授权</button>
                                             <button type="button" name="editExpirDate" data-id="${item.id }"  data-expirDate="${item.expir_data }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">修改过期时间</button>
                                             <button type="button" name="editAccountDate" data-username="${item.user_name }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">修改余额</button>
                                             <button type="button" name="resetPwdBtn" data-id="${item.id }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">重置密码</button>

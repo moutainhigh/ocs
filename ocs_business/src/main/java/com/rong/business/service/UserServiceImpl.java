@@ -88,6 +88,4 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	public boolean batchDelete(Object... idValues) {
 		return dao.batchDelete(idValues);
 	}
-	
-	
 }

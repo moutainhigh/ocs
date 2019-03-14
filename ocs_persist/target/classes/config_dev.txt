@@ -1,16 +1,4 @@
 #此配置只做生成实体
-#jdbcUrl = jdbc:mysql://127.0.0.1:3306/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
-#user=root
-#password=test2016
-
-#jdbcUrl   = jdbc:mysql://39.108.75.150:3306/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
-#user = tel
-#password= xiaowu1234.
-
-#jdbcUrl = jdbc:mysql://127.0.0.1:7196/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
-#user=tel
-#password=xiaowu1234.
-
-jdbcUrl = jdbc:mysql://zcqq.f3322.net:7196/tel_db?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
-user=tel
-password=xiaowu1234.
+jdbcUrl = jdbc:mysql://127.0.0.1:3306/ocs?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+user=root
+password=test2016

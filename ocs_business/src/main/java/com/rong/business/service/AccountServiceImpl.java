@@ -1,5 +1,6 @@
 package com.rong.business.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.rong.persist.base.BaseServiceImpl;
@@ -25,6 +26,11 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 	@Override
 	public Account findByUserName(String userName) {
 		return dao.findByUserName(userName);
+	}
+
+	@Override
+	public boolean updateUserAccount(String userName, BigDecimal money) {
+		return dao.updateUserAccount(userName, money);
 	}
 	
 }

@@ -226,3 +226,10 @@ function initBatchDelete(){
 	      });
 	    });
 }
+
+function toBatchEdit(){
+	var userName = $("#userName").val();
+	var state = $("#state").val();
+	var dayExpir = $("#dayExpir").val();
+	loadRight(getRootPath()+'/userAuth/userListToBatchEdit?userName='+userName+'&state='+state+'&dayExpir='+dayExpir,'用户批量更新');
+}

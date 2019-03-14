@@ -24,4 +24,5 @@ public interface MealService extends BaseService<Meal> {
 	boolean deleteUserMeal(Long userMealId);
 	List<MealProject> findMealProject(Long mealId);
 	UserMeal findByUserMealId(Long id);
+	List<Meal> findAll();
 }

@@ -1,5 +1,7 @@
 package com.rong.persist.dao;
 
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -40,6 +42,11 @@ public class UserDao extends BaseDao<User> {
 			if (agentId != null && agentId != 0) {
 				where.append(" and u.agent_id = " + agentId + "");
 			}
+			// 小于N天过期
+			Long dayExpir = param.getLong("dayExpir");
+			if (dayExpir != null && dayExpir != 0) {
+				where.append(" and to_days(u.expir_date) - to_days(now()) <= " + dayExpir);
+			}
 		}
 		String orderBy = " order by u.id desc";
 		if(param!=null && param.getBoolean("orderByLoginTime")!=null){
@@ -77,5 +84,19 @@ public class UserDao extends BaseDao<User> {
 			dao.deleteById(object);
 		}
 		return true;
+	}
+	
+	public List<User> findByUserNameList(List<String> userNameList){
+		StringBuffer param = new StringBuffer("");
+		int i = 0;
+		for (String str : userNameList) {
+			if(i!=0){
+				param.append(",");
+			}
+			i++;
+			param.append("'").append(str).append("'");
+		}
+		String sql = "select "+FILEDS+" from " + User.TABLE+" where user_name in ("+param+")";
+		return dao.find(sql);
 	}
 }

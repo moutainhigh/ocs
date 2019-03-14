@@ -62,6 +62,11 @@ public class MealServiceImpl extends BaseServiceImpl<Meal> implements MealServic
 		return userMeal.delete();
 	}
 
+	@Override
+	public List<Meal> findAll() {
+		return dao.findAll();
+	}
+
 }
 
 

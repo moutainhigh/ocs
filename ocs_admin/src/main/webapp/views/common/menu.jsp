@@ -24,6 +24,14 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
 							href="javascript:loadRight('<%=mybasePath %>/user/list','用户列表')">
 								<i class="am-icon-angle-right"></i> <span>用户列表</span>
 						</a>
+						<li><a
+							href="javascript:loadRight('<%=mybasePath %>/userAuth/toBatchAdd','批量注册用户')">
+								<i class="am-icon-angle-right"></i> <span>批量注册用户</span>
+						</a>
+						<li><a
+							href="javascript:loadRight('<%=mybasePath %>/userAuth/toBatchEdit','批量更新用户')">
+								<i class="am-icon-angle-right"></i> <span>批量更新用户</span>
+						</a>
 						</li>
 						<li>
 						 <a
@@ -131,6 +139,12 @@ String mybasePath = request.getScheme()+"://" +request.getServerName()+":" +requ
                             <li><a
                                 href="javascript:loadRight('<%=mybasePath %>/adtask/list','广告任务')">
                                     <i class="am-icon-angle-right"></i> <span>广告任务</span>
+                            </a></li>
+                          </shiro:hasPermission>
+                          <shiro:hasPermission name="qq">
+                            <li><a
+                                href="javascript:loadRight('<%=mybasePath %>/userAuth/list','软件管理')">
+                                    <i class="am-icon-angle-right"></i> <span>软件管理</span>
                             </a></li>
                           </shiro:hasPermission>
                         </ul></li>

@@ -87,6 +87,7 @@ public class CommonInterceptor implements Interceptor {
 			// 判断token
 			if (null != resultToken) {
 				if (!token.equals(resultToken.get("token"))) {
+					logger.error("userId:"+userId+",token错误：传递token："+token+"服务器token:"+resultToken.get("token") );
 					BaseRenderJson.baseRenderObj.returnTokenErrorObj(controller, 2);
 					return;
 				}

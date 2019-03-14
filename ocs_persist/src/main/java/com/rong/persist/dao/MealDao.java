@@ -122,4 +122,9 @@ public class MealDao extends BaseDao<Meal> {
 		}
 		return returnList;
 	}
+	
+	public List<Meal> findAll(){
+		String sql = "select "+FILEDS+" from " + Meal.TABLE;
+		return dao.find(sql);
+	}
 }

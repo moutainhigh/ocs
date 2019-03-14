@@ -1,7 +1,6 @@
 package com.rong.admin.controller;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Map;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.log.Log;
@@ -12,13 +11,8 @@ import com.rong.business.service.AccountServiceImpl;
 import com.rong.business.service.UserService;
 import com.rong.business.service.UserServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
+import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.util.CommonUtil;
-import com.rong.common.util.GsonUtil;
-import com.rong.common.util.HttpUtils;
-import com.rong.common.util.NumberUtil;
-import com.rong.common.util.StringUtils;
-import com.rong.persist.model.Account;
-import com.rong.persist.model.Recharge;
 
 public class UserController extends BaseController{
 	private final Log logger = Log.getLog(this.getClass());
@@ -62,7 +56,8 @@ public class UserController extends BaseController{
 		int page = getParaToInt("page", 1);
 		Boolean state = getParaToBoolean("state");
 		String userName = getPara("userName");
-		Kv param = Kv.by("userName", userName).set("state", state);
+		Long dayExpir = getParaToLong("dayExpir");
+		Kv param = Kv.by("userName", userName).set("state", state).set("dayExpir",dayExpir);
 		if(!isAdmin()){
 			param.set("agentId", getUser().getId());
 		}
@@ -73,7 +68,6 @@ public class UserController extends BaseController{
 		render("/views/user/list.jsp");
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public void loginList() {
 		int page = getParaToInt("page", 1);
 		String userName = getPara("userName");
@@ -120,20 +114,7 @@ public class UserController extends BaseController{
 	public void editAccount() {
 		String userName = getPara("userName");
 		String money = getPara("money");
-		Account account = accountService.findByUserName(userName);
-		BigDecimal oldMoney = account.getAccount();
-		account.setAccount(new BigDecimal(money));
-		account.update();
-		Recharge recharge = new Recharge();
-		recharge.setUserName(userName);
-		recharge.setCreateTime(new Date());
-		recharge.setMoney(account.getAccount().subtract(oldMoney));
-		recharge.setType(3);
-		recharge.setRechargeCode(NumberUtil.createOrderCode(3));
-		recharge.setGiveMoney(0);
-		recharge.setUseState(true);
-		recharge.setRemark("手动将账户余额["+oldMoney+"]调整为："+money);
-		recharge.save();
+		accountService.updateUserAccount(userName, new BigDecimal(money));
 		BaseRenderJson.returnUpdateObj(this, true);
 		logger.info("[操作日志]修改用户账户成功,userName：" + userName+",account:"+money);
 	}
