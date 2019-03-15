@@ -89,9 +89,9 @@
                                 <td>
                                     <div class="am-btn-toolbar">
                                         <div class="am-btn-group am-btn-group-xs">
-                                            <button type="button" name="userAuth" onclick="loadRight('<%=basePath %>/userAuth/userAuthList?userName=${item.user_name}','软件授权')" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">软件授权</button>
-                                            <button type="button" name="editExpirDate" data-id="${item.id }"  data-expirDate="${item.expir_data }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">修改过期时间</button>
-                                            <button type="button" name="editAccountDate" data-username="${item.user_name }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">修改余额</button>
+                                            <button type="button" name="userAuth" onclick="loadRight('<%=basePath %>/userAuth/userAuthList?userName=${item.user_name}','软件授权')" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">授权</button>
+                                            <button type="button" name="editExpirDate" data-id="${item.id }"  data-expirDate="${item.expir_data }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">过期</button>
+                                            <button type="button" name="editAccountDate" data-username="${item.user_name }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">余额</button>
                                             <button type="button" name="resetPwdBtn" data-id="${item.id }" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">重置密码</button>
                                             <c:if test="${item.state  }">
                                               <button type="button" name="disableBtn" onclick="disable(${item.id })" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">冻结</button>

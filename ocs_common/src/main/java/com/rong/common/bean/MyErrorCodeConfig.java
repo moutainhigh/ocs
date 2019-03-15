@@ -28,4 +28,5 @@ public class MyErrorCodeConfig {
 	public static final String AGENT_NOT_EXIST = "1011"; // 代理不存在
 	public static final String RECHARGE_ORDERCODE_ERROR = "1012"; //充值时异常，订单号已使用
 	public static final String NOT_EXIST = "1013"; //查询数据不存在
+	public static final String USER_AUTH_ERROR = "1014"; //软件没有授权
 }

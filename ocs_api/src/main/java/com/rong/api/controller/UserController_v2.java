@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.jfinal.core.Controller;
+import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
 import com.rong.api.jna.WebDll;
 import com.rong.business.service.AccountService;
 import com.rong.business.service.AccountServiceImpl;
+import com.rong.business.service.AuthService;
+import com.rong.business.service.AuthServiceImpl;
 import com.rong.business.service.InterfaceCallService;
 import com.rong.business.service.InterfaceCallServiceImpl;
 import com.rong.business.service.ProjectService;
@@ -26,6 +29,9 @@ import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.exception.CommonException;
 import com.rong.common.util.CommonUtil;
+import com.rong.common.util.GsonUtil;
+import com.rong.common.util.HttpUtils;
+import com.rong.common.util.RequestUtils;
 import com.rong.common.util.StringUtils;
 import com.rong.common.validator.CommonValidatorUtils;
 import com.rong.persist.model.Account;
@@ -42,12 +48,14 @@ import com.rong.persist.model.User;
  * @date 2018年2月8日
  */
 public class UserController_v2 extends Controller {
+	private final Log logger = Log.getLog(this.getClass());
 	private UserService userService = new UserServiceImpl();
 	private AccountService accountService = new AccountServiceImpl();
 	private InterfaceCallService interfaceCallService = new InterfaceCallServiceImpl();
 	private ProjectService projectService = new ProjectServiceImpl();
 	private QqService qqService = new QqServiceImpl();
 	private UserTokenService userTokenService = new UserTokenServiceImpl();
+	private AuthService authService = new AuthServiceImpl();
 	
 	/**
 	 * 接口调用计费
@@ -241,5 +249,73 @@ public class UserController_v2 extends Controller {
 			e.printStackTrace();
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.ERROR_FAIL, "注册异常");
 		}
+	}
+	
+	/**
+	 * 登录
+	 */
+	@SuppressWarnings("rawtypes")
+	public void login() {
+		String userName = getPara("userName");
+		String userPwd = getPara("userPwd");
+		String auth = getPara("auth");
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userName", userName);
+		paraMap.put("userPwd", userPwd);
+		paraMap.put("auth", auth);
+		if (CommonValidatorUtils.requiredValidate(paraMap, this)) {
+			return;
+		}
+		User user = checkUserNameAndPwd(userName, userPwd);
+		if(user == null){
+			return;
+		}
+		boolean hasAuth = authService.hasAuth(userName, auth);
+		if(!hasAuth){
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_AUTH_ERROR, "软件没有授权");
+			return;
+		}
+		// 更新用户登录ip和登录时间
+		user.setLoginTime(new Date());
+		String ip = RequestUtils.getRequestIpAddress(this.getRequest());
+		user.setLoginIp(RequestUtils.getRequestIpAddress(this.getRequest()));
+		//解析登录地址
+		if(!StringUtils.isNullOrEmpty(ip)){
+			// {"code":0,"data":{"ip":"210.21.41.52","country":"中国","area":"",
+			// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
+			// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}
+			try {
+				String jsonString = HttpUtils.sendGet("http://ip.taobao.com/service/getIpInfo.php?ip="+ip);
+				Map map = (Map)GsonUtil.fromJson(jsonString, Map.class);
+				Map dataMap =  (Map)map.get("data");
+				String country = (String)dataMap.get("country");
+				String region = (String)dataMap.get("region");
+				String city = (String)dataMap.get("city");
+				String addr = country+region+city;
+				user.setIpAddr(addr);
+			} catch (Exception e) {
+				logger.error("获取用户ip信息失败");
+			}
+		}
+		user.update();
+		// 旧的TOKEN失效 删除掉旧的token
+		userTokenService.delByUserName(userName);
+		String token = userTokenService.saveToken(user);// 保存新的token信息
+		Record returnObj = new Record();
+		returnObj.set("userName", userName);
+		returnObj.set("token", token);
+		BaseRenderJson.baseRenderObj.returnObj(this, returnObj, MyErrorCodeConfig.REQUEST_SUCCESS, "登录成功");
+		logger.info(userName+"登录,token:"+token);
+	}
+	
+	/** 校验登录用户名密码是否正确  */
+	private User checkUserNameAndPwd(String userName, String userPwd) {
+		User temp = checkUserState(userName);
+		User user = userService.findByUserNameAndPwd(userName, userPwd);
+		if (user == null) {
+			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_LOGIN_ERROR, "用户名或者密码错误");
+			return null;
+		}
+		return temp;
 	}
 }
