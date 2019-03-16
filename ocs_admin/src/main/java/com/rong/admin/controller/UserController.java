@@ -11,7 +11,6 @@ import com.rong.business.service.AccountServiceImpl;
 import com.rong.business.service.UserService;
 import com.rong.business.service.UserServiceImpl;
 import com.rong.common.bean.BaseRenderJson;
-import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.util.CommonUtil;
 
 public class UserController extends BaseController{

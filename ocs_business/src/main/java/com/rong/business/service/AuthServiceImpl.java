@@ -110,7 +110,7 @@ public class AuthServiceImpl extends BaseServiceImpl<Auth> implements AuthServic
 	}
 
 	@Override
-	public boolean hasAuth(String userName, String authKey) {
+	public Auth hasAuth(String userName, String authKey) {
 		return dao.hasAuth(userName, authKey);
 	}
 

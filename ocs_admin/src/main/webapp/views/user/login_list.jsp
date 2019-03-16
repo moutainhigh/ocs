@@ -30,6 +30,7 @@
 							<th>用户名</th>
 							<th>登录ip</th>
 							<th>地址</th>
+							<th>软件</th>
 							<th>最后登录时间</th>
 						</tr>
 					</thead>
@@ -41,6 +42,7 @@
 								<td>${item.user_name }</td>
 								<td>${item.login_ip }</td>
 								<td>${item.city }</td>
+								<td>${item.login_auth }</td>
 								<td><fmt:formatDate value="${item.login_time }" pattern="yyyy-MM-dd HH:mm" /></td>
 							</tr>
 

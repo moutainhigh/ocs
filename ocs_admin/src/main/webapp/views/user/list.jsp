@@ -57,8 +57,6 @@
                             <th>最后消费时间</th>
                             <th>状态</th>
                             <th>所属代理</th>
-                            <th>登录ip</th>
-                            <th>最后登录时间</th>
                             <th>过期时间</th>
                             <th>操作</th>
                         </tr>
@@ -83,8 +81,6 @@
                                     <c:if test="${!item.state  }">冻结</c:if>
                                 </td>
                                 <td>${item.agent_id }</td>
-                                <td>${item.login_ip }</td>
-                                <td><fmt:formatDate value="${item.login_time }" pattern="yyyy-MM-dd HH:mm" /></td>
                                 <td><fmt:formatDate value="${item.expir_date }" pattern="yyyy-MM-dd 00:00" /></td>
                                 <td>
                                     <div class="am-btn-toolbar">

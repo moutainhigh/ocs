@@ -35,6 +35,7 @@ import com.rong.common.util.RequestUtils;
 import com.rong.common.util.StringUtils;
 import com.rong.common.validator.CommonValidatorUtils;
 import com.rong.persist.model.Account;
+import com.rong.persist.model.Auth;
 import com.rong.persist.model.InterfaceCall;
 import com.rong.persist.model.Project;
 import com.rong.persist.model.Qq;
@@ -270,11 +271,12 @@ public class UserController_v2 extends Controller {
 		if(user == null){
 			return;
 		}
-		boolean hasAuth = authService.hasAuth(userName, auth);
-		if(!hasAuth){
+		Auth hasAuth = authService.hasAuth(userName, auth);
+		if(hasAuth==null){
 			BaseRenderJson.apiReturnJson(this, MyErrorCodeConfig.USER_AUTH_ERROR, "软件没有授权");
 			return;
 		}
+		user.setLoginAuth(hasAuth.getAuthName());
 		// 更新用户登录ip和登录时间
 		user.setLoginTime(new Date());
 		String ip = RequestUtils.getRequestIpAddress(this.getRequest());
@@ -305,7 +307,7 @@ public class UserController_v2 extends Controller {
 		returnObj.set("userName", userName);
 		returnObj.set("token", token);
 		BaseRenderJson.baseRenderObj.returnObj(this, returnObj, MyErrorCodeConfig.REQUEST_SUCCESS, "登录成功");
-		logger.info(userName+"登录,token:"+token);
+		logger.info(userName+"登录,"+hasAuth.getAuthName()+",token:"+token);
 	}
 	
 	/** 校验登录用户名密码是否正确  */

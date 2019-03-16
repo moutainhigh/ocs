@@ -81,6 +81,14 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 	public java.util.Date getLoginTime() {
 		return get("login_time");
 	}
+	
+	public void setLoginAuth(java.lang.String loginAuth) {
+		set("login_auth", loginAuth);
+	}
+
+	public java.lang.String getLoginAuth() {
+		return getStr("login_auth");
+	}
 
 	public void setAgentId(java.lang.Long agentId) {
 		set("agent_id", agentId);

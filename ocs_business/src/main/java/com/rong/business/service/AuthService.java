@@ -71,7 +71,7 @@ public interface AuthService extends BaseService<Auth>{
 	 * @param authKey
 	 * @return
 	 */
-	boolean hasAuth(String userName,String authKey);
+	Auth hasAuth(String userName,String authKey);
 	
 	/**
 	 * 根据key查询软件权限类别

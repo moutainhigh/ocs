@@ -113,7 +113,7 @@ public class MyConfig extends JFinalConfig {
 		statFilter.setMergeSql(true);
 		statFilter.setLogSlowSql(true);
 		// 2.1慢查询目前设置为1s,随着优化一步步进行慢慢更改
-		statFilter.setSlowSqlMillis(1000);
+		statFilter.setSlowSqlMillis(5000);
 		druidPlugin.addFilter(statFilter);
 		me.add(druidPlugin);
 		// 配置ActiveRecord插件

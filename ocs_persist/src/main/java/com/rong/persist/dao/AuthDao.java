@@ -5,7 +5,6 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.rong.common.util.StringUtils;
 import com.rong.persist.base.BaseDao;
 import com.rong.persist.model.Auth;
@@ -67,15 +66,9 @@ public class AuthDao extends BaseDao<Auth> {
 		return Db.update(sql,userName)>0?true:false;
 	}
 	
-	public boolean hasAuth(String userName,String authKey){
-		String sql = "select count(*) mycount from " + Auth.TABLE_USER_AUTH +" ua,"+Auth.TABLE +" a where ua.auth_id = a.id and ua.user_name = ? and a.auth_key = ? ";
-		Record result = Db.findFirst(sql,userName,authKey);
-		if(result!=null){
-			if(result.getLong("mycount")>0){
-				return true;
-			}
-		}
-		return false;
+	public Auth hasAuth(String userName,String authKey){
+		String sql = "select a.* from " + Auth.TABLE_USER_AUTH +" ua,"+Auth.TABLE +" a where ua.auth_id = a.id and ua.user_name = ? and a.auth_key = ? ";
+		return dao.findFirst(sql, userName,authKey);
 	}
 	
 	public List<Auth> findAll(){
