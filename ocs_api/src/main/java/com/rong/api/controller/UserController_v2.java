@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
@@ -277,29 +279,36 @@ public class UserController_v2 extends Controller {
 			return;
 		}
 		user.setLoginAuth(hasAuth.getAuthName());
-		// 更新用户登录ip和登录时间
-		user.setLoginTime(new Date());
-		String ip = RequestUtils.getRequestIpAddress(this.getRequest());
-		user.setLoginIp(RequestUtils.getRequestIpAddress(this.getRequest()));
-		//解析登录地址
-		if(!StringUtils.isNullOrEmpty(ip)){
-			// {"code":0,"data":{"ip":"210.21.41.52","country":"中国","area":"",
-			// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
-			// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}
-			try {
-				String jsonString = HttpUtils.sendGet("http://ip.taobao.com/service/getIpInfo.php?ip="+ip);
-				Map map = (Map)GsonUtil.fromJson(jsonString, Map.class);
-				Map dataMap =  (Map)map.get("data");
-				String country = (String)dataMap.get("country");
-				String region = (String)dataMap.get("region");
-				String city = (String)dataMap.get("city");
-				String addr = country+region+city;
-				user.setIpAddr(addr);
-			} catch (Exception e) {
-				logger.error("获取用户ip信息失败");
+		//异步处理用户ip信息
+		HttpServletRequest request = this.getRequest();
+		new Thread() {
+			public void run() {
+				// 更新用户登录ip和登录时间
+				user.setLoginTime(new Date());
+				String ip = RequestUtils.getRequestIpAddress(request);
+				user.setLoginIp(RequestUtils.getRequestIpAddress(request));
+				// 解析登录地址
+				if (!StringUtils.isNullOrEmpty(ip)) {
+					// {"code":0,"data":{"ip":"210.21.41.52","country":"中国","area":"",
+					// "region":"广东","city":"广州","county":"XX","isp":"联通","country_id":"CN","area_id":"",
+					// "region_id":"440000","city_id":"440100","county_id":"xx","isp_id":"100026"}}
+					try {
+						String jsonString = HttpUtils.sendGet("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip);
+						Map map = (Map) GsonUtil.fromJson(jsonString, Map.class);
+						Map dataMap = (Map) map.get("data");
+						String country = (String) dataMap.get("country");
+						String region = (String) dataMap.get("region");
+						String city = (String) dataMap.get("city");
+						String addr = country + region + city;
+						user.setIpAddr(addr);
+					} catch (Exception e) {
+						logger.error("获取用户:" + userName + "ip信息失败：" + ip);
+					}
+				}
+				user.update();
 			}
-		}
-		user.update();
+
+		}.start();  
 		// 旧的TOKEN失效 删除掉旧的token
 		userTokenService.delByUserName(userName);
 		String token = userTokenService.saveToken(user);// 保存新的token信息
