@@ -59,20 +59,36 @@ public class AuthServiceImpl extends BaseServiceImpl<Auth> implements AuthServic
 		int i = 0;
 		for (User user : userList) {
 			if(user!=null){
-				user.setExpirDate(expirDate);
-				user.update();
-				//批量更新用户权限
-				saveUserAuth(user.getUserName(), authList);
-				//批量更新用户余额
-				accountDao.updateUserAccount(user.getUserName(), money);
-				//批量更新用户套餐
-				for (Long mealId : mealIdList) {
-					mealDao.saveUserMeal(user.getUserName(), mealId);
-				}
+				batchSave(authList, mealIdList, expirDate, money, user,false);
 				i++;
 			}
 		}
 		return i;
+	}
+
+	private void batchSave(List<Auth> authList, List<Long> mealIdList, Date expirDate, BigDecimal money, User user,Boolean isadd) {
+		if(expirDate!=null){
+			user.setExpirDate(expirDate);
+		}
+		if(isadd){
+			user.save();
+		}else{
+			user.update();
+		}
+		if(authList!=null && !authList.isEmpty()){
+			//批量更新用户权限
+			saveUserAuth(user.getUserName(), authList);
+		}
+		if(money!=null){
+			//批量更新用户余额
+			accountDao.updateUserAccount(user.getUserName(), money);
+		}
+		//批量更新用户套餐
+		if(mealIdList!=null && !mealIdList.isEmpty()){
+			for (Long mealId : mealIdList) {
+				mealDao.saveUserMeal(user.getUserName(), mealId);
+			}
+		}
 	}
 
 	@Override
@@ -84,16 +100,7 @@ public class AuthServiceImpl extends BaseServiceImpl<Auth> implements AuthServic
 			if(userDao.findByUserName(user.getUserName())!=null){
 				continue;
 			}
-			user.setExpirDate(expirDate);
-			user.save();
-			// 批量更新用户权限
-			saveUserAuth(user.getUserName(), authList);
-			// 批量更新用户余额
-			accountDao.updateUserAccount(user.getUserName(), money);
-			// 批量更新用户套餐
-			for (Long mealId : mealIdList) {
-				mealDao.saveUserMeal(user.getUserName(), mealId);
-			}
+			batchSave(authList, mealIdList, expirDate, money, user,true);
 			i++;
 		}
 		return i;

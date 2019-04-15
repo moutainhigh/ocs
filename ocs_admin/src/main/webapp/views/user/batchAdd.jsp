@@ -18,6 +18,14 @@
                     <div class="am-form-group">
                         <label for="mealName" class="am-u-sm-3 am-form-label">密码</label>
                         <div class="am-u-sm-9">
+                            <input type="radio" name="state" value="0"/> 冻结
+                            <input type="radio" name="state" value="1"/> 启用
+                        </div>
+                    </div>
+                    
+                    <div class="am-form-group">
+                        <label for="mealName" class="am-u-sm-3 am-form-label">密码</label>
+                        <div class="am-u-sm-9">
                             <input class="am-form-field" type="text" name="userPwd" required="required"/>
                         </div>
                     </div>
@@ -25,14 +33,14 @@
                     <div class="am-form-group">
                         <label for="mealTime" class="am-u-sm-3 am-form-label">过期时间</label>
                         <div class="am-u-sm-9">
-                            <input type="text" class="am-modal-prompt-input" value="" placeholder="请填入过期时间 " name="expirDate" id="expirDate" required="required">
+                            <input type="text" class="am-modal-prompt-input" value="" placeholder="请填入过期时间 " name="expirDate" id="expirDate">
                         </div>
                     </div>
                     
                      <div class="am-form-group">
                         <label for="mealName" class="am-u-sm-3 am-form-label">余额</label>
                         <div class="am-u-sm-9">
-                            <input class="am-form-field" type="text" name="money" required="required"/>
+                            <input class="am-form-field" type="text" name="money"/>
                         </div>
                      </div>
                    
@@ -77,11 +85,14 @@
       <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
     </div>
     <div class="am-modal-bd">
-<p>注：用户名重复或系统存在会跳过</p>
+<p>注1：用户名重复或系统存在会跳过</p>
 <p>注：每个用户名使用英文,隔开,支持多行</p>
 <p>格式如下：<br>
   用户A,用户B<br>
   用户C,用户D<br>
+ <p>注2：支持号码段</p>
+<p>格式如下：<br>
+  开始,结束（如：1001-1010）<br>
     </div>
   </div>
 </div>
@@ -104,6 +115,7 @@
 			data:$('#dataForm').formSerialize(),
 			success:function(data) {
 				alert(data.resultDes);
+				loadRight(getRootPath()+"/user/list");
 			}
 		});
 		return false;

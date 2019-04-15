@@ -7,6 +7,7 @@
             <div class="am-btn-toolbar">
 	            <div class="am-btn-group am-btn-group-xs">
 	                <button type="button" id="addBtn" onclick="addMeal()" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</button>
+	                <button type="button" id="addBtn" onclick="javascript:back('${backUrl}')" class="am-btn am-btn-default"><span class="am-icon-backward"></span> 返回</button>
 	            </div>
             </div>
         </div>

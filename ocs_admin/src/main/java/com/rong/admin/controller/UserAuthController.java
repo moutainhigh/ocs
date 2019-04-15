@@ -19,6 +19,7 @@ import com.rong.common.bean.BaseRenderJson;
 import com.rong.common.bean.MyErrorCodeConfig;
 import com.rong.common.util.CommonUtil;
 import com.rong.common.util.DateTimeUtil;
+import com.rong.common.util.StringUtils;
 import com.rong.persist.model.Auth;
 import com.rong.persist.model.Meal;
 import com.rong.persist.model.User;
@@ -119,28 +120,46 @@ public class UserAuthController extends BaseController{
 		String [] mealIds = getParaValues("mealIds");
 		String userPwd = getPara("userPwd");
 		String expirDateStr = getPara("expirDate");
-		String money = getPara("money");
-		//对用户名做分行处理和分割处理
-		String userNamesStr [] = userNames.split("\n");
+		String money = getPara("money","0");
+		Boolean state = getParaToBoolean("state",true);
 		List<String> userNameList = new ArrayList<String>();
-		for (String str : userNamesStr) {
-			userNameList.addAll(Arrays.asList(str.split(",")));
+		if(userNames.indexOf("-")>0){
+			int start = Integer.parseInt(userNames.split("-")[0]);
+			int end = Integer.parseInt(userNames.split("-")[1]);
+			for (int i = start;i<=end;i++) {
+				userNameList.add(String.valueOf(i));
+			}
+		}else{
+			//对用户名做分行处理和分割处理
+			String userNamesStr [] = userNames.split("\n");
+			for (String str : userNamesStr) {
+				userNameList.addAll(Arrays.asList(str.split(",")));
+			}
 		}
-		//对软件权限做分割处理
-		List<String> authKeyList = Arrays.asList(authkeys);
-		//对套餐做分割处理，并格式化
-		List<String> mealIdList = Arrays.asList(mealIds);
-		List<Long>  mealList = new ArrayList<Long>();
-		for (String mealId : mealIdList) {
-			mealList.add(Long.parseLong(mealId));
+		
+		// 对软件权限做分割处理
+		List<String> authKeyList = null;
+		List<Auth> authList = null;
+		if (authkeys != null) {
+			authKeyList = Arrays.asList(authkeys);
+			authList = authService.findByAuthKey(authKeyList);
 		}
-		List<Auth> authList = authService.findByAuthKey(authKeyList);
+		List<String> mealIdList = null;
+		List<Long> mealList = null;
+		if (authkeys != null) {
+			mealIdList = Arrays.asList(mealIds);
+			mealList = new ArrayList<Long>();
+			for (String mealId : mealIdList) {
+				mealList.add(Long.parseLong(mealId));
+			}
+		}
 		List<User> userList = new ArrayList<User>();
 		for (String userName : userNameList) {
 			User u = new User();
 			u.setUserPwd(CommonUtil.getMD5(userPwd));
 			u.setUserName(userName);
 			u.setCreateTime(new Date());
+			u.setState(state);
 			userList.add(u);
 		}
 		Date expirDate = DateTimeUtil.parseDateTime(expirDateStr,DateTimeUtil.DEFAULT_FORMAT_DAY);
@@ -150,9 +169,9 @@ public class UserAuthController extends BaseController{
 	}
 	
 	public void batchUpdate() {
-		String authkeys = getPara("authKeys");
+		String [] authkeys = getParaValues("authKeys");
 		String userNames = getPara("userNames");
-		String mealIds = getPara("mealIds");
+		String [] mealIds = getParaValues("mealIds");
 		String expirDateStr = getPara("expirDate");
 		String money = getPara("money");
 		// 对用户名做分行处理和分割处理
@@ -162,15 +181,27 @@ public class UserAuthController extends BaseController{
 			userNameList.addAll(Arrays.asList(str.split(",")));
 		}
 		// 对软件权限做分割处理
-		List<String> authKeyList = Arrays.asList(authkeys.split(","));
-		List<String> mealIdList = Arrays.asList(mealIds.split(","));
-		List<Long>  mealList = new ArrayList<Long>();
-		for (String mealId : mealIdList) {
-			mealList.add(Long.parseLong(mealId));
+		List<String> authKeyList = null;
+		List<Auth> authList = null;
+		if(authkeys!=null){
+			authKeyList = Arrays.asList(authkeys);
+			authList = authService.findByAuthKey(authKeyList);
 		}
-		List<Auth> authList = authService.findByAuthKey(authKeyList);
+		List<String> mealIdList = null;
+		List<Long>  mealList = null;
+		if(authkeys!=null){
+			mealIdList = Arrays.asList(mealIds);
+			mealList = new ArrayList<Long>();
+			for (String mealId : mealIdList) {
+				mealList.add(Long.parseLong(mealId));
+			}
+		}
 		Date expirDate = DateTimeUtil.parseDateTime(expirDateStr,DateTimeUtil.DEFAULT_FORMAT_DAY);
-		int result = authService.updateUserBatch(userNameList, authList, mealList, expirDate, new BigDecimal(money));
+		BigDecimal moneyBigDecimal = null;
+		if(!StringUtils.isNullOrEmpty(money)){
+			moneyBigDecimal = new BigDecimal(money);
+		}
+		int result = authService.updateUserBatch(userNameList, authList, mealList, expirDate, moneyBigDecimal);
 		BaseRenderJson.apiReturnJson(this, "1", "总数据："+userNameList.size()+",成功更新:"+result+",跳过:"+(userNameList.size()-result));
 		logger.info("[操作日志]批量更新成功");
 	}
