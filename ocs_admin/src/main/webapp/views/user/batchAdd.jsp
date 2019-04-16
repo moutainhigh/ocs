@@ -16,9 +16,9 @@
                     
                     
                     <div class="am-form-group">
-                        <label for="mealName" class="am-u-sm-3 am-form-label">密码</label>
+                        <label for="mealName" class="am-u-sm-3 am-form-label">状态</label>
                         <div class="am-u-sm-9">
-                            <input type="radio" name="state" value="0"/> 冻结
+                            <input type="radio" name="state" value="0" checked="checked"/> 冻结
                             <input type="radio" name="state" value="1"/> 启用
                         </div>
                     </div>

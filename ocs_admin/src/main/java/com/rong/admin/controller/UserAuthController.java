@@ -174,11 +174,21 @@ public class UserAuthController extends BaseController{
 		String [] mealIds = getParaValues("mealIds");
 		String expirDateStr = getPara("expirDate");
 		String money = getPara("money");
-		// 对用户名做分行处理和分割处理
-		String userNamesStr[] = userNames.split("\n");
+		Boolean state = getParaToBoolean("state");
 		List<String> userNameList = new ArrayList<String>();
-		for (String str : userNamesStr) {
-			userNameList.addAll(Arrays.asList(str.split(",")));
+		// 对用户名做分行处理和分割处理
+		if(userNames.indexOf("-")>0){
+			int start = Integer.parseInt(userNames.split("-")[0]);
+			int end = Integer.parseInt(userNames.split("-")[1]);
+			for (int i = start;i<=end;i++) {
+				userNameList.add(String.valueOf(i));
+			}
+		}else{
+			//对用户名做分行处理和分割处理
+			String userNamesStr [] = userNames.split("\n");
+			for (String str : userNamesStr) {
+				userNameList.addAll(Arrays.asList(str.split(",")));
+			}
 		}
 		// 对软件权限做分割处理
 		List<String> authKeyList = null;
@@ -201,7 +211,7 @@ public class UserAuthController extends BaseController{
 		if(!StringUtils.isNullOrEmpty(money)){
 			moneyBigDecimal = new BigDecimal(money);
 		}
-		int result = authService.updateUserBatch(userNameList, authList, mealList, expirDate, moneyBigDecimal);
+		int result = authService.updateUserBatch(userNameList, authList, mealList, expirDate, moneyBigDecimal,state);
 		BaseRenderJson.apiReturnJson(this, "1", "总数据："+userNameList.size()+",成功更新:"+result+",跳过:"+(userNameList.size()-result));
 		logger.info("[操作日志]批量更新成功");
 	}

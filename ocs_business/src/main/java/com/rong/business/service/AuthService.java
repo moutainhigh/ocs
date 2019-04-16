@@ -39,7 +39,7 @@ public interface AuthService extends BaseService<Auth>{
 	 * @param money
 	 * @return
 	 */
-	int updateUserBatch(List<String> userNameList,List<Auth> authList,List<Long> mealIdList,Date expirDate,BigDecimal money);
+	int updateUserBatch(List<String> userNameList,List<Auth> authList,List<Long> mealIdList,Date expirDate,BigDecimal money,Boolean state);
 	/**
 	 * 批量注册帐号
 	 * @param userList

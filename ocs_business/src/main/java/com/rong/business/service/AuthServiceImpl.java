@@ -54,11 +54,12 @@ public class AuthServiceImpl extends BaseServiceImpl<Auth> implements AuthServic
 
 	@Override
 	public int updateUserBatch(List<String> userNameList, List<Auth> authList, List<Long> mealIdList, Date expirDate,
-			BigDecimal money) {
+			BigDecimal money,Boolean state) {
 		List<User> userList =  userDao.findByUserNameList(userNameList);
 		int i = 0;
 		for (User user : userList) {
 			if(user!=null){
+				user.setState(state);
 				batchSave(authList, mealIdList, expirDate, money, user,false);
 				i++;
 			}
