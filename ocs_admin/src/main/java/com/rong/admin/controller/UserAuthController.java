@@ -146,7 +146,7 @@ public class UserAuthController extends BaseController{
 		}
 		List<String> mealIdList = null;
 		List<Long> mealList = null;
-		if (authkeys != null) {
+		if (mealIds != null) {
 			mealIdList = Arrays.asList(mealIds);
 			mealList = new ArrayList<Long>();
 			for (String mealId : mealIdList) {
@@ -199,7 +199,7 @@ public class UserAuthController extends BaseController{
 		}
 		List<String> mealIdList = null;
 		List<Long>  mealList = null;
-		if(authkeys!=null){
+		if(mealIds!=null){
 			mealIdList = Arrays.asList(mealIds);
 			mealList = new ArrayList<Long>();
 			for (String mealId : mealIdList) {
